@@ -1,121 +1,136 @@
-.container {
-  min-height: 99vh;
-  padding: 0 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.main {
-  padding: 5rem 0;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.footer {
+.App {
+  height: 100%;
   width: 100%;
-  height: 100px;
-  border-top: 1px solid #eaeaea;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
 }
 
-.footer a {
+.topBar {
   display: flex;
-  justify-content: center;
+  padding: 12px;
+  font-weight: 600;
+  background: #A8CABA;
+  align-items: flex-start;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   flex-grow: 1;
+  overflow: hidden;
 }
 
-.title a {
-  color: #0070f3;
-  text-decoration: none;
+.headerBar {
+  height: 50px;
+  background: #4ECDC4;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  color: #fff;
 }
 
-.title a:hover,
-.title a:focus,
-.title a:active {
-  text-decoration: underline;
+.tokenScrollContainer {
+  width: 100%;
+  margin-bottom: 16px;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
 }
 
-.title {
-  margin: 0;
-  line-height: 1.15;
-  font-size: 4rem;
-}
-
-.title,
-.description {
-  text-align: center;
-}
-
-.description {
-  line-height: 1.5;
-  font-size: 1.5rem;
-}
-
-.code {
-  background: #fafafa;
-  border-radius: 5px;
-  padding: 0.75rem;
-  font-size: 1.1rem;
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-    Bitstream Vera Sans Mono, Courier New, monospace;
-}
-
-.grid {
+.inputIndicator {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  max-width: 800px;
-  margin-top: 3rem;
+  padding: 16px 0 32px;
+  font-size: 24px;
+  color: #bbb;
+  font-style: italic;
 }
 
-.card {
-  margin: 1rem;
-  padding: 1.5rem;
-  text-align: left;
-  color: inherit;
-  text-decoration: none;
-  border: 1px solid #eaeaea;
-  border-radius: 10px;
-  transition: color 0.15s ease, border-color 0.15s ease;
-  width: 45%;
+.tokensOuter {
+  margin: 8px 0;
+  font-size: 40px;
+  display: grid;
+  grid-template-columns: min-content 200px;
+  row-gap: 24px;
 }
 
-.card:hover,
-.card:focus,
-.card:active {
-  color: #0070f3;
-  border-color: #0070f3;
+.left {
+  display: flex;
+  align-items: flex-start;
 }
 
-.card h2 {
-  margin: 0 0 1rem 0;
-  font-size: 1.5rem;
+.grey {
+  color: #999;
 }
 
-.card p {
+.left.grey:hover {
+  cursor: pointer;
+  color: #000;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 30px;
+}
+
+.actions {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.logs {
+  display: flex;
+  flex-grow: 1;
+  background: #f8f6e7;
   margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.5;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: hidden;
 }
 
-.logo {
-  height: 1em;
-  margin-left: 0.5rem;
+.logs h4 {
+  background: #CAD7B2;
+  margin: 0;
+  padding: 8px 12px;
+  text-align: left;
 }
 
-@media (max-width: 600px) {
-  .grid {
-    width: 100%;
-    flex-direction: column;
-  }
+.logsInner {
+  flex-grow: 1;
+  overflow-y: scroll;
+  margin: 0;
+  padding: 12px;
+  height: 0;
+}
+
+.logItem {
+  text-align: left;
+}
+
+.buttonAction {
+  color: #fff;
+  font-weight: 600;
+  background: #838689;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.buttonAction:hover {
+  background: #50354a;
+}
+
+.buttonAction:active {
+  background: #422a3d;
 }

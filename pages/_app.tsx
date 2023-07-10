@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import { Poppins } from 'next/font/google';
+import './katex.min.css';
 
 const poppins = Poppins({
   weight: '400',

@@ -60,6 +60,7 @@
 }
 
 .left {
+  white-space: nowrap;
   display: flex;
   align-items: flex-start;
 }

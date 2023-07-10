@@ -1,11 +1,9 @@
-import Head from "next/head";
 import React from "react";
 import styles from "../styles/Home.module.css";
-import nextPackage from "package.json";
-
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { MathJax, MathJaxContext } from "better-react-mathjax";
 import classnames from "classnames";
+import Script from "next/script";
+import katex from "katex";
 
 function debugOutput(...data: any[]) {
   if (process.env.NODE_ENV === 'development') {
@@ -955,8 +953,8 @@ function PreviousToken(props: { step: AlgorithmStep, onClick: () => void }) {
     debugOutput("recompute");
     const tokens = TokenGroupComponent(props.step.state, true).join(' ')
     return <Fragment>
-      <div className={classnames(styles.left, styles.grey)} onClick={props.onClick}><MathJax>{'\\(' + tokens + '\\)'}</MathJax></div>
-      <div className={classnames(styles.right, styles.grey)}><MathJax>{'\\(' + getOperatorLabel(props.step.operator) + '\\)'}</MathJax></div>
+      <div className={classnames(styles.left, styles.grey)} onClick={props.onClick} dangerouslySetInnerHTML={{ __html: katex.renderToString(tokens) }} />
+      <div className={classnames(styles.right, styles.grey)} dangerouslySetInnerHTML={{ __html: katex.renderToString(getOperatorLabel(props.step.operator)) }} />
     </Fragment >
   }, [props.step]);
 }
@@ -1041,23 +1039,21 @@ function App() {
   const tokens = TokenGroupComponent(testTokens, true).join(' ');
   debugOutput(tokens);
   return (
-    <MathJaxContext>
-      <div className={styles.App} role="main">
-        <div className={styles.container}>
-          <div className={styles.headerBar}>Algebra Sandbox</div>
-          <div className={styles.tokenScrollContainer} ref={scrollRef}>
-            <div className={styles.tokensOuter}>
-              {previousTokens}
-              <div className={styles.left}><MathJax>{testTokens.tokens.length === 0 ? 'done' : '\\(' + tokens + '\\)'}</MathJax></div>
-              <div className={styles.right}>&lt;-</div>
-            </div>
-          </div>
-          <div className={styles.inputIndicator}>
-            {getInputLabelFromOperator(currentInput)}
+    <div className={styles.App} role="main">
+      <div className={styles.container}>
+        <div className={styles.headerBar}>Algebra Sandbox</div>
+        <div className={styles.tokenScrollContainer} ref={scrollRef}>
+          <div className={styles.tokensOuter}>
+            {previousTokens}
+            <div className={styles.left} dangerouslySetInnerHTML={{ __html: testTokens.tokens.length === 0 ? 'done' : katex.renderToString(tokens) }} />
+            <div className={styles.right}>&lt;-</div>
           </div>
         </div>
+        <div className={styles.inputIndicator}>
+          {getInputLabelFromOperator(currentInput)}
+        </div>
       </div>
-    </MathJaxContext>
+    </div>
   );
 }
 

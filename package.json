@@ -1,0 +1,17 @@
+{
+  "name": "algebra-sandbox-2",
+  "version": "0.0.151",
+  "dependencies": {
+    "next": "12.2.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-is": "^18"
+  },
+  "devDependencies": {
+    "@types/react": "^18",
+    "bun-framework-next": "^12.2",
+    "typescript": "latest",
+    "react-refresh": "0.10.0"
+  },
+  "module": "index.js"
+}

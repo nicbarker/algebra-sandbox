@@ -5,12 +5,6 @@ import classnames from "classnames";
 import Script from "next/script";
 import katex from "katex";
 
-function debugOutput(...data: any[]) {
-  if (process.env.NODE_ENV === 'development') {
-    console.log(data);
-  }
-}
-
 enum GameOperatorType {
   ADD,
   SUBTRACT,
@@ -457,7 +451,7 @@ function multiplyPowDiv(powGroup: TokenGroupPow, divGroup: TokenGroupDiv) {
 
 // TODO implement mul for exponents
 function multiply(token1: Token, token2: Token): Token | undefined {
-  debugOutput('multiply: ', JSON.parse(JSON.stringify(token1)), JSON.parse(JSON.stringify(token2)));
+  process.env.NODE_ENV === 'development' && console.log('multiply: ', JSON.parse(JSON.stringify(token1)), JSON.parse(JSON.stringify(token2)));
   switch (token1.type) {
     case TokenType.GROUP_ADD: {
       switch (token2.type) {
@@ -561,7 +555,7 @@ function multiply(token1: Token, token2: Token): Token | undefined {
       }
     }
   }
-  debugOutput(`WARNING: Unimplemented multiply case fell through: `, JSON.parse(JSON.stringify(token1)), JSON.parse(JSON.stringify(token2)));
+  process.env.NODE_ENV === 'development' && console.log(`WARNING: Unimplemented multiply case fell through: `, JSON.parse(JSON.stringify(token1)), JSON.parse(JSON.stringify(token2)));
 }
 
 function addPrimitivePrimitive(token1: TokenPrimitive, token2: TokenPrimitive) {
@@ -626,10 +620,10 @@ function canAddTerms(token1: Token, token2: Token) {
 }
 
 function add(token1: Token, token2: Token): Token | undefined {
-  debugOutput('add: ', JSON.parse(JSON.stringify(token1)), JSON.parse(JSON.stringify(token2)));
-  debugOutput("Like terms:", findLikeTermsInToken(token1), findLikeTermsInToken(token2));
+  process.env.NODE_ENV === 'development' && console.log('add: ', JSON.parse(JSON.stringify(token1)), JSON.parse(JSON.stringify(token2)));
+  process.env.NODE_ENV === 'development' && console.log("Like terms:", findLikeTermsInToken(token1), findLikeTermsInToken(token2));
   const canAdd = canAddTerms(token1, token2);
-  debugOutput("Can add:", canAdd);
+  process.env.NODE_ENV === 'development' && console.log("Can add:", canAdd);
   if (!canAdd) {
     return undefined;
   }
@@ -670,7 +664,7 @@ function add(token1: Token, token2: Token): Token | undefined {
 }
 
 function mergeRedundantTokensUpwardsIntoParent(group: TokenGroup, token: Token) {
-  debugOutput('checking merge', token)
+  process.env.NODE_ENV === 'development' && console.log('checking merge', token)
   if (!isGroupToken(token)) {
     return false;
   }
@@ -682,22 +676,22 @@ function mergeRedundantTokensUpwardsIntoParent(group: TokenGroup, token: Token) 
         case TokenType.GROUP_MUL:
         case TokenType.GROUP_ADD: {
           if (token.tokens.length === 0) {
-            debugOutput("remove length 0");
+            process.env.NODE_ENV === 'development' && console.log("remove length 0");
             group.tokens.splice(index, 1);
             return true;
           }
           if (token.tokens.length === 1) {
-            debugOutput("merge length 1");
+            process.env.NODE_ENV === 'development' && console.log("merge length 1");
             group.tokens.splice(index, 1, token.tokens[0]);
             return true;
           }
           if (group.type === token.type) {
-            debugOutput("merge same type");
+            process.env.NODE_ENV === 'development' && console.log("merge same type");
             group.tokens = [...group.tokens.slice(0, index), ...token.tokens, ...group.tokens.slice(index + 1)];
             return true;
           }
           if (token.type === TokenType.GROUP_MUL && token.tokens.find(t => t.type === TokenType.PRIMITIVE_NUMBER && t.value === 0)) {
-            debugOutput("remove multiply by zero");
+            process.env.NODE_ENV === 'development' && console.log("remove multiply by zero");
             group.tokens.splice(index, 1);
             return true;
           }
@@ -705,11 +699,11 @@ function mergeRedundantTokensUpwardsIntoParent(group: TokenGroup, token: Token) 
         }
         case TokenType.GROUP_DIV: {
           if (token.numerator.tokens[0].type === TokenType.PRIMITIVE_NUMBER && token.numerator.tokens[0].value === 0) { // Numerator is 0
-            debugOutput("removing NUMERATOR 0")
+            process.env.NODE_ENV === 'development' && console.log("removing NUMERATOR 0")
             group.tokens.splice(index, 1);
             return true;
           } else if (token.denominator.tokens.length === 0 || (token.denominator.tokens.length === 1 && token.denominator.tokens[0].type === TokenType.PRIMITIVE_NUMBER && token.denominator.tokens[0].value === 1)) {
-            debugOutput('removing DENOM 1')
+            process.env.NODE_ENV === 'development' && console.log('removing DENOM 1')
             group.tokens.splice(index, 1, token.numerator);
             return true;
           }
@@ -717,7 +711,7 @@ function mergeRedundantTokensUpwardsIntoParent(group: TokenGroup, token: Token) 
         }
         case TokenType.GROUP_POW: {
           if (token.exponent.tokens.length === 1 && token.exponent.tokens[0].type === TokenType.PRIMITIVE_NUMBER && token.exponent.tokens[0].value === 1) {
-            debugOutput('removing POW 1')
+            process.env.NODE_ENV === 'development' && console.log('removing POW 1')
             group.tokens.splice(index, 1, token.base);
             return true;
           }
@@ -737,7 +731,7 @@ function mergeTokensInGroup(group: TokenGroup) {
         for (let j = i + 1; j < group.tokens.length; j++) {
           const result = multiply(group.tokens[i], group.tokens[j]);
           if (result) {
-            debugOutput('multiply result:', JSON.parse(JSON.stringify(result)))
+            process.env.NODE_ENV === 'development' && console.log('multiply result:', JSON.parse(JSON.stringify(result)))
             group.tokens.splice(j, 1);
             group.tokens.splice(i, 1, result);
             if (isGroupToken(group.tokens[i])) {
@@ -747,7 +741,7 @@ function mergeTokensInGroup(group: TokenGroup) {
             i = 0;
             break;
           } else {
-            debugOutput('multiply had no effect');
+            process.env.NODE_ENV === 'development' && console.log('multiply had no effect');
           }
         }
         if (isGroupToken(group.tokens[i])) {
@@ -755,6 +749,22 @@ function mergeTokensInGroup(group: TokenGroup) {
           mergeRedundantTokensUpwardsIntoParent(group, group.tokens[i]);
         }
       }
+      // Sort tokens by number first then alphabetical
+      console.log('sort');
+      group.tokens.sort((a, b) => {
+        if (a.type === TokenType.PRIMITIVE_NUMBER) {
+          return -1;
+        } else if (a.type === TokenType.PRIMITIVE_PRONUMERAL) {
+          if (b.type === TokenType.PRIMITIVE_PRONUMERAL) {
+            return a.numeral > b.numeral ? 1 : -1;
+          } else if (b.type === TokenType.PRIMITIVE_NUMBER) {
+            return 1;
+          }
+        } else if (b.type === TokenType.PRIMITIVE_PRONUMERAL) {
+          return -1;
+        }
+        return -1;
+      });
       break;
     }
     case TokenType.GROUP_DIV: {
@@ -765,12 +775,12 @@ function mergeTokensInGroup(group: TokenGroup) {
       const gcd = getGCD(numeratorFactors.number, denominatorFactors.number)
       const pronumeralCrossover = numeratorFactors.numerals.filter(n => denominatorFactors.numerals.includes(n));
       if (gcd > 0 || pronumeralCrossover.length > 0) {
-        debugOutput('extracting common factors', { number: gcd, numerals: pronumeralCrossover });
+        process.env.NODE_ENV === 'development' && console.log('extracting common factors', { number: gcd, numerals: pronumeralCrossover });
         extractCommonFactorsInAddGroup(group.numerator, { number: gcd, numerals: pronumeralCrossover });
         extractCommonFactorsInAddGroup(group.denominator, { number: gcd, numerals: pronumeralCrossover });
-        debugOutput("NUMERATOR---")
+        process.env.NODE_ENV === 'development' && console.log("NUMERATOR---")
         mergeTokensInGroup(group.numerator);
-        debugOutput("DENOMINATOR---")
+        process.env.NODE_ENV === 'development' && console.log("DENOMINATOR---")
         mergeTokensInGroup(group.denominator);
       }
       break;
@@ -778,10 +788,10 @@ function mergeTokensInGroup(group: TokenGroup) {
     case TokenType.GROUP_ADD: {
       for (let i = 0; i < group.tokens.length - 1; i++) {
         for (let j = i + 1; j < group.tokens.length; j++) {
-          debugOutput("add", group.tokens[i], group.tokens[j])
+          process.env.NODE_ENV === 'development' && console.log("add", group.tokens[i], group.tokens[j])
           const result = add(group.tokens[i], group.tokens[j]);
           if (result) {
-            debugOutput("add result", JSON.parse(JSON.stringify(result)))
+            process.env.NODE_ENV === 'development' && console.log("add result", JSON.parse(JSON.stringify(result)))
             group.tokens.splice(j, 1);
             group.tokens.splice(i, 1, result);
             if (isGroupToken(group.tokens[i])) {
@@ -791,7 +801,7 @@ function mergeTokensInGroup(group: TokenGroup) {
             i = 0;
             break;
           } else {
-            debugOutput("add had no effect")
+            process.env.NODE_ENV === 'development' && console.log("add had no effect")
           }
         }
       }
@@ -800,7 +810,7 @@ function mergeTokensInGroup(group: TokenGroup) {
         if (isGroupToken(token)) {
           mergeTokensInGroup(token);
           if (mergeRedundantTokensUpwardsIntoParent(group, token)) {
-            debugOutput('redundant');
+            process.env.NODE_ENV === 'development' && console.log('redundant');
             i--;
           }
         } else if (token.type === TokenType.PRIMITIVE_NUMBER && token.value === 0) {
@@ -819,7 +829,7 @@ function mergeTokensInGroup(group: TokenGroup) {
 }
 
 function applyOperator(operator: InputOperatorObject) {
-  debugOutput('-------------------------------------------------------------------------')
+  process.env.NODE_ENV === 'development' && console.log('-------------------------------------------------------------------------')
   const previousTokens = JSON.parse(JSON.stringify(testTokens));
   let handled = false;
   switch (operator.operator) {
@@ -950,7 +960,7 @@ function getInputLabelFromOperator(operatorObject: InputOperatorObject) {
 
 function PreviousToken(props: { step: AlgorithmStep, onClick: () => void }) {
   return useMemo(() => {
-    debugOutput("recompute");
+    process.env.NODE_ENV === 'development' && console.log("recompute");
     const tokens = TokenGroupComponent(props.step.state, true).join(' ')
     return <Fragment>
       <div className={classnames(styles.left, styles.grey)} onClick={props.onClick} dangerouslySetInnerHTML={{ __html: katex.renderToString(tokens) }} />
@@ -964,7 +974,7 @@ function App() {
   const [reload, setReload] = useState<number>(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    debugOutput(testTokens);
+    process.env.NODE_ENV === 'development' && console.log(testTokens);
     const down = (event: KeyboardEvent) => {
       let handled = false;
       if (currentInput.operator !== InputOperator.NONE) {
@@ -979,7 +989,7 @@ function App() {
           handled = true;
         }
       }
-      debugOutput(event.key);
+      process.env.NODE_ENV === 'development' && console.log(event.key);
       switch (event.key) {
         case '+': currentInput.operator = InputOperator.ADD; handled = true; break;
         case '-': currentInput.operator = InputOperator.SUBTRACT; handled = true; break;
@@ -994,7 +1004,7 @@ function App() {
         case 'Enter': {
           if (currentInput.operator !== InputOperator.NONE) {
             if (currentInput.value || currentInput.numeral) {
-              debugOutput(currentInput);
+              process.env.NODE_ENV === 'development' && console.log(currentInput);
               applyOperator(currentInput);
               handled = true;
               setTimeout(() => {
@@ -1037,7 +1047,7 @@ function App() {
     }}></PreviousToken>
   ));
   const tokens = TokenGroupComponent(testTokens, true).join(' ');
-  debugOutput(tokens);
+  process.env.NODE_ENV === 'development' && console.log(tokens);
   return (
     <div className={styles.App} role="main">
       <div className={styles.container}>

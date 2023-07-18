@@ -3,6 +3,8 @@ import styles from "../styles/Home.module.css";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import classnames from "classnames";
 import katex from "katex";
+import Link from "next/link";
+import classNames from "classnames";
 
 const DEBUG_VIEW = true;
 
@@ -940,7 +942,7 @@ function mergeTokensInGroup(group: TokenGroup) {
           if (result) {
             const distribute = group.tokens[i].type === TokenType.GROUP_ADD || group.tokens[j].type === TokenType.GROUP_ADD
             DEBUG_VIEW && previousSteps[previousSteps.length - 1].subSteps.push({
-              operator: { operator: InputOperator.MULTIPLY, numeral: '\.' }, state: previous, note:
+              operator: { operator: InputOperator.MULTIPLY }, state: previous, note:
               {
                 groupId: group.id, noteStart: i, noteEnd: Math.min(j, group.tokens.length - 1),
                 noteContentsToken: distribute ? undefined : { type: TokenType.GROUP_ADD, id: -1, tokens: [JSON.parse(JSON.stringify(result))] },
@@ -986,7 +988,7 @@ function mergeTokensInGroup(group: TokenGroup) {
       const gcd = getGCD(numeratorFactors.number, denominatorFactors.number)
       const pronumeralCrossover = numeratorFactors.numerals.filter(n => denominatorFactors.numerals.includes(n));
       if (gcd > 1 || pronumeralCrossover.length > 0) {
-        DEBUG_VIEW && previousSteps[previousSteps.length - 1].subSteps.push({ operator: { operator: InputOperator.DIVIDE, numeral: '\.' }, state: JSON.parse(JSON.stringify(equations)) });
+        DEBUG_VIEW && previousSteps[previousSteps.length - 1].subSteps.push({ operator: { operator: InputOperator.DIVIDE }, state: JSON.parse(JSON.stringify(equations)) });
         process.env.NODE_ENV === 'development' && console.log('extracting common factors', { number: gcd, numerals: pronumeralCrossover });
         extractCommonFactorsInAddGroup(group.numerator, { number: gcd, numerals: pronumeralCrossover });
         extractCommonFactorsInAddGroup(group.denominator, { number: gcd, numerals: pronumeralCrossover });
@@ -1009,7 +1011,7 @@ function mergeTokensInGroup(group: TokenGroup) {
           const result = add(group.tokens[i], group.tokens[j]);
           if (result) {
             DEBUG_VIEW && previousSteps[previousSteps.length - 1].subSteps.push({
-              operator: { operator: InputOperator.ADD, numeral: '\.' }, state: previous, note:
+              operator: { operator: InputOperator.ADD }, state: previous, note:
               {
                 groupId: group.id, noteStart: i, noteEnd: Math.min(j, group.tokens.length - 1),
                 noteContentsToken: { type: TokenType.GROUP_ADD, id: -1, tokens: [JSON.parse(JSON.stringify(result))] }
@@ -1042,7 +1044,7 @@ function mergeTokensInGroup(group: TokenGroup) {
 function applyOperator(operator: InputOperatorObject) {
   process.env.NODE_ENV === 'development' && console.log('-------------------------------------------------------------------------')
   previousSteps.push({ operator, state: JSON.parse(JSON.stringify(equations)), subSteps: [] });
-  const stepOperator = { operator: operator.operator, value: undefined, numeral: '\.' };
+  const stepOperator = { operator: operator.operator, value: undefined };
   for (let equationIndex = 0; equationIndex < equations.length; equationIndex++) {
     const equation = equations[equationIndex];
     switch (operator.operator) {
@@ -1150,13 +1152,18 @@ const getLCM = (...arr: number[]) => {
 };
 
 function getOperatorLabel(operator: InputOperatorObject) {
-  const value = `${operator.numeral || Math.abs(operator.value!)}`;
+  let value;
+  if (operator.numeral || operator.value) {
+    value = ` ${operator.numeral || Math.abs(operator.value!)}`;
+  } else {
+    value = ''
+  }
   switch (operator.operator) {
-    case InputOperator.ADD: return `+ ${value}`;
-    case InputOperator.SUBTRACT: return `- ${value}`;
-    case InputOperator.MULTIPLY: return `\\times ${value}`;
-    case InputOperator.DIVIDE: return `/ ${value}`;
-    case InputOperator.EXPONENT: return `() ^ ${value}`;
+    case InputOperator.ADD: return `+${value}`;
+    case InputOperator.SUBTRACT: return `-${value}`;
+    case InputOperator.MULTIPLY: return `\\times${value}`;
+    case InputOperator.DIVIDE: return `/${value}`;
+    case InputOperator.EXPONENT: return `()^${value}`;
     case InputOperator.SIMPLIFY: return 'simplify';
   }
 }
@@ -1230,6 +1237,7 @@ function PreviousToken(props: { step: AlgorithmStep, onClick?: () => void, onExp
 function App() {
   const [currentInput, setCurrentInput] = useState<InputOperatorObject>({ operator: InputOperator.NONE });
   const [reload, setReload] = useState<number>(0);
+  const [optionsExpanded, setOptionsExpanded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     process.env.NODE_ENV === 'development' && console.log(equations);
@@ -1321,18 +1329,42 @@ function App() {
   return (
     <div className={styles.App} role="main">
       <div className={styles.container}>
-        <div className={styles.headerBar}>Algebra Sandbox</div>
-        <label>
-          <input value={'Add Equality'} type="button" onClick={() => {
-            equations.push({ type: TokenType.GROUP_ADD, id: nextTokenId++, tokens: [{ type: TokenType.PRIMITIVE_NUMBER, id: nextTokenId++, value: 1 }] });
-            setReload(reload + 1);
-          }} />
-        </label>
+        <div className={styles.headerBar}>
+          <div className={styles.logo}>Algebra Sandbox</div>
+          <div className={styles.dropdownOuter}>
+            <div className={styles.dropdownLabel} onClick={() => setOptionsExpanded(!optionsExpanded)}>Options &#8595;</div>
+            <button className={classNames(styles.dropdownInner, { [styles.visible]: optionsExpanded })}>
+              <label>
+                Equality Count
+                <div className={styles.expand} />
+                <select onChange={(event) => {
+                  const newValue = parseInt(event.target.value, 10);
+                  if (newValue > equations.length) {
+                    for (let i = equations.length; i < newValue; i++) {
+                      equations.push({ type: TokenType.GROUP_ADD, id: nextTokenId++, tokens: [{ type: TokenType.PRIMITIVE_NUMBER, id: nextTokenId++, value: 1 }] });
+                    }
+                  } else if (newValue < equations.length) {
+                    equations = equations.slice(0, newValue);
+                  }
+                  setReload(reload + 1);
+                }}>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                </select>
+              </label>
+            </button>
+          </div>
+          <div className={styles.expand} />
+          <Link href="https://github.com/nicbarker/algebra-sandbox">
+            GitHub
+          </Link>
+        </div>
         <div className={styles.tokenScrollContainer} ref={scrollRef}>
           <div className={styles.tokensOuter}>
             {previousTokens}
             <div className={styles.left} dangerouslySetInnerHTML={{ __html: katex.renderToString(tokens) }} />
-            <div className={styles.right}>&lt;-</div>
+            <div className={styles.right}>&#8592;</div>
           </div>
         </div>
         <div className={styles.inputIndicator}>

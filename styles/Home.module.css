@@ -5,14 +5,6 @@
   flex-direction: column;
 }
 
-.topBar {
-  display: flex;
-  padding: 12px;
-  font-weight: 600;
-  background: #A8CABA;
-  align-items: flex-start;
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -30,6 +22,89 @@
   align-items: center;
   padding: 0 32px;
   color: #fff;
+  flex-shrink: 0;
+  gap: 32px;
+}
+
+.dropdownOuter {
+  position: relative;
+}
+
+.dropdownLabel {
+  cursor: pointer;
+  border-radius: 8px;
+  background: #4ECDC4;
+  display: flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 12px;
+}
+
+.dropdownLabel:hover {
+  background: #4bb8b1;
+}
+
+.dropdownInner {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  background: #556270;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 8px;
+  display: none;
+}
+
+.dropdownInner:after {
+  bottom: 100%;
+  left: 20px;
+  border: solid transparent;
+  content: "";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(136, 183, 213, 0);
+  border-bottom-color: #556270;
+  border-width: 10px;
+  margin-left: -10px;
+}
+
+.dropdownInner>input,
+.dropdownInner>select,
+.dropdownInner>label,
+.dropdownInner>div {
+  height: 44px;
+}
+
+.dropdownInner>label:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.dropdownInner>label:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.dropdownInner>label {
+  text-align: left;
+  padding: 0 12px;
+  color: #fff;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  background: #556270;
+}
+
+.dropdownInner>label:hover {
+  background: #4b5865;
+}
+
+.visible {
+  display: flex;
 }
 
 .tokenScrollContainer {
@@ -154,4 +229,8 @@
 
 .buttonAction:active {
   background: #422a3d;
+}
+
+.expand {
+  flex-grow: 1;
 }

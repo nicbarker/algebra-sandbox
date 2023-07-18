@@ -30,3 +30,11 @@ a {
 * {
   box-sizing: border-box;
 }
+
+input[type="button"],
+button {
+  background: none;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}

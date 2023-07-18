@@ -10,7 +10,7 @@ u16 NULL_TOKEN_ID = 65535;
 // Definitions ----------------------------
 typedef u16 TokenId; // NOTE: High bit of 16 is used for storage of various concepts
 
-typedef enum __attribute__((packed))
+typedef enum
 {
   TOKENTYPE_NONE,
   TOKENTYPE_PRIMITIVE_NUMBER,
@@ -22,7 +22,7 @@ typedef enum __attribute__((packed))
   TOKENTYPE_GROUP_ROOT,
 } TokenType;
 
-typedef enum __attribute__((packed))
+typedef enum
 {
   GROUPMEMBER_NONE,
   GROUPMEMBER_ADD,
@@ -80,6 +80,7 @@ typedef struct
 
 // Globals ------------------------------
 Token *childTokenBuffer[256];
+Token *childTokenBuffer2[256];
 
 Token tokens[1000];
 TokenId tokensCount = 0;
@@ -129,7 +130,7 @@ void addTokenToGroup(Token *token, Token *groupToken, GroupMemberType groupMembe
   groupToken->childCount++;
 }
 
-void removeTokenWithId(TokenId tokenId) // NOTE: Don't use this for primitive tokens. Use removePrimitiveNumberTokenAtIndex etc.
+void removeTokenWithId(TokenId tokenId)
 {
   for (int i = 0; i < tokensCount; i++)
   {
@@ -154,7 +155,36 @@ u8 getChildTokens(TokenId groupId, Token **childTokenBuffer)
   return childTokenCount;
 }
 
+bool multiply(Token *token1, Token *token2);
+
 // Multiply ------------------------------------------------------------
+
+bool multiplyAddAdd(Token *token1, Token *token2)
+{
+  // Otherwise, create a new MUL group for each member of the ADD group, with the primitive and the old ADD member
+  u8 oldChildCount1 = getChildTokens(token1->tokenId, childTokenBuffer);
+  u8 oldChildCount2 = getChildTokens(token2->tokenId, childTokenBuffer2);
+
+  token1->tokenId = nextTokenId++;
+  token1->childCount = 0;
+  for (int i = 0; i < oldChildCount1; i++)
+  {
+    for (int j = 0; j < oldChildCount2; j++)
+    {
+      Token *oldChildToken1 = childTokenBuffer[i];
+      Token *oldChildToken2 = childTokenBuffer2[j];
+      Token *newMulGroup = createToken(TOKENTYPE_GROUP_MUL);
+      addTokenToGroup(newMulGroup, token1, GROUPMEMBER_ADD);
+      addTokenToGroup(oldChildToken1, newMulGroup, GROUPMEMBER_MUL);
+      addTokenToGroup(oldChildToken2, newMulGroup, GROUPMEMBER_MUL);
+      // multiply(oldChildToken1, oldChildToken2);
+    }
+  }
+
+  // Remove the old add group 2
+  removeTokenWithId(token2->tokenId);
+  return true;
+}
 
 bool multiplyAddPrimitive(Token *addGroupToken, Token *primitiveToken)
 {
@@ -180,14 +210,17 @@ bool multiplyAddPrimitive(Token *addGroupToken, Token *primitiveToken)
     addTokenToGroup(oldChildToken, newMulGroup, GROUPMEMBER_MUL);
 
     // Clone the primitive for each mul group
+    Token *primitive;
     if (isPrimitiveNumber)
     {
-      addTokenToGroup(createTokenPrimitiveNumber(primitiveToken->primitiveValue.numberValue), newMulGroup, GROUPMEMBER_MUL);
+      primitive = createTokenPrimitiveNumber(primitiveToken->primitiveValue.numberValue);
     }
-    else if (primitiveToken->tokenType == TOKENTYPE_PRIMITIVE_PRONUMERAL)
+    else
     {
-      addTokenToGroup(createTokenPrimitiveNumber(primitiveToken->primitiveValue.numberValue), newMulGroup, GROUPMEMBER_MUL);
+      primitive = createTokenPrimitivePronumeral(primitiveToken->primitiveValue.pronumeral);
     }
+    addTokenToGroup(primitive, newMulGroup, GROUPMEMBER_MUL);
+    multiply(primitive, oldChildToken);
   }
 
   // Remove the old primitive
@@ -200,6 +233,17 @@ bool multiplyPrimitivePrimitive(Token *token1, Token *token2)
   if (token1->tokenType == TOKENTYPE_PRIMITIVE_NUMBER && token2->tokenType == TOKENTYPE_PRIMITIVE_NUMBER)
   {
     token1->primitiveValue.numberValue *= token2->primitiveValue.numberValue;
+    removeTokenWithId(token2->tokenId);
+    return true;
+  }
+  if (token1->tokenType == TOKENTYPE_PRIMITIVE_NUMBER && token1->primitiveValue.numberValue == 1 && token2->tokenType == TOKENTYPE_PRIMITIVE_PRONUMERAL)
+  {
+    removeTokenWithId(token1->tokenId);
+    return true;
+  }
+  if (token2->tokenType == TOKENTYPE_PRIMITIVE_NUMBER && token2->primitiveValue.numberValue == 1 && token1->tokenType == TOKENTYPE_PRIMITIVE_PRONUMERAL)
+  {
+    removeTokenWithId(token2->tokenId);
     return true;
   }
   return false;
@@ -228,7 +272,7 @@ bool multiply(Token *token1, Token *token2)
     {
     case TOKENTYPE_GROUP_ADD:
     { // ADD * ADD ------------------
-      // return multiplyAddAdd(token1, token2);
+      return multiplyAddAdd(token1, token2);
     }
     case TOKENTYPE_GROUP_MUL:
     { // ADD * MUL ------------------
@@ -375,7 +419,7 @@ int compareTokens(const void *a, const void *b)
   Token *token_b = (Token *)b;
 
   if (token_a->groupTokenId == token_b->groupTokenId)
-    return token_b->tokenId - token_a->tokenId;
+    return token_a->tokenId - token_b->tokenId;
   else if (token_a->groupTokenId < token_b->groupTokenId)
     return -1;
   else
@@ -413,30 +457,45 @@ void printTokensTEX()
         bool isAdd = token->tokenType == TOKENTYPE_GROUP_ADD;
         char operator= isAdd ? '+' : '*';
         u8 childTokensCount = getChildTokens(token->tokenId, childTokenBuffer);
-        if (isAdd && childTokensCount > 1)
+        if (isAdd /* && childTokensCount > 1*/)
         {
           printableTokens[i++] = (PrintableToken){
               .printableType = PRINTABLETYPE_CHAR,
               .printableValue.printableChar = ')'};
         }
-        // Clip off the last operator
-        printableTokens[i++] = (PrintableToken){
-            .printableType = PRINTABLETYPE_EVALUATE,
-            .printableValue.token = childTokenBuffer[childTokensCount - 1]};
-        for (int j = childTokensCount - 2; j > -1; j--)
+        else
         {
           printableTokens[i++] = (PrintableToken){
               .printableType = PRINTABLETYPE_CHAR,
-              .printableValue.printableChar = operator};
+              .printableValue.printableChar = ']'};
+        }
+        // Clip off the last operator
+        if (childTokensCount > 0)
+        {
           printableTokens[i++] = (PrintableToken){
               .printableType = PRINTABLETYPE_EVALUATE,
-              .printableValue.token = childTokenBuffer[j]};
+              .printableValue.token = childTokenBuffer[childTokensCount - 1]};
+          for (int j = childTokensCount - 2; j > -1; j--)
+          {
+            printableTokens[i++] = (PrintableToken){
+                .printableType = PRINTABLETYPE_CHAR,
+                .printableValue.printableChar = operator};
+            printableTokens[i++] = (PrintableToken){
+                .printableType = PRINTABLETYPE_EVALUATE,
+                .printableValue.token = childTokenBuffer[j]};
+          }
         }
-        if (isAdd && childTokensCount > 1)
+        if (isAdd /* && childTokensCount > 1*/)
         {
           printableTokens[i++] = (PrintableToken){
               .printableType = PRINTABLETYPE_CHAR,
               .printableValue.printableChar = '('};
+        }
+        else
+        {
+          printableTokens[i++] = (PrintableToken){
+              .printableType = PRINTABLETYPE_CHAR,
+              .printableValue.printableChar = '['};
         }
         break;
       }
@@ -462,16 +521,20 @@ void printTokensTEX()
 
 int main()
 {
+  Token *outerAddGroup = createToken(TOKENTYPE_GROUP_ADD);
   Token *outerMulGroup = createToken(TOKENTYPE_GROUP_MUL);
-  Token *primitiveNumber = createTokenPrimitiveNumber(5);
-  addTokenToGroup(primitiveNumber, outerMulGroup, GROUPMEMBER_MUL);
-  Token *addGroup = createToken(TOKENTYPE_GROUP_ADD);
-  addTokenToGroup(addGroup, outerMulGroup, GROUPMEMBER_MUL);
-  addTokenToGroup(createTokenPrimitiveNumber(1), addGroup, GROUPMEMBER_ADD);
-  addTokenToGroup(createTokenPrimitivePronumeral('x'), addGroup, GROUPMEMBER_ADD);
+  addTokenToGroup(outerMulGroup, outerAddGroup, GROUPMEMBER_ADD);
+  Token *addGroup1 = createToken(TOKENTYPE_GROUP_ADD);
+  addTokenToGroup(addGroup1, outerMulGroup, GROUPMEMBER_MUL);
+  addTokenToGroup(createTokenPrimitiveNumber(1), addGroup1, GROUPMEMBER_ADD);
+  addTokenToGroup(createTokenPrimitivePronumeral('x'), addGroup1, GROUPMEMBER_ADD);
+  Token *addGroup2 = createToken(TOKENTYPE_GROUP_ADD);
+  addTokenToGroup(addGroup2, outerMulGroup, GROUPMEMBER_MUL);
+  addTokenToGroup(createTokenPrimitiveNumber(1), addGroup2, GROUPMEMBER_ADD);
+  addTokenToGroup(createTokenPrimitivePronumeral('x'), addGroup2, GROUPMEMBER_ADD);
 
   printTokensTEX();
-  TokenId multiplyResult = multiply(addGroup, primitiveNumber);
+  TokenId multiplyResult = multiply(addGroup1, addGroup2);
   if (multiplyResult)
   {
     qsort(tokens + 1, tokensCount - 1, sizeof(Token), compareTokens);

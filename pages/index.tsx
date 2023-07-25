@@ -5,6 +5,7 @@ import classnames from "classnames";
 import katex from "katex";
 import Link from "next/link";
 import classNames from "classnames";
+import Script from "next/script";
 
 const DEBUG_VIEW = true;
 
@@ -1238,7 +1239,14 @@ function App() {
   const [currentInput, setCurrentInput] = useState<InputOperatorObject>({ operator: InputOperator.NONE });
   const [reload, setReload] = useState<number>(0);
   const [optionsExpanded, setOptionsExpanded] = useState(false);
+  const [tokenString, setTokenString] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    window['Module']._initialize();
+    setTokenString(window['Module'].UTF8ToString(window['Module']._getTokenString()));
+  }, []);
+
   useEffect(() => {
     process.env.NODE_ENV === 'development' && console.log(equations);
     const down = (event: KeyboardEvent) => {
@@ -1322,10 +1330,10 @@ function App() {
       }}
     ></PreviousToken>
   ));
-  const tokens = equations.map(equation => {
-    return TokenGroupComponent({ group: equation, noParens: true, algorithmStep: { operator: { operator: InputOperator.NONE }, state: equations, subSteps: [] } }).join(' ');
-  }).join(' = ');
-  process.env.NODE_ENV === 'development' && console.log(tokens);
+  // const tokens = equations.map(equation => {
+  //   return TokenGroupComponent({ group: equation, noParens: true, algorithmStep: { operator: { operator: InputOperator.NONE }, state: equations, subSteps: [] } }).join(' ');
+  // }).join(' = ');
+  process.env.NODE_ENV === 'development' && console.log(tokenString);
   return (
     <div className={styles.App} role="main">
       <div className={styles.container}>
@@ -1363,7 +1371,7 @@ function App() {
         <div className={styles.tokenScrollContainer} ref={scrollRef}>
           <div className={styles.tokensOuter}>
             {previousTokens}
-            <div className={styles.left} dangerouslySetInnerHTML={{ __html: katex.renderToString(tokens) }} />
+            <div className={styles.left} dangerouslySetInnerHTML={{ __html: katex.renderToString(tokenString) }} />
             <div className={styles.right}>&#8592;</div>
           </div>
         </div>

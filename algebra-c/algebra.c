@@ -1,543 +1,233 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
+#include "tokens.c"
+#include "multiply.c"
+#include "add.c"
 
-typedef unsigned char u8;
-typedef unsigned short u16;
-
-// Constants ------------------------------
-u16 NULL_TOKEN_ID = 65535;
+// #define DEBUG_OUT true
 
 // Definitions ----------------------------
-typedef u16 TokenId; // NOTE: High bit of 16 is used for storage of various concepts
-
-typedef enum
-{
-  TOKENTYPE_NONE,
-  TOKENTYPE_PRIMITIVE_NUMBER,
-  TOKENTYPE_PRIMITIVE_PRONUMERAL,
-  TOKENTYPE_GROUP_ADD,
-  TOKENTYPE_GROUP_MUL,
-  TOKENTYPE_GROUP_DIV,
-  TOKENTYPE_GROUP_POW,
-  TOKENTYPE_GROUP_ROOT,
-} TokenType;
-
-typedef enum
-{
-  GROUPMEMBER_NONE,
-  GROUPMEMBER_ADD,
-  GROUPMEMBER_MUL,
-  GROUPMEMBER_DIV_NUMERATOR,
-  GROUPMEMBER_DIV_DENOMINATOR,
-  GROUPMEMBER_POW_BASE,
-  GROUPMEMBER_POW_EXPONENT
-} GroupMemberType;
-
-typedef struct
-{
-  // This is sparse-ish and a small waste of cache
-  union PrimitiveValue
-  {
-    int numberValue;
-    char pronumeral;
-  } primitiveValue;
-  TokenId tokenId;
-  TokenId groupTokenId;
-  GroupMemberType groupMemberType;
-  TokenType tokenType;
-  u8 childCount;
-} Token;
-
-typedef struct
-{
-  TokenId tokenIndex;
-  int value;
-} TokenPrimitiveNumberValue;
-
-typedef struct
-{
-  TokenId tokenIndex;
-  char numeral;
-} TokenPrimitivePronumeralValue;
-
-typedef enum
-{
-  PRINTABLETYPE_CHAR,
-  PRINTABLETYPE_INT,
-  PRINTABLETYPE_EVALUATE
-} PrintableTokenType;
-
-typedef struct
-{
-  union PrintableValue
-  {
-    Token *token;
-    int printableInt;
-    char printableChar;
-  } printableValue;
-  PrintableTokenType printableType;
-} PrintableToken;
 
 // Globals ------------------------------
-Token *childTokenBuffer[256];
-Token *childTokenBuffer2[256];
 
-Token tokens[1000];
-TokenId tokensCount = 0;
-TokenId nextTokenId = 0;
+#ifdef DEBUG_OUT
+#include "algebra_debug.c"
+#endif
 
-PrintableToken printableTokens[1000];
-
-static inline Token *createToken(TokenType tokenType)
+void getTokensTEX(AlgebraTree *tree, char *charBuffer)
 {
-  tokens[tokensCount++] = (Token){
-      .tokenId = nextTokenId++,
-      .tokenType = tokenType,
-      .groupTokenId = NULL_TOKEN_ID,
-      .groupMemberType = GROUPMEMBER_NONE,
-      .childCount = 0};
-  return &tokens[tokensCount - 1];
+#ifndef DEBUG_OUT
+  _getTokensTEX(tree, &tree->tokens[tree->rootIndex], charBuffer);
+#else
+  _getTokensTEXDebug(tree, charBuffer);
+#endif
 }
 
-static inline Token *createTokenPrimitiveNumber(int numberValue)
+typedef struct
 {
-  tokens[tokensCount++] = (Token){
-      .tokenId = nextTokenId++,
-      .tokenType = TOKENTYPE_PRIMITIVE_NUMBER,
-      .groupTokenId = NULL_TOKEN_ID,
-      .groupMemberType = GROUPMEMBER_NONE,
-      .childCount = 0,
-      .primitiveValue.numberValue = numberValue};
-  return &tokens[tokensCount - 1];
-}
+  TokenIndex index;
+  bool down;
+  bool sorted;
+} ProcessTreeIndex;
 
-static inline Token *createTokenPrimitivePronumeral(char pronumeral)
+// Returns true if the tree is stable and finished processing, otherwise processes one step of simplification and returns
+bool processTree(AlgebraTree *tree)
 {
-  tokens[tokensCount++] = (Token){
-      .tokenId = nextTokenId++,
-      .tokenType = TOKENTYPE_PRIMITIVE_PRONUMERAL,
-      .groupTokenId = NULL_TOKEN_ID,
-      .groupMemberType = GROUPMEMBER_NONE,
-      .childCount = 0,
-      .primitiveValue.pronumeral = pronumeral};
-  return &tokens[tokensCount - 1];
-}
-
-void addTokenToGroup(Token *token, Token *groupToken, GroupMemberType groupMemberType)
-{
-  token->groupTokenId = groupToken->tokenId;
-  token->groupMemberType = groupMemberType;
-  groupToken->childCount++;
-}
-
-void removeTokenWithId(TokenId tokenId)
-{
-  for (int i = 0; i < tokensCount; i++)
+  ProcessTreeIndex tokenIndexStack[256] = {(ProcessTreeIndex){.index = tree->rootIndex, .down = true, .sorted = false}};
+  int stackIndex = 0;
+  int iterationCount = 0;
+  while (stackIndex > -1)
   {
-    if (tokens[i].tokenId == tokenId)
+    iterationCount++;
+    if (iterationCount > 100)
     {
-      tokens[i] = tokens[--tokensCount];
+      printf("hit max iteration count\n");
+      return true;
     }
-  }
-}
-
-// Returns count of tokens added to childTokenBuffer
-u8 getChildTokens(TokenId groupId, Token **childTokenBuffer)
-{
-  u8 childTokenCount = 0;
-  for (int i = 0; i < tokensCount; i++)
-  {
-    if (tokens[i].groupTokenId == groupId)
+    ProcessTreeIndex *treeIndex = &tokenIndexStack[stackIndex];
+    TokenIndex tokenIndex = treeIndex->index;
+    if (tokenIndex == TOKEN_INDEX_NULL)
     {
-      childTokenBuffer[childTokenCount++] = &tokens[i];
+      stackIndex--;
+      continue;
     }
-  }
-  return childTokenCount;
-}
+    Token *token = &tree->tokens[tokenIndex];
 
-bool multiply(Token *token1, Token *token2);
-
-// Multiply ------------------------------------------------------------
-
-bool multiplyAddAdd(Token *token1, Token *token2)
-{
-  // Otherwise, create a new MUL group for each member of the ADD group, with the primitive and the old ADD member
-  u8 oldChildCount1 = getChildTokens(token1->tokenId, childTokenBuffer);
-  u8 oldChildCount2 = getChildTokens(token2->tokenId, childTokenBuffer2);
-
-  token1->tokenId = nextTokenId++;
-  token1->childCount = 0;
-  for (int i = 0; i < oldChildCount1; i++)
-  {
-    for (int j = 0; j < oldChildCount2; j++)
+    TokenIndex resultIndex = TOKEN_INDEX_NULL;
+    switch (token->tokenType)
     {
-      Token *oldChildToken1 = childTokenBuffer[i];
-      Token *oldChildToken2 = childTokenBuffer2[j];
-      Token *newMulGroup = createToken(TOKENTYPE_GROUP_MUL);
-      addTokenToGroup(newMulGroup, token1, GROUPMEMBER_ADD);
-      addTokenToGroup(oldChildToken1, newMulGroup, GROUPMEMBER_MUL);
-      addTokenToGroup(oldChildToken2, newMulGroup, GROUPMEMBER_MUL);
-      // multiply(oldChildToken1, oldChildToken2);
+    case TOKENTYPE_GROUP_MUL:
+    {
+      printf("TRYING MUL -----------\n");
+      char charBuffer[256];
+      _getTokensTEX(tree, &tree->tokens[token->childLeft.tokenIndex], charBuffer);
+      printf("%s\n", charBuffer);
+      _getTokensTEX(tree, &tree->tokens[token->childRight], charBuffer);
+      printf("%s\n", charBuffer);
+      resultIndex = multiply(tree, &tree->tokens[token->childLeft.tokenIndex], &tree->tokens[token->childRight]);
+      if (resultIndex != TOKEN_INDEX_NULL)
+      {
+        printf("Mul succeeded\n");
+      }
+      break;
     }
-  }
-
-  // Remove the old add group 2
-  removeTokenWithId(token2->tokenId);
-  return true;
-}
-
-bool multiplyAddPrimitive(Token *addGroupToken, Token *primitiveToken)
-{
-  bool isPrimitiveNumber = primitiveToken->tokenType == TOKENTYPE_PRIMITIVE_NUMBER;
-  // Just ignore multiply by 1 - delete the token
-  if (isPrimitiveNumber && primitiveToken->primitiveValue.numberValue == 1)
-  {
-    removeTokenWithId(primitiveToken->tokenId);
-    addGroupToken->childCount--;
-    return true;
-  }
-
-  // Otherwise, create a new MUL group for each member of the ADD group, with the primitive and the old ADD member
-  u8 oldChildCount = getChildTokens(addGroupToken->tokenId, childTokenBuffer);
-
-  addGroupToken->tokenId = nextTokenId++;
-  addGroupToken->childCount = 0;
-  for (int i = 0; i < oldChildCount; i++)
-  {
-    Token *oldChildToken = childTokenBuffer[i];
-    Token *newMulGroup = createToken(TOKENTYPE_GROUP_MUL);
-    addTokenToGroup(newMulGroup, addGroupToken, GROUPMEMBER_ADD);
-    addTokenToGroup(oldChildToken, newMulGroup, GROUPMEMBER_MUL);
-
-    // Clone the primitive for each mul group
-    Token *primitive;
-    if (isPrimitiveNumber)
+    case TOKENTYPE_GROUP_ADD:
     {
-      primitive = createTokenPrimitiveNumber(primitiveToken->primitiveValue.numberValue);
+      printf("TRYING ADD -----------\n");
+      char charBuffer[256];
+      _getTokensTEX(tree, &tree->tokens[token->childLeft.tokenIndex], charBuffer);
+      printf("%s\n", charBuffer);
+      _getTokensTEX(tree, &tree->tokens[token->childRight], charBuffer);
+      printf("%s\n", charBuffer);
+      resultIndex = add(tree, &tree->tokens[token->childLeft.tokenIndex], &tree->tokens[token->childRight]);
+      if (resultIndex != TOKEN_INDEX_NULL)
+      {
+        printf("Add succeeded\n");
+      }
+      break;
+    }
+    }
+    if (resultIndex != TOKEN_INDEX_NULL)
+    {
+      printf("combine succeeded\n");
+      // Hoist the result
+      tree->tokens[tokenIndex] = tree->tokens[resultIndex];
+      tokenIndexStack[stackIndex].down = true;
+      return false;
     }
     else
     {
-      primitive = createTokenPrimitivePronumeral(primitiveToken->primitiveValue.pronumeral);
+      printf("combine failed\n");
     }
-    addTokenToGroup(primitive, newMulGroup, GROUPMEMBER_MUL);
-    multiply(primitive, oldChildToken);
+    if (token->tokenType != TOKENTYPE_PRIMITIVE_NUMBER && token->tokenType != TOKENTYPE_PRIMITIVE_PRONUMERAL)
+    {
+      if (treeIndex->down == true)
+      {
+        treeIndex->down = false;
+        stackIndex++;
+        tokenIndexStack[stackIndex++] = (ProcessTreeIndex){
+            .index = token->childLeft.tokenIndex,
+            .down = true,
+            .sorted = false,
+        };
+        tokenIndexStack[stackIndex++] = (ProcessTreeIndex){
+            .index = token->childRight,
+            .down = true,
+            .sorted = false};
+      }
+      else if (!treeIndex->down && !treeIndex->sorted)
+      {
+        // Only returns true if token group sorting is stable
+        treeIndex->sorted = sortTokenGroup(tree, tokenIndex);
+        if (!treeIndex->sorted)
+        {
+          printf("Unstable sort\n");
+          char charBuffer[256];
+          getTokensTEX(tree, charBuffer);
+          printf("%s\n", charBuffer);
+          treeIndex->down = true;
+          stackIndex++;
+        }
+      }
+    }
+    stackIndex--;
   }
-
-  // Remove the old primitive
-  removeTokenWithId(primitiveToken->tokenId);
+  printf("Stability after %d iterations.\n", iterationCount);
   return true;
 }
 
-bool multiplyPrimitivePrimitive(Token *token1, Token *token2)
+void applySubTree(AlgebraTree *baseTree, AlgebraTree *subTree)
 {
-  if (token1->tokenType == TOKENTYPE_PRIMITIVE_NUMBER && token2->tokenType == TOKENTYPE_PRIMITIVE_NUMBER)
+  // Replace the whole tokens array with a new one
+  if (subTree->tokens[0].childRight != TOKEN_INDEX_NULL)
   {
-    token1->primitiveValue.numberValue *= token2->primitiveValue.numberValue;
-    removeTokenWithId(token2->tokenId);
-    return true;
+    memcpy(baseTree->tokens, subTree->tokens, subTree->tokensCount);
+    baseTree->tokensCount = subTree->tokensCount;
+    baseTree->rootIndex = subTree->rootIndex;
   }
-  if (token1->tokenType == TOKENTYPE_PRIMITIVE_NUMBER && token1->primitiveValue.numberValue == 1 && token2->tokenType == TOKENTYPE_PRIMITIVE_PRONUMERAL)
-  {
-    removeTokenWithId(token1->tokenId);
-    return true;
-  }
-  if (token2->tokenType == TOKENTYPE_PRIMITIVE_NUMBER && token2->primitiveValue.numberValue == 1 && token1->tokenType == TOKENTYPE_PRIMITIVE_PRONUMERAL)
-  {
-    removeTokenWithId(token2->tokenId);
-    return true;
-  }
-  return false;
-  // else if (token1->tokenType == TOKENTYPE_PRIMITIVE_PRONUMERAL && token2->tokenType == TOKENTYPE_PRIMITIVE_PRONUMERAL && token1.numeral == token2.numeral) {
-  //   return {
-  //     type: TOKENTYPE_GROUP_POW,
-  //     base: { type: TOKENTYPE_GROUP_ADD, id: nextTokenId++, tokens: [token1] },
-  //     exponent: { type: TOKENTYPE_GROUP_ADD, id: nextTokenId++, tokens: [{ type: TOKENTYPE_PRIMITIVE_NUMBER, id: nextTokenId++, value: 2 }] }
-  //   }
-  // } else {
-  //   const number = (token1->tokenType == TOKENTYPE_PRIMITIVE_NUMBER ? token1 : token2) as TokenPrimitiveNumber;
-  //   const numeral = (token1->tokenType == TOKENTYPE_PRIMITIVE_PRONUMERAL ? token1 : token2) as TokenPrimitivePronumeral;
-  //   if (number.value == 1) {
-  //     return numeral;
-  //   }
-  // }
-}
-
-bool multiply(Token *token1, Token *token2)
-{
-  switch (token1->tokenType)
-  {
-  case TOKENTYPE_GROUP_ADD:
-  {
-    switch (token2->tokenType)
-    {
-    case TOKENTYPE_GROUP_ADD:
-    { // ADD * ADD ------------------
-      return multiplyAddAdd(token1, token2);
-    }
-    case TOKENTYPE_GROUP_MUL:
-    { // ADD * MUL ------------------
-      // return multiplyAddMul(token1, token2);
-    }
-    case TOKENTYPE_GROUP_POW:
-    { // POW * ADD ------------------
-      // return multiplyPowAdd(token2, token1);
-    }
-    case TOKENTYPE_PRIMITIVE_PRONUMERAL:
-    case TOKENTYPE_PRIMITIVE_NUMBER:
-    { // ADD * PRIMITIVE -----
-      return multiplyAddPrimitive(token1, token2);
-    }
-    }
-    break;
-  }
-  case TOKENTYPE_GROUP_MUL:
-  {
-    switch (token2->tokenType)
-    {
-    case TOKENTYPE_GROUP_ADD:
-    { // MUL * ADD ------------------
-      // return multiplyAddMul(token2, token1);
-    }
-    case TOKENTYPE_GROUP_DIV:
-    { // MUL * DIV ------------------
-      // return multiplyMulDiv(token1, token2);
-    }
-    case TOKENTYPE_PRIMITIVE_PRONUMERAL:
-    case TOKENTYPE_PRIMITIVE_NUMBER:
-    { // MUL * PRIMITIVE -----
-      // return multiplyMulPrimitive(token1, token2);
-    }
-    }
-    break;
-  }
-  case TOKENTYPE_GROUP_DIV:
-  {
-    switch (token2->tokenType)
-    {
-    case TOKENTYPE_GROUP_MUL:
-    { // DIV * MUL ------------------
-      // return multiplyMulDiv(token2, token1);
-    }
-    case TOKENTYPE_GROUP_DIV:
-    { // DIV * DIV ------------------
-      // return multiplyDivDiv(token1, token2);
-    }
-    case TOKENTYPE_GROUP_POW:
-    { // POW * DIV ------------------
-      // return multiplyPowDiv(token2, token1);
-    }
-    case TOKENTYPE_PRIMITIVE_PRONUMERAL:
-    case TOKENTYPE_PRIMITIVE_NUMBER:
-    { // DIV * PRIMITIVE -
-      // return multiplyDivPrimitive(token1, token2);
-    }
-    }
-    break;
-  }
-  case TOKENTYPE_GROUP_POW:
-  {
-    switch (token2->tokenType)
-    {
-    case TOKENTYPE_GROUP_ADD:
-    { // POW * ADD ------------------
-      // return multiplyPowAdd(token1, token2);
-    }
-    case TOKENTYPE_GROUP_DIV:
-    { // POW * DIV ------------------
-      // return multiplyPowDiv(token1, token2);
-    }
-    case TOKENTYPE_GROUP_POW:
-    { // POW * DIV ------------------
-      // return multiplyPowPow(token1, token2);
-    }
-    case TOKENTYPE_PRIMITIVE_PRONUMERAL:
-    case TOKENTYPE_PRIMITIVE_NUMBER:
-    { // POW * PRIMITIVE -
-      // return multiplyPowPrimitive(token1, token2);
-    }
-    }
-    break;
-  }
-  case TOKENTYPE_PRIMITIVE_NUMBER:
-  {
-    switch (token2->tokenType)
-    {
-    case TOKENTYPE_GROUP_ADD:
-    { // ADD * PRIMITIVE ------------
-      return multiplyAddPrimitive(token2, token1);
-    }
-    case TOKENTYPE_GROUP_MUL:
-    { // PRIMITIVE * MUL ------------
-      // return multiplyMulPrimitive(token2, token1);
-    }
-    case TOKENTYPE_GROUP_DIV:
-    { // DIV * PRIMITIVE ------------
-      // return multiplyDivPrimitive(token2, token1);
-    }
-    case TOKENTYPE_GROUP_POW:
-    { // POW * PRIMITIVE ------------
-      // return multiplyPowPrimitive(token2, token1)
-    }
-    case TOKENTYPE_PRIMITIVE_PRONUMERAL:
-    case TOKENTYPE_PRIMITIVE_NUMBER:
-    { // PRIMITIVE * PRIMITIVE -
-      return multiplyPrimitivePrimitive(token1, token2);
-    }
-    }
-    break;
-  }
-  case TOKENTYPE_PRIMITIVE_PRONUMERAL:
-  {
-    switch (token2->tokenType)
-    {
-    case TOKENTYPE_GROUP_MUL:
-    {
-      // return multiplyMulPrimitive(token2, token1);
-    }
-    case TOKENTYPE_GROUP_DIV:
-    { // DIV * DIV ------------------
-      // return multiplyDivPrimitive(token2, token1);
-    }
-    case TOKENTYPE_GROUP_POW:
-    { // POW * PRIMITIVE -
-      // return multiplyPowPrimitive(token2, token1);
-    }
-    case TOKENTYPE_PRIMITIVE_PRONUMERAL:
-    case TOKENTYPE_PRIMITIVE_NUMBER:
-    { // PRIMITIVE * PRIMITIVE -
-      return multiplyPrimitivePrimitive(token1, token2);
-    }
-    }
-  }
-  }
-  return false;
-}
-
-int compareTokens(const void *a, const void *b)
-{
-  Token *token_a = (Token *)a;
-  Token *token_b = (Token *)b;
-
-  if (token_a->groupTokenId == token_b->groupTokenId)
-    return token_a->tokenId - token_b->tokenId;
-  else if (token_a->groupTokenId < token_b->groupTokenId)
-    return -1;
   else
-    return 1;
+  {
+    TokenIndex newRootIndex = cloneTokenBetweenTreesAndReturnIndex(baseTree, subTree, &subTree->tokens[subTree->rootIndex]);
+    baseTree->tokens[newRootIndex].childRight = baseTree->rootIndex;
+    baseTree->rootIndex = newRootIndex;
+  }
 }
 
-void printTokensTEX()
+AlgebraTree *makeTree()
 {
-  printableTokens[0] = (PrintableToken){
-      .printableType = PRINTABLETYPE_EVALUATE,
-      .printableValue.token = &tokens[0]};
+  AlgebraTree *otherTree = createAlgebraTree();
+  TokenIndex outerMulGroupIndex = createTokenAndReturnIndex(otherTree, TOKENTYPE_GROUP_MUL);
+  otherTree->rootIndex = outerMulGroupIndex;
+  Token *outerMulGroup = &otherTree->tokens[outerMulGroupIndex];
+  TokenIndex leftAddGroupIndex = createTokenAndReturnIndex(otherTree, TOKENTYPE_GROUP_ADD);
+  outerMulGroup->childLeft.tokenIndex = leftAddGroupIndex;
+  outerMulGroup->childRight = TOKEN_INDEX_NULL;
+  Token *leftAddGroup = &otherTree->tokens[leftAddGroupIndex];
+  // Token *rightAddGroup = createTokenAsRightChild(TOKENTYPE_GROUP_ADD, outerMulGroup);
 
-  int i = 1;
-  while (i > -1)
-  {
-    i--;
-    PrintableToken *printable = &printableTokens[i];
-    if (printable->printableType == PRINTABLETYPE_CHAR)
-    {
-      printf("%c", printable->printableValue.printableChar);
-    }
-    else if (printable->printableType == PRINTABLETYPE_INT)
-    {
-      printf("%d", printable->printableValue.printableInt);
-    }
-    else
-    {
-      // Otherwise, evaluate the top token on the stack
-      Token *token = printable->printableValue.token;
-      switch (token->tokenType)
-      {
-      case TOKENTYPE_GROUP_ADD:
-      case TOKENTYPE_GROUP_MUL:
-      {
-        bool isAdd = token->tokenType == TOKENTYPE_GROUP_ADD;
-        char operator= isAdd ? '+' : '*';
-        u8 childTokensCount = getChildTokens(token->tokenId, childTokenBuffer);
-        if (isAdd /* && childTokensCount > 1*/)
-        {
-          printableTokens[i++] = (PrintableToken){
-              .printableType = PRINTABLETYPE_CHAR,
-              .printableValue.printableChar = ')'};
-        }
-        else
-        {
-          printableTokens[i++] = (PrintableToken){
-              .printableType = PRINTABLETYPE_CHAR,
-              .printableValue.printableChar = ']'};
-        }
-        // Clip off the last operator
-        if (childTokensCount > 0)
-        {
-          printableTokens[i++] = (PrintableToken){
-              .printableType = PRINTABLETYPE_EVALUATE,
-              .printableValue.token = childTokenBuffer[childTokensCount - 1]};
-          for (int j = childTokensCount - 2; j > -1; j--)
-          {
-            printableTokens[i++] = (PrintableToken){
-                .printableType = PRINTABLETYPE_CHAR,
-                .printableValue.printableChar = operator};
-            printableTokens[i++] = (PrintableToken){
-                .printableType = PRINTABLETYPE_EVALUATE,
-                .printableValue.token = childTokenBuffer[j]};
-          }
-        }
-        if (isAdd /* && childTokensCount > 1*/)
-        {
-          printableTokens[i++] = (PrintableToken){
-              .printableType = PRINTABLETYPE_CHAR,
-              .printableValue.printableChar = '('};
-        }
-        else
-        {
-          printableTokens[i++] = (PrintableToken){
-              .printableType = PRINTABLETYPE_CHAR,
-              .printableValue.printableChar = '['};
-        }
-        break;
-      }
-      case TOKENTYPE_PRIMITIVE_NUMBER:
-      {
-        printableTokens[i++] = (PrintableToken){
-            .printableType = PRINTABLETYPE_INT,
-            .printableValue.printableInt = token->primitiveValue.numberValue};
-        break;
-      }
-      case TOKENTYPE_PRIMITIVE_PRONUMERAL:
-      {
-        printableTokens[i++] = (PrintableToken){
-            .printableType = PRINTABLETYPE_CHAR,
-            .printableValue.printableChar = token->primitiveValue.pronumeral};
-        break;
-      }
-      }
-    }
-  }
-  printf("\n");
+  Token *leftNum1 = createTokenAsLeftChild(otherTree, TOKENTYPE_PRIMITIVE_NUMBER, leftAddGroup);
+  leftNum1->childLeft.numberValue = 1;
+  Token *leftPro1 = createTokenAsRightChild(otherTree, TOKENTYPE_PRIMITIVE_PRONUMERAL, leftAddGroup);
+  leftPro1->childLeft.pronumeralValue = 'x';
+  return otherTree;
 }
 
 int main()
 {
-  Token *outerAddGroup = createToken(TOKENTYPE_GROUP_ADD);
-  Token *outerMulGroup = createToken(TOKENTYPE_GROUP_MUL);
-  addTokenToGroup(outerMulGroup, outerAddGroup, GROUPMEMBER_ADD);
-  Token *addGroup1 = createToken(TOKENTYPE_GROUP_ADD);
-  addTokenToGroup(addGroup1, outerMulGroup, GROUPMEMBER_MUL);
-  addTokenToGroup(createTokenPrimitiveNumber(1), addGroup1, GROUPMEMBER_ADD);
-  addTokenToGroup(createTokenPrimitivePronumeral('x'), addGroup1, GROUPMEMBER_ADD);
-  Token *addGroup2 = createToken(TOKENTYPE_GROUP_ADD);
-  addTokenToGroup(addGroup2, outerMulGroup, GROUPMEMBER_MUL);
-  addTokenToGroup(createTokenPrimitiveNumber(1), addGroup2, GROUPMEMBER_ADD);
-  addTokenToGroup(createTokenPrimitivePronumeral('x'), addGroup2, GROUPMEMBER_ADD);
+  AlgebraTree *otherTree = makeTree();
+  AlgebraTree *mainTree = createAlgebraTree();
+  // TokenIndex outerMulGroupIndex = createTokenAndReturnIndex(TOKENTYPE_GROUP_MUL);
+  // Token *outerMulGroup = tree->tokens[outerMulGroupIndex];
+  TokenIndex leftAddGroupIndex = createTokenAndReturnIndex(mainTree, TOKENTYPE_GROUP_ADD);
+  Token *leftAddGroup = &mainTree->tokens[leftAddGroupIndex];
+  // Token *rightAddGroup = createTokenAsRightChild(TOKENTYPE_GROUP_ADD, outerMulGroup);
 
-  printTokensTEX();
-  TokenId multiplyResult = multiply(addGroup1, addGroup2);
-  if (multiplyResult)
+  Token *leftNum1 = createTokenAsLeftChild(mainTree, TOKENTYPE_PRIMITIVE_NUMBER, leftAddGroup);
+  leftNum1->childLeft.numberValue = 1;
+  Token *leftPro1 = createTokenAsRightChild(mainTree, TOKENTYPE_PRIMITIVE_PRONUMERAL, leftAddGroup);
+  leftPro1->childLeft.pronumeralValue = 'x';
+
+  // Token *rightNum1 = createTokenAsLeftChild(TOKENTYPE_PRIMITIVE_NUMBER, rightAddGroup);
+  // rightNum1->childLeft.numberValue = 1;
+  // Token *rightPro1 = createTokenAsRightChild(TOKENTYPE_PRIMITIVE_PRONUMERAL, rightAddGroup);
+  // rightPro1->childLeft.pronumeralValue = 'x';
+
+  applySubTree(mainTree, otherTree);
+
+  char charBuffer[256];
+  while (!processTree(mainTree))
   {
-    qsort(tokens + 1, tokensCount - 1, sizeof(Token), compareTokens);
+    getTokensTEX(mainTree, charBuffer);
+    printf("%s\n", charBuffer);
   }
-  printTokensTEX();
+  getTokensTEX(mainTree, charBuffer);
+  printf("%s\n", charBuffer);
+
+  AlgebraTree *otherTree2 = makeTree();
+  applySubTree(mainTree, otherTree2);
+  while (!processTree(mainTree))
+  {
+    getTokensTEX(mainTree, charBuffer);
+    printf("%s\n", charBuffer);
+  }
+  getTokensTEX(mainTree, charBuffer);
+  printf("%s\n", charBuffer);
+
+  AlgebraTree *otherTree3 = makeTree();
+  applySubTree(mainTree, otherTree3);
+  while (!processTree(mainTree))
+  {
+    getTokensTEX(mainTree, charBuffer);
+    printf("%s\n", charBuffer);
+  }
+  getTokensTEX(mainTree, charBuffer);
+  printf("%s\n", charBuffer);
+
+  // TokenIndex multiplyResult = multiply(leftAddGroup, rightAddGroup);
+  // if (multiplyResult)
+  // {
+  //   qsort(tokens + 1, tokensCount - 1, sizeof(Token), compareTokens);
+  // }
+  // printf("%s\n", charBuffer);
 }

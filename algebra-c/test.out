@@ -1,0 +1,5910 @@
+TRYING MUL -----------
+1+x
+1+x
+Mul succeeded
+combine succeeded
+11+1x+x1+xx
+TRYING ADD -----------
+11+1x
+x1+xx
+subadd 3, 3
+11+1x
+x1+xx
+subadd 4, 4
+11
+x1
+subadd 1, 2
+1
+x
+subadd 4, 4
+11
+xx
+subadd 1, 2
+1
+x
+subadd 4, 4
+1x
+x1
+subadd 1, 2
+1
+x
+subadd 4, 4
+1x
+xx
+subadd 1, 2
+1
+x
+combine failed
+TRYING ADD -----------
+x1
+xx
+subadd 4, 4
+x1
+xx
+subadd 2, 2
+x
+x
+subadd 1, 2
+1
+x
+combine failed
+TRYING MUL -----------
+x
+x
+Mul succeeded
+combine succeeded
+11+1x+x1+x^{2}
+TRYING ADD -----------
+11+1x
+x1+x^{2}
+subadd 3, 3
+11+1x
+x1+x^{2}
+subadd 4, 4
+11
+x1
+subadd 1, 2
+1
+x
+subadd 4, 6
+11
+x^{2}
+subadd 4, 4
+1x
+x1
+subadd 1, 2
+1
+x
+subadd 4, 6
+1x
+x^{2}
+combine failed
+TRYING ADD -----------
+x1
+x^{2}
+subadd 4, 6
+x1
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+x
+1
+Mul succeeded
+combine succeeded
+11+1x+x+x^{2}
+TRYING ADD -----------
+11+1x
+x+x^{2}
+subadd 3, 3
+11+1x
+x+x^{2}
+subadd 4, 2
+11
+x
+subadd 4, 3
+11
+1+x
+subadd 1, 4
+1
+11
+subadd 2, 4
+x
+11
+subadd 2, 1
+x
+1
+subadd 4, 6
+11
+x^{2}
+subadd 4, 2
+1x
+x
+subadd 4, 3
+1x
+1+x
+subadd 1, 4
+1
+1x
+subadd 2, 4
+x
+1x
+subadd 2, 2
+x
+x
+add add add
+subadd 4, 2
+11
+x
+subadd 4, 3
+11
+1+x
+subadd 1, 4
+1
+11
+subadd 2, 4
+x
+11
+subadd 2, 1
+x
+1
+subadd 4, 6
+11
+x^{2}
+subadd 4, 2
+1x
+x
+subadd 4, 3
+1x
+1+x
+subadd 1, 4
+1
+1x
+subadd 2, 4
+x
+1x
+subadd 2, 2
+x
+x
+Add succeeded
+combine succeeded
+2x+11+x^{2}
+TRYING ADD -----------
+2x
+11+x^{2}
+subadd 4, 3
+2x
+11+x^{2}
+subadd 4, 4
+11
+2x
+subadd 1, 1
+1
+2
+subadd 1, 2
+1
+x
+subadd 6, 4
+x^{2}
+2x
+combine failed
+TRYING ADD -----------
+11
+x^{2}
+subadd 4, 6
+11
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+1
+1
+Mul succeeded
+combine succeeded
+2x+1+x^{2}
+TRYING ADD -----------
+2x
+1+x^{2}
+subadd 4, 3
+2x
+1+x^{2}
+subadd 1, 4
+1
+2x
+subadd 6, 4
+x^{2}
+2x
+combine failed
+TRYING ADD -----------
+1
+x^{2}
+subadd 1, 6
+1
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+1
+x^{2}
+subadd 1, 6
+1
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+1
+sorting 2 tokens
+Unstable sort
+2x+x^{2}+1
+TRYING ADD -----------
+x^{2}
+1
+subadd 6, 1
+x^{2}
+1
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{2}
+1
+subadd 6, 1
+x^{2}
+1
+combine failed
+subadd 1, 6
+1
+x^{2}
+sorting 2 tokens
+TRYING MUL -----------
+2
+x
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+2
+x
+combine failed
+subadd 2, 1
+x
+2
+sorting 2 tokens
+TRYING ADD -----------
+2x
+x^{2}+1
+subadd 4, 3
+2x
+x^{2}+1
+subadd 6, 4
+x^{2}
+2x
+subadd 1, 4
+1
+2x
+combine failed
+subadd 6, 4
+x^{2}
+2x
+subadd 1, 4
+1
+2x
+subadd 1, 6
+1
+x^{2}
+sorting 3 tokens
+Unstable sort
+x^{2}+2x+1
+TRYING ADD -----------
+x^{2}
+2x+1
+subadd 6, 3
+x^{2}
+2x+1
+combine failed
+TRYING ADD -----------
+2x
+1
+subadd 4, 1
+2x
+1
+combine failed
+combine failed
+TRYING MUL -----------
+2
+x
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+2
+x
+combine failed
+subadd 2, 1
+x
+2
+sorting 2 tokens
+TRYING ADD -----------
+2x
+1
+subadd 4, 1
+2x
+1
+combine failed
+subadd 1, 4
+1
+2x
+sorting 2 tokens
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{2}
+2x+1
+subadd 6, 3
+x^{2}
+2x+1
+combine failed
+subadd 4, 6
+2x
+x^{2}
+subadd 1, 6
+1
+x^{2}
+subadd 1, 4
+1
+2x
+sorting 3 tokens
+Stability after 33 iterations.
+x^{2}+2x+1
+TRYING MUL -----------
+1+x
+x^{2}+2x+1
+Mul succeeded
+combine succeeded
+1x^{2}+12x+1+xx^{2}+x2x+1
+TRYING ADD -----------
+1x^{2}+12x+1
+xx^{2}+x2x+1
+subadd 3, 3
+1x^{2}+12x+1
+xx^{2}+x2x+1
+subadd 4, 4
+1x^{2}
+xx^{2}
+subadd 1, 2
+1
+x
+subadd 4, 4
+1x^{2}
+x2x+1
+subadd 1, 2
+1
+x
+subadd 4, 4
+12x+1
+xx^{2}
+subadd 1, 2
+1
+x
+subadd 4, 4
+12x+1
+x2x+1
+subadd 1, 2
+1
+x
+combine failed
+TRYING ADD -----------
+xx^{2}
+x2x+1
+subadd 4, 4
+xx^{2}
+x2x+1
+subadd 2, 2
+x
+x
+subadd 6, 3
+x^{2}
+2x+1
+combine failed
+TRYING MUL -----------
+x
+2x+1
+Mul succeeded
+combine succeeded
+1x^{2}+12x+1+xx^{2}+2xx+1x
+TRYING ADD -----------
+1x^{2}+12x+1
+xx^{2}+2xx+1x
+subadd 3, 3
+1x^{2}+12x+1
+xx^{2}+2xx+1x
+subadd 4, 4
+1x^{2}
+xx^{2}
+subadd 1, 2
+1
+x
+subadd 4, 3
+1x^{2}
+2xx+1x
+subadd 4, 4
+2xx
+1x^{2}
+subadd 4, 1
+2x
+1
+subadd 4, 4
+1x
+1x^{2}
+subadd 1, 1
+1
+1
+subadd 2, 6
+x
+x^{2}
+subadd 4, 4
+12x+1
+xx^{2}
+subadd 1, 2
+1
+x
+subadd 4, 3
+12x+1
+2xx+1x
+subadd 4, 4
+2xx
+12x+1
+subadd 4, 1
+2x
+1
+subadd 4, 4
+1x
+12x+1
+subadd 1, 1
+1
+1
+subadd 2, 3
+x
+2x+1
+combine failed
+TRYING ADD -----------
+xx^{2}
+2xx+1x
+subadd 4, 3
+xx^{2}
+2xx+1x
+subadd 4, 4
+2xx
+xx^{2}
+subadd 4, 2
+2x
+x
+subadd 4, 3
+2x
+1+x
+subadd 1, 4
+1
+2x
+subadd 2, 4
+x
+2x
+subadd 2, 2
+x
+x
+subadd 2, 6
+x
+x^{2}
+subadd 4, 4
+1x
+xx^{2}
+subadd 1, 2
+1
+x
+combine failed
+TRYING ADD -----------
+2xx
+1x
+subadd 4, 4
+2xx
+1x
+subadd 4, 1
+2x
+1
+combine failed
+TRYING MUL -----------
+1
+x
+Mul succeeded
+combine succeeded
+1x^{2}+12x+1+xx^{2}+2xx+x
+TRYING ADD -----------
+1x^{2}+12x+1
+xx^{2}+2xx+x
+subadd 3, 3
+1x^{2}+12x+1
+xx^{2}+2xx+x
+subadd 4, 4
+1x^{2}
+xx^{2}
+subadd 1, 2
+1
+x
+subadd 4, 3
+1x^{2}
+2xx+x
+subadd 4, 4
+2xx
+1x^{2}
+subadd 4, 1
+2x
+1
+subadd 2, 4
+x
+1x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 4, 4
+12x+1
+xx^{2}
+subadd 1, 2
+1
+x
+subadd 4, 3
+12x+1
+2xx+x
+subadd 4, 4
+2xx
+12x+1
+subadd 4, 1
+2x
+1
+subadd 2, 4
+x
+12x+1
+subadd 2, 3
+x
+2x+1
+combine failed
+TRYING ADD -----------
+xx^{2}
+2xx+x
+subadd 4, 3
+xx^{2}
+2xx+x
+subadd 4, 4
+2xx
+xx^{2}
+subadd 4, 2
+2x
+x
+subadd 4, 3
+2x
+1+x
+subadd 1, 4
+1
+2x
+subadd 2, 4
+x
+2x
+subadd 2, 2
+x
+x
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+xx^{2}
+combine failed
+TRYING ADD -----------
+2xx
+x
+subadd 4, 2
+2xx
+x
+subadd 4, 3
+2xx
+1+x
+subadd 1, 4
+1
+2xx
+subadd 2, 4
+x
+2xx
+combine failed
+combine failed
+TRYING MUL -----------
+2x
+x
+combine failed
+combine failed
+TRYING MUL -----------
+2
+x
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+2
+x
+combine failed
+subadd 2, 1
+x
+2
+sorting 2 tokens
+TRYING MUL -----------
+2x
+x
+combine failed
+subadd 2, 1
+x
+2
+subadd 2, 1
+x
+2
+subadd 2, 2
+x
+x
+sorting 3 tokens
+Unstable sort
+1x^{2}+12x+1+xx^{2}+xx2+x
+TRYING MUL -----------
+xx
+2
+combine failed
+combine failed
+TRYING MUL -----------
+x
+x
+Mul succeeded
+combine succeeded
+1x^{2}+12x+1+xx^{2}+x^{2}2+x
+TRYING ADD -----------
+1x^{2}+12x+1
+xx^{2}+x^{2}2+x
+subadd 3, 3
+1x^{2}+12x+1
+xx^{2}+x^{2}2+x
+subadd 4, 4
+1x^{2}
+xx^{2}
+subadd 1, 2
+1
+x
+subadd 4, 3
+1x^{2}
+x^{2}2+x
+subadd 4, 4
+x^{2}2
+1x^{2}
+subadd 6, 1
+x^{2}
+1
+subadd 2, 4
+x
+1x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 4, 4
+12x+1
+xx^{2}
+subadd 1, 2
+1
+x
+subadd 4, 3
+12x+1
+x^{2}2+x
+subadd 4, 4
+x^{2}2
+12x+1
+subadd 6, 1
+x^{2}
+1
+subadd 2, 4
+x
+12x+1
+subadd 2, 3
+x
+2x+1
+combine failed
+TRYING ADD -----------
+xx^{2}
+x^{2}2+x
+subadd 4, 3
+xx^{2}
+x^{2}2+x
+subadd 4, 4
+x^{2}2
+xx^{2}
+subadd 6, 2
+x^{2}
+x
+subadd 2, 4
+x
+xx^{2}
+combine failed
+TRYING ADD -----------
+x^{2}2
+x
+subadd 4, 2
+x^{2}2
+x
+subadd 4, 3
+x^{2}2
+1+x
+subadd 1, 4
+1
+x^{2}2
+subadd 2, 4
+x
+x^{2}2
+combine failed
+combine failed
+TRYING MUL -----------
+x^{2}
+2
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+x^{2}
+2
+combine failed
+subadd 1, 6
+2
+x^{2}
+sorting 2 tokens
+Unstable sort
+1x^{2}+12x+1+xx^{2}+2x^{2}+x
+TRYING MUL -----------
+2
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+2
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+2
+sorting 2 tokens
+TRYING ADD -----------
+2x^{2}
+x
+subadd 4, 2
+2x^{2}
+x
+subadd 4, 3
+2x^{2}
+1+x
+subadd 1, 4
+1
+2x^{2}
+subadd 2, 4
+x
+2x^{2}
+subadd 2, 6
+x
+x^{2}
+combine failed
+subadd 2, 4
+x
+2x^{2}
+subadd 2, 6
+x
+x^{2}
+sorting 2 tokens
+TRYING MUL -----------
+x
+x^{2}
+subadd 2, 2
+x
+x
+Mul succeeded
+combine succeeded
+1x^{2}+12x+1+x^{2+1}+2x^{2}+x
+TRYING ADD -----------
+1x^{2}+12x+1
+x^{2+1}+2x^{2}+x
+subadd 3, 3
+1x^{2}+12x+1
+x^{2+1}+2x^{2}+x
+subadd 4, 6
+1x^{2}
+x^{2+1}
+subadd 4, 3
+1x^{2}
+2x^{2}+x
+subadd 4, 4
+2x^{2}
+1x^{2}
+subadd 1, 1
+2
+1
+subadd 6, 6
+x^{2}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+2
+add add add
+subadd 4, 6
+1x^{2}
+x^{2+1}
+subadd 4, 3
+1x^{2}
+2x^{2}+x
+subadd 4, 4
+2x^{2}
+1x^{2}
+subadd 1, 1
+2
+1
+subadd 6, 6
+x^{2}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+2
+subadd 4, 4
+2x^{2}
+1x^{2}
+subadd 1, 1
+2
+1
+subadd 6, 6
+x^{2}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+2
+Add succeeded
+combine succeeded
+3x^{2}+x+12x+1+x^{2+1}
+TRYING ADD -----------
+3x^{2}+x
+12x+1+x^{2+1}
+subadd 3, 3
+3x^{2}+x
+12x+1+x^{2+1}
+subadd 4, 4
+3x^{2}
+12x+1
+subadd 1, 1
+3
+1
+subadd 6, 3
+x^{2}
+2x+1
+subadd 4, 6
+3x^{2}
+x^{2+1}
+subadd 2, 4
+x
+12x+1
+subadd 2, 3
+x
+2x+1
+subadd 2, 6
+x
+x^{2+1}
+combine failed
+TRYING ADD -----------
+12x+1
+x^{2+1}
+subadd 4, 6
+12x+1
+x^{2+1}
+combine failed
+combine failed
+TRYING ADD -----------
+2
+1
+subadd 1, 1
+2
+1
+Add succeeded
+combine succeeded
+3x^{2}+x+12x+1+x^{3}
+TRYING ADD -----------
+3x^{2}+x
+12x+1+x^{3}
+subadd 3, 3
+3x^{2}+x
+12x+1+x^{3}
+subadd 4, 4
+3x^{2}
+12x+1
+subadd 1, 1
+3
+1
+subadd 6, 3
+x^{2}
+2x+1
+subadd 4, 6
+3x^{2}
+x^{3}
+subadd 2, 4
+x
+12x+1
+subadd 2, 3
+x
+2x+1
+subadd 2, 6
+x
+x^{3}
+combine failed
+TRYING ADD -----------
+12x+1
+x^{3}
+subadd 4, 6
+12x+1
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+1
+2x+1
+Mul succeeded
+combine succeeded
+3x^{2}+x+2x1+11+x^{3}
+TRYING ADD -----------
+3x^{2}+x
+2x1+11+x^{3}
+subadd 3, 3
+3x^{2}+x
+2x1+11+x^{3}
+subadd 4, 3
+3x^{2}
+2x1+11
+subadd 4, 4
+2x1
+3x^{2}
+subadd 4, 1
+2x
+3
+subadd 4, 4
+11
+3x^{2}
+subadd 1, 1
+1
+3
+subadd 1, 6
+1
+x^{2}
+subadd 4, 6
+3x^{2}
+x^{3}
+subadd 2, 3
+x
+2x1+11
+subadd 2, 6
+x
+x^{3}
+combine failed
+TRYING ADD -----------
+2x1+11
+x^{3}
+subadd 3, 6
+2x1+11
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+2x1
+11
+subadd 4, 4
+2x1
+11
+subadd 4, 1
+2x
+1
+combine failed
+TRYING MUL -----------
+1
+1
+Mul succeeded
+combine succeeded
+3x^{2}+x+2x1+1+x^{3}
+TRYING ADD -----------
+3x^{2}+x
+2x1+1+x^{3}
+subadd 3, 3
+3x^{2}+x
+2x1+1+x^{3}
+subadd 4, 3
+3x^{2}
+2x1+1
+subadd 4, 4
+2x1
+3x^{2}
+subadd 4, 1
+2x
+3
+subadd 1, 4
+1
+3x^{2}
+subadd 4, 6
+3x^{2}
+x^{3}
+subadd 2, 3
+x
+2x1+1
+subadd 2, 6
+x
+x^{3}
+combine failed
+TRYING ADD -----------
+2x1+1
+x^{3}
+subadd 3, 6
+2x1+1
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+2x1
+1
+subadd 4, 1
+2x1
+1
+combine failed
+combine failed
+TRYING MUL -----------
+2x
+1
+Mul succeeded
+combine succeeded
+3x^{2}+x+2x+1+x^{3}
+TRYING ADD -----------
+3x^{2}+x
+2x+1+x^{3}
+subadd 3, 3
+3x^{2}+x
+2x+1+x^{3}
+subadd 4, 3
+3x^{2}
+2x+1
+subadd 4, 4
+2x
+3x^{2}
+subadd 1, 1
+2
+3
+subadd 2, 6
+x
+x^{2}
+subadd 1, 4
+1
+3x^{2}
+subadd 4, 6
+3x^{2}
+x^{3}
+subadd 2, 3
+x
+2x+1
+subadd 2, 6
+x
+x^{3}
+combine failed
+TRYING ADD -----------
+2x+1
+x^{3}
+subadd 3, 6
+2x+1
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+2x
+1
+subadd 4, 1
+2x
+1
+combine failed
+combine failed
+TRYING MUL -----------
+2
+x
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+2
+x
+combine failed
+subadd 2, 1
+x
+2
+sorting 2 tokens
+TRYING ADD -----------
+2x
+1
+subadd 4, 1
+2x
+1
+combine failed
+subadd 1, 4
+1
+2x
+sorting 2 tokens
+TRYING ADD -----------
+2x+1
+x^{3}
+subadd 3, 6
+2x+1
+x^{3}
+combine failed
+subadd 1, 4
+1
+2x
+subadd 6, 4
+x^{3}
+2x
+subadd 6, 1
+x^{3}
+1
+sorting 3 tokens
+Unstable sort
+3x^{2}+x+x^{3}+2x+1
+TRYING ADD -----------
+x^{3}+2x
+1
+subadd 3, 1
+x^{3}+2x
+1
+combine failed
+combine failed
+TRYING ADD -----------
+x^{3}
+2x
+subadd 6, 4
+x^{3}
+2x
+combine failed
+TRYING MUL -----------
+2
+x
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+2
+x
+combine failed
+subadd 2, 1
+x
+2
+sorting 2 tokens
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{3}
+2x
+subadd 6, 4
+x^{3}
+2x
+combine failed
+subadd 4, 6
+2x
+x^{3}
+sorting 2 tokens
+TRYING ADD -----------
+x^{3}+2x
+1
+subadd 3, 1
+x^{3}+2x
+1
+combine failed
+subadd 4, 6
+2x
+x^{3}
+subadd 1, 6
+1
+x^{3}
+subadd 1, 4
+1
+2x
+sorting 3 tokens
+TRYING ADD -----------
+3x^{2}
+x
+subadd 4, 2
+3x^{2}
+x
+subadd 4, 3
+3x^{2}
+1+x
+subadd 1, 4
+1
+3x^{2}
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}
+x
+subadd 4, 2
+3x^{2}
+x
+subadd 4, 3
+3x^{2}
+1+x
+subadd 1, 4
+1
+3x^{2}
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+combine failed
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}+x
+x^{3}+2x+1
+subadd 3, 3
+3x^{2}+x
+x^{3}+2x+1
+subadd 4, 3
+3x^{2}
+x^{3}+2x
+subadd 6, 4
+x^{3}
+3x^{2}
+subadd 4, 4
+2x
+3x^{2}
+subadd 1, 1
+2
+3
+subadd 2, 6
+x
+x^{2}
+subadd 4, 1
+3x^{2}
+1
+subadd 2, 3
+x
+x^{3}+2x
+subadd 2, 1
+x
+1
+combine failed
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 6, 4
+x^{3}
+3x^{2}
+subadd 6, 2
+x^{3}
+x
+subadd 4, 4
+2x
+3x^{2}
+subadd 1, 1
+2
+3
+subadd 2, 6
+x
+x^{2}
+subadd 4, 2
+2x
+x
+subadd 4, 3
+2x
+1+x
+subadd 1, 4
+1
+2x
+subadd 2, 4
+x
+2x
+subadd 2, 2
+x
+x
+subadd 4, 6
+2x
+x^{3}
+subadd 1, 4
+1
+3x^{2}
+subadd 1, 2
+1
+x
+subadd 1, 6
+1
+x^{3}
+subadd 1, 4
+1
+2x
+sorting 5 tokens
+Unstable sort
+2x+x+x^{3}+3x^{2}+1
+TRYING ADD -----------
+2x+x
+x^{3}+3x^{2}+1
+subadd 3, 3
+2x+x
+x^{3}+3x^{2}+1
+subadd 4, 3
+2x
+x^{3}+3x^{2}
+subadd 6, 4
+x^{3}
+2x
+subadd 4, 4
+3x^{2}
+2x
+subadd 1, 1
+3
+2
+subadd 6, 2
+x^{2}
+x
+subadd 4, 1
+2x
+1
+subadd 2, 3
+x
+x^{3}+3x^{2}
+subadd 2, 1
+x
+1
+combine failed
+TRYING ADD -----------
+x^{3}+3x^{2}
+1
+subadd 3, 1
+x^{3}+3x^{2}
+1
+combine failed
+combine failed
+TRYING ADD -----------
+x^{3}
+3x^{2}
+subadd 6, 4
+x^{3}
+3x^{2}
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+3
+sorting 2 tokens
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{3}
+3x^{2}
+subadd 6, 4
+x^{3}
+3x^{2}
+combine failed
+subadd 4, 6
+3x^{2}
+x^{3}
+sorting 2 tokens
+TRYING ADD -----------
+x^{3}+3x^{2}
+1
+subadd 3, 1
+x^{3}+3x^{2}
+1
+combine failed
+subadd 4, 6
+3x^{2}
+x^{3}
+subadd 1, 6
+1
+x^{3}
+subadd 1, 4
+1
+3x^{2}
+sorting 3 tokens
+TRYING ADD -----------
+2x
+x
+subadd 4, 2
+2x
+x
+subadd 4, 3
+2x
+1+x
+subadd 1, 4
+1
+2x
+subadd 2, 4
+x
+2x
+subadd 2, 2
+x
+x
+Add succeeded
+combine succeeded
+3x+x^{3}+3x^{2}+1
+TRYING ADD -----------
+3x
+x^{3}+3x^{2}+1
+subadd 4, 3
+3x
+x^{3}+3x^{2}+1
+subadd 3, 4
+x^{3}+3x^{2}
+3x
+subadd 6, 4
+x^{3}
+3x
+subadd 1, 4
+1
+3x
+combine failed
+TRYING ADD -----------
+x^{3}+3x^{2}
+1
+subadd 3, 1
+x^{3}+3x^{2}
+1
+combine failed
+combine failed
+TRYING ADD -----------
+x^{3}
+3x^{2}
+subadd 6, 4
+x^{3}
+3x^{2}
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+3
+sorting 2 tokens
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{3}
+3x^{2}
+subadd 6, 4
+x^{3}
+3x^{2}
+combine failed
+subadd 4, 6
+3x^{2}
+x^{3}
+sorting 2 tokens
+TRYING ADD -----------
+x^{3}+3x^{2}
+1
+subadd 3, 1
+x^{3}+3x^{2}
+1
+combine failed
+subadd 4, 6
+3x^{2}
+x^{3}
+subadd 1, 6
+1
+x^{3}
+subadd 1, 4
+1
+3x^{2}
+sorting 3 tokens
+TRYING MUL -----------
+3
+x
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x
+combine failed
+subadd 2, 1
+x
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x
+x^{3}+3x^{2}+1
+subadd 4, 3
+3x
+x^{3}+3x^{2}+1
+subadd 3, 4
+x^{3}+3x^{2}
+3x
+subadd 6, 4
+x^{3}
+3x
+subadd 1, 4
+1
+3x
+combine failed
+subadd 6, 4
+x^{3}
+3x
+subadd 4, 4
+3x^{2}
+3x
+subadd 1, 1
+3
+3
+subadd 6, 2
+x^{2}
+x
+subadd 4, 6
+3x^{2}
+x^{3}
+subadd 1, 4
+1
+3x
+subadd 1, 6
+1
+x^{3}
+subadd 1, 4
+1
+3x^{2}
+sorting 4 tokens
+Unstable sort
+x^{3}+3x+3x^{2}+1
+TRYING ADD -----------
+x^{3}
+3x+3x^{2}+1
+subadd 6, 3
+x^{3}
+3x+3x^{2}+1
+combine failed
+TRYING ADD -----------
+3x+3x^{2}
+1
+subadd 3, 1
+3x+3x^{2}
+1
+combine failed
+combine failed
+TRYING ADD -----------
+3x
+3x^{2}
+subadd 4, 4
+3x
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 2, 6
+x
+x^{2}
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+3
+sorting 2 tokens
+TRYING MUL -----------
+3
+x
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x
+combine failed
+subadd 2, 1
+x
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x
+3x^{2}
+subadd 4, 4
+3x
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 2, 6
+x
+x^{2}
+combine failed
+subadd 4, 4
+3x^{2}
+3x
+subadd 1, 1
+3
+3
+subadd 6, 2
+x^{2}
+x
+sorting 2 tokens
+TRYING ADD -----------
+3x+3x^{2}
+1
+subadd 3, 1
+3x+3x^{2}
+1
+combine failed
+subadd 4, 4
+3x^{2}
+3x
+subadd 1, 1
+3
+3
+subadd 6, 2
+x^{2}
+x
+subadd 1, 4
+1
+3x
+subadd 1, 4
+1
+3x^{2}
+sorting 3 tokens
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{3}
+3x+3x^{2}+1
+subadd 6, 3
+x^{3}
+3x+3x^{2}+1
+combine failed
+subadd 4, 6
+3x
+x^{3}
+subadd 4, 6
+3x^{2}
+x^{3}
+subadd 4, 4
+3x^{2}
+3x
+subadd 1, 1
+3
+3
+subadd 6, 2
+x^{2}
+x
+subadd 1, 6
+1
+x^{3}
+subadd 1, 4
+1
+3x
+subadd 1, 4
+1
+3x^{2}
+sorting 4 tokens
+Stability after 44 iterations.
+x^{3}+3x+3x^{2}+1
+TRYING MUL -----------
+1+x
+x^{3}+3x+3x^{2}+1
+Mul succeeded
+combine succeeded
+1x^{3}+1(3x+3x^{2}+1)+xx^{3}+x3x+3x^{2}+1
+TRYING ADD -----------
+1x^{3}+13x+3x^{2}+1
+xx^{3}+x3x+3x^{2}+1
+subadd 3, 3
+1x^{3}+13x+3x^{2}+1
+xx^{3}+x3x+3x^{2}+1
+subadd 4, 4
+1x^{3}
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 4
+1x^{3}
+x3x+3x^{2}+1
+subadd 1, 2
+1
+x
+subadd 4, 4
+13x+3x^{2}+1
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 4
+13x+3x^{2}+1
+x3x+3x^{2}+1
+subadd 1, 2
+1
+x
+combine failed
+TRYING ADD -----------
+xx^{3}
+x3x+3x^{2}+1
+subadd 4, 4
+xx^{3}
+x3x+3x^{2}+1
+subadd 2, 2
+x
+x
+subadd 6, 3
+x^{3}
+3x+3x^{2}+1
+combine failed
+TRYING MUL -----------
+x
+3x+3x^{2}+1
+Mul succeeded
+combine succeeded
+1x^{3}+1(3x+3x^{2}+1)+xx^{3}+3x+3x^{2}x+1x
+TRYING ADD -----------
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3x+3x^{2}x+1x
+subadd 3, 3
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3x+3x^{2}x+1x
+subadd 4, 4
+1x^{3}
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+1x^{3}
+3x+3x^{2}x+1x
+subadd 4, 4
+3x+3x^{2}x
+1x^{3}
+subadd 3, 1
+3x+3x^{2}
+1
+subadd 4, 4
+1x
+1x^{3}
+subadd 1, 1
+1
+1
+subadd 2, 6
+x
+x^{3}
+subadd 4, 4
+13x+3x^{2}+1
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+13x+3x^{2}+1
+3x+3x^{2}x+1x
+subadd 4, 4
+3x+3x^{2}x
+13x+3x^{2}+1
+subadd 3, 1
+3x+3x^{2}
+1
+subadd 4, 4
+1x
+13x+3x^{2}+1
+subadd 1, 1
+1
+1
+subadd 2, 3
+x
+3x+3x^{2}+1
+combine failed
+TRYING ADD -----------
+xx^{3}
+3x+3x^{2}x+1x
+subadd 4, 3
+xx^{3}
+3x+3x^{2}x+1x
+subadd 4, 4
+3x+3x^{2}x
+xx^{3}
+subadd 3, 2
+3x+3x^{2}
+x
+subadd 4, 4
+1x
+xx^{3}
+subadd 1, 2
+1
+x
+combine failed
+TRYING ADD -----------
+3x+3x^{2}x
+1x
+subadd 4, 4
+3x+3x^{2}x
+1x
+subadd 3, 1
+3x+3x^{2}
+1
+combine failed
+TRYING MUL -----------
+1
+x
+Mul succeeded
+combine succeeded
+1x^{3}+1(3x+3x^{2}+1)+xx^{3}+3x+3x^{2}x+x
+TRYING ADD -----------
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3x+3x^{2}x+x
+subadd 3, 3
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3x+3x^{2}x+x
+subadd 4, 4
+1x^{3}
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+1x^{3}
+3x+3x^{2}x+x
+subadd 4, 4
+3x+3x^{2}x
+1x^{3}
+subadd 3, 1
+3x+3x^{2}
+1
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 4, 4
+13x+3x^{2}+1
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+13x+3x^{2}+1
+3x+3x^{2}x+x
+subadd 4, 4
+3x+3x^{2}x
+13x+3x^{2}+1
+subadd 3, 1
+3x+3x^{2}
+1
+subadd 2, 4
+x
+13x+3x^{2}+1
+subadd 2, 3
+x
+3x+3x^{2}+1
+combine failed
+TRYING ADD -----------
+xx^{3}
+3x+3x^{2}x+x
+subadd 4, 3
+xx^{3}
+3x+3x^{2}x+x
+subadd 4, 4
+3x+3x^{2}x
+xx^{3}
+subadd 3, 2
+3x+3x^{2}
+x
+subadd 2, 4
+x
+xx^{3}
+combine failed
+TRYING ADD -----------
+3x+3x^{2}x
+x
+subadd 4, 2
+3x+3x^{2}x
+x
+subadd 4, 3
+3x+3x^{2}x
+1+x
+subadd 1, 4
+1
+3x+3x^{2}x
+subadd 2, 4
+x
+3x+3x^{2}x
+combine failed
+combine failed
+TRYING MUL -----------
+3x+3x^{2}
+x
+Mul succeeded
+combine succeeded
+1x^{3}+1(3x+3x^{2}+1)+xx^{3}+3xx+3x^{2}x+x
+TRYING ADD -----------
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3xx+3x^{2}x+x
+subadd 3, 3
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3xx+3x^{2}x+x
+subadd 4, 4
+1x^{3}
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+1x^{3}
+3xx+3x^{2}x+x
+subadd 3, 4
+3xx+3x^{2}x
+1x^{3}
+subadd 4, 4
+3xx
+1x^{3}
+subadd 4, 1
+3x
+1
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 4, 4
+13x+3x^{2}+1
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+13x+3x^{2}+1
+3xx+3x^{2}x+x
+subadd 3, 4
+3xx+3x^{2}x
+13x+3x^{2}+1
+subadd 4, 4
+3xx
+13x+3x^{2}+1
+subadd 4, 1
+3x
+1
+subadd 2, 4
+x
+13x+3x^{2}+1
+subadd 2, 3
+x
+3x+3x^{2}+1
+combine failed
+TRYING ADD -----------
+xx^{3}
+3xx+3x^{2}x+x
+subadd 4, 3
+xx^{3}
+3xx+3x^{2}x+x
+subadd 3, 4
+3xx+3x^{2}x
+xx^{3}
+subadd 4, 4
+3xx
+xx^{3}
+subadd 4, 2
+3x
+x
+subadd 4, 3
+3x
+1+x
+subadd 1, 4
+1
+3x
+subadd 2, 4
+x
+3x
+subadd 2, 2
+x
+x
+subadd 2, 6
+x
+x^{3}
+subadd 2, 4
+x
+xx^{3}
+combine failed
+TRYING ADD -----------
+3xx+3x^{2}x
+x
+subadd 3, 2
+3xx+3x^{2}x
+x
+combine failed
+combine failed
+TRYING ADD -----------
+3xx
+3x^{2}x
+subadd 4, 4
+3xx
+3x^{2}x
+subadd 4, 4
+3x
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 2, 6
+x
+x^{2}
+combine failed
+TRYING MUL -----------
+3x^{2}
+x
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+3
+sorting 2 tokens
+TRYING MUL -----------
+3x^{2}
+x
+combine failed
+subadd 6, 1
+x^{2}
+3
+subadd 2, 1
+x
+3
+subadd 2, 6
+x
+x^{2}
+sorting 3 tokens
+Unstable sort
+1x^{3}+1(3x+3x^{2}+1)+xx^{3}+3xx+3xx^{2}+x
+TRYING MUL -----------
+3x
+x^{2}
+subadd 2, 4
+x
+3x
+subadd 2, 2
+x
+x
+Mul succeeded
+combine succeeded
+1x^{3}+1(3x+3x^{2}+1)+xx^{3}+3xx+3xx^{2}+x
+TRYING ADD -----------
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3xx+3xx^{2}+x
+subadd 3, 3
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3xx+3xx^{2}+x
+subadd 4, 4
+1x^{3}
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+1x^{3}
+3xx+3xx^{2}+x
+subadd 3, 4
+3xx+3xx^{2}
+1x^{3}
+subadd 4, 4
+3xx
+1x^{3}
+subadd 4, 1
+3x
+1
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 4, 4
+13x+3x^{2}+1
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+13x+3x^{2}+1
+3xx+3xx^{2}+x
+subadd 3, 4
+3xx+3xx^{2}
+13x+3x^{2}+1
+subadd 4, 4
+3xx
+13x+3x^{2}+1
+subadd 4, 1
+3x
+1
+subadd 2, 4
+x
+13x+3x^{2}+1
+subadd 2, 3
+x
+3x+3x^{2}+1
+combine failed
+TRYING ADD -----------
+xx^{3}
+3xx+3xx^{2}+x
+subadd 4, 3
+xx^{3}
+3xx+3xx^{2}+x
+subadd 3, 4
+3xx+3xx^{2}
+xx^{3}
+subadd 4, 4
+3xx
+xx^{3}
+subadd 4, 2
+3x
+x
+subadd 4, 3
+3x
+1+x
+subadd 1, 4
+1
+3x
+subadd 2, 4
+x
+3x
+subadd 2, 2
+x
+x
+subadd 2, 6
+x
+x^{3}
+subadd 2, 4
+x
+xx^{3}
+combine failed
+TRYING ADD -----------
+3xx+3xx^{2}
+x
+subadd 3, 2
+3xx+3xx^{2}
+x
+combine failed
+combine failed
+TRYING ADD -----------
+3xx
+3xx^{2}
+subadd 4, 4
+3xx
+3xx^{2}
+subadd 4, 1
+3x
+3
+combine failed
+TRYING MUL -----------
+3
+xx^{2}
+combine failed
+TRYING MUL -----------
+x
+x^{2}
+subadd 2, 2
+x
+x
+Mul succeeded
+combine succeeded
+1x^{3}+1(3x+3x^{2}+1)+xx^{3}+3xx+3x^{2+1}+x
+TRYING ADD -----------
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3xx+3x^{2+1}+x
+subadd 3, 3
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3xx+3x^{2+1}+x
+subadd 4, 4
+1x^{3}
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+1x^{3}
+3xx+3x^{2+1}+x
+subadd 3, 4
+3xx+3x^{2+1}
+1x^{3}
+subadd 4, 4
+3xx
+1x^{3}
+subadd 4, 1
+3x
+1
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 4, 4
+13x+3x^{2}+1
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+13x+3x^{2}+1
+3xx+3x^{2+1}+x
+subadd 3, 4
+3xx+3x^{2+1}
+13x+3x^{2}+1
+subadd 4, 4
+3xx
+13x+3x^{2}+1
+subadd 4, 1
+3x
+1
+subadd 2, 4
+x
+13x+3x^{2}+1
+subadd 2, 3
+x
+3x+3x^{2}+1
+combine failed
+TRYING ADD -----------
+xx^{3}
+3xx+3x^{2+1}+x
+subadd 4, 3
+xx^{3}
+3xx+3x^{2+1}+x
+subadd 3, 4
+3xx+3x^{2+1}
+xx^{3}
+subadd 4, 4
+3xx
+xx^{3}
+subadd 4, 2
+3x
+x
+subadd 4, 3
+3x
+1+x
+subadd 1, 4
+1
+3x
+subadd 2, 4
+x
+3x
+subadd 2, 2
+x
+x
+subadd 2, 6
+x
+x^{3}
+subadd 2, 4
+x
+xx^{3}
+combine failed
+TRYING ADD -----------
+3xx+3x^{2+1}
+x
+subadd 3, 2
+3xx+3x^{2+1}
+x
+combine failed
+combine failed
+TRYING ADD -----------
+3xx
+3x^{2+1}
+subadd 4, 4
+3xx
+3x^{2+1}
+subadd 4, 1
+3x
+3
+combine failed
+TRYING MUL -----------
+3
+x^{2+1}
+combine failed
+combine failed
+TRYING ADD -----------
+2
+1
+subadd 1, 1
+2
+1
+Add succeeded
+combine succeeded
+1x^{3}+1(3x+3x^{2}+1)+xx^{3}+3xx+3x^{3}+x
+TRYING ADD -----------
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3xx+3x^{3}+x
+subadd 3, 3
+1x^{3}+13x+3x^{2}+1
+xx^{3}+3xx+3x^{3}+x
+subadd 4, 4
+1x^{3}
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+1x^{3}
+3xx+3x^{3}+x
+subadd 3, 4
+3xx+3x^{3}
+1x^{3}
+subadd 4, 4
+3xx
+1x^{3}
+subadd 4, 1
+3x
+1
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 4, 4
+13x+3x^{2}+1
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+13x+3x^{2}+1
+3xx+3x^{3}+x
+subadd 3, 4
+3xx+3x^{3}
+13x+3x^{2}+1
+subadd 4, 4
+3xx
+13x+3x^{2}+1
+subadd 4, 1
+3x
+1
+subadd 2, 4
+x
+13x+3x^{2}+1
+subadd 2, 3
+x
+3x+3x^{2}+1
+combine failed
+TRYING ADD -----------
+xx^{3}
+3xx+3x^{3}+x
+subadd 4, 3
+xx^{3}
+3xx+3x^{3}+x
+subadd 3, 4
+3xx+3x^{3}
+xx^{3}
+subadd 4, 4
+3xx
+xx^{3}
+subadd 4, 2
+3x
+x
+subadd 4, 3
+3x
+1+x
+subadd 1, 4
+1
+3x
+subadd 2, 4
+x
+3x
+subadd 2, 2
+x
+x
+subadd 2, 6
+x
+x^{3}
+subadd 2, 4
+x
+xx^{3}
+combine failed
+TRYING ADD -----------
+3xx+3x^{3}
+x
+subadd 3, 2
+3xx+3x^{3}
+x
+combine failed
+combine failed
+TRYING ADD -----------
+3xx
+3x^{3}
+subadd 4, 4
+3xx
+3x^{3}
+subadd 4, 1
+3x
+3
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING MUL -----------
+3x
+x
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x
+combine failed
+subadd 2, 1
+x
+3
+sorting 2 tokens
+TRYING MUL -----------
+3x
+x
+combine failed
+subadd 2, 1
+x
+3
+subadd 2, 1
+x
+3
+subadd 2, 2
+x
+x
+sorting 3 tokens
+Unstable sort
+1x^{3}+1(3x+3x^{2}+1)+xx^{3}+xx3+3x^{3}+x
+TRYING MUL -----------
+xx
+3
+combine failed
+combine failed
+TRYING MUL -----------
+x
+x
+Mul succeeded
+combine succeeded
+1x^{3}+1(3x+3x^{2}+1)+xx^{3}+x^{2}3+3x^{3}+x
+TRYING ADD -----------
+1x^{3}+13x+3x^{2}+1
+xx^{3}+x^{2}3+3x^{3}+x
+subadd 3, 3
+1x^{3}+13x+3x^{2}+1
+xx^{3}+x^{2}3+3x^{3}+x
+subadd 4, 4
+1x^{3}
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+1x^{3}
+x^{2}3+3x^{3}+x
+subadd 3, 4
+x^{2}3+3x^{3}
+1x^{3}
+subadd 4, 4
+x^{2}3
+1x^{3}
+subadd 6, 1
+x^{2}
+1
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 4, 4
+13x+3x^{2}+1
+xx^{3}
+subadd 1, 2
+1
+x
+subadd 4, 3
+13x+3x^{2}+1
+x^{2}3+3x^{3}+x
+subadd 3, 4
+x^{2}3+3x^{3}
+13x+3x^{2}+1
+subadd 4, 4
+x^{2}3
+13x+3x^{2}+1
+subadd 6, 1
+x^{2}
+1
+subadd 2, 4
+x
+13x+3x^{2}+1
+subadd 2, 3
+x
+3x+3x^{2}+1
+combine failed
+TRYING ADD -----------
+xx^{3}
+x^{2}3+3x^{3}+x
+subadd 4, 3
+xx^{3}
+x^{2}3+3x^{3}+x
+subadd 3, 4
+x^{2}3+3x^{3}
+xx^{3}
+subadd 4, 4
+x^{2}3
+xx^{3}
+subadd 6, 2
+x^{2}
+x
+subadd 2, 4
+x
+xx^{3}
+combine failed
+TRYING ADD -----------
+x^{2}3+3x^{3}
+x
+subadd 3, 2
+x^{2}3+3x^{3}
+x
+combine failed
+combine failed
+TRYING ADD -----------
+x^{2}3
+3x^{3}
+subadd 4, 4
+x^{2}3
+3x^{3}
+subadd 6, 1
+x^{2}
+3
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING MUL -----------
+x^{2}
+3
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+x^{2}
+3
+combine failed
+subadd 1, 6
+3
+x^{2}
+sorting 2 tokens
+Unstable sort
+1x^{3}+1(3x+3x^{2}+1)+xx^{3}+3x^{2}+3x^{3}+x
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}
+3x^{3}
+subadd 4, 4
+3x^{2}
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}+3x^{3}
+x
+subadd 3, 2
+3x^{2}+3x^{3}
+x
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+sorting 3 tokens
+TRYING MUL -----------
+x
+x^{3}
+subadd 2, 2
+x
+x
+Mul succeeded
+combine succeeded
+1x^{3}+1(3x+3x^{2}+1)+x^{3+1}+3x^{2}+3x^{3}+x
+TRYING ADD -----------
+1x^{3}+13x+3x^{2}+1
+x^{3+1}+3x^{2}+3x^{3}+x
+subadd 3, 3
+1x^{3}+13x+3x^{2}+1
+x^{3+1}+3x^{2}+3x^{3}+x
+subadd 4, 6
+1x^{3}
+x^{3+1}
+subadd 4, 3
+1x^{3}
+3x^{2}+3x^{3}+x
+subadd 3, 4
+3x^{2}+3x^{3}
+1x^{3}
+subadd 4, 4
+3x^{2}
+1x^{3}
+subadd 1, 1
+3
+1
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 4, 6
+13x+3x^{2}+1
+x^{3+1}
+subadd 4, 3
+13x+3x^{2}+1
+3x^{2}+3x^{3}+x
+subadd 3, 4
+3x^{2}+3x^{3}
+13x+3x^{2}+1
+subadd 4, 4
+3x^{2}
+13x+3x^{2}+1
+subadd 1, 1
+3
+1
+subadd 6, 3
+x^{2}
+3x+3x^{2}+1
+subadd 2, 4
+x
+13x+3x^{2}+1
+subadd 2, 3
+x
+3x+3x^{2}+1
+combine failed
+TRYING ADD -----------
+x^{3+1}
+3x^{2}+3x^{3}+x
+subadd 6, 3
+x^{3+1}
+3x^{2}+3x^{3}+x
+combine failed
+TRYING ADD -----------
+3x^{2}+3x^{3}
+x
+subadd 3, 2
+3x^{2}+3x^{3}
+x
+combine failed
+combine failed
+TRYING ADD -----------
+3x^{2}
+3x^{3}
+subadd 4, 4
+3x^{2}
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}
+3x^{3}
+subadd 4, 4
+3x^{2}
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}+3x^{3}
+x
+subadd 3, 2
+3x^{2}+3x^{3}
+x
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+sorting 3 tokens
+combine failed
+TRYING ADD -----------
+3
+1
+subadd 1, 1
+3
+1
+Add succeeded
+combine succeeded
+1x^{3}+1(3x+3x^{2}+1)+x^{4}+3x^{2}+3x^{3}+x
+TRYING ADD -----------
+1x^{3}+13x+3x^{2}+1
+x^{4}+3x^{2}+3x^{3}+x
+subadd 3, 3
+1x^{3}+13x+3x^{2}+1
+x^{4}+3x^{2}+3x^{3}+x
+subadd 4, 6
+1x^{3}
+x^{4}
+subadd 4, 3
+1x^{3}
+3x^{2}+3x^{3}+x
+subadd 3, 4
+3x^{2}+3x^{3}
+1x^{3}
+subadd 4, 4
+3x^{2}
+1x^{3}
+subadd 1, 1
+3
+1
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 4, 6
+13x+3x^{2}+1
+x^{4}
+subadd 4, 3
+13x+3x^{2}+1
+3x^{2}+3x^{3}+x
+subadd 3, 4
+3x^{2}+3x^{3}
+13x+3x^{2}+1
+subadd 4, 4
+3x^{2}
+13x+3x^{2}+1
+subadd 1, 1
+3
+1
+subadd 6, 3
+x^{2}
+3x+3x^{2}+1
+subadd 2, 4
+x
+13x+3x^{2}+1
+subadd 2, 3
+x
+3x+3x^{2}+1
+combine failed
+TRYING ADD -----------
+x^{4}
+3x^{2}+3x^{3}+x
+subadd 6, 3
+x^{4}
+3x^{2}+3x^{3}+x
+combine failed
+TRYING ADD -----------
+3x^{2}+3x^{3}
+x
+subadd 3, 2
+3x^{2}+3x^{3}
+x
+combine failed
+combine failed
+TRYING ADD -----------
+3x^{2}
+3x^{3}
+subadd 4, 4
+3x^{2}
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}
+3x^{3}
+subadd 4, 4
+3x^{2}
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}+3x^{3}
+x
+subadd 3, 2
+3x^{2}+3x^{3}
+x
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+sorting 3 tokens
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{4}
+3x^{2}+3x^{3}+x
+subadd 6, 3
+x^{4}
+3x^{2}+3x^{3}+x
+combine failed
+subadd 4, 6
+3x^{2}
+x^{4}
+subadd 4, 6
+3x^{3}
+x^{4}
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 2, 6
+x
+x^{4}
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+sorting 4 tokens
+TRYING ADD -----------
+1x^{3}
+13x+3x^{2}+1
+subadd 4, 4
+1x^{3}
+13x+3x^{2}+1
+subadd 1, 1
+1
+1
+subadd 6, 3
+x^{3}
+3x+3x^{2}+1
+combine failed
+TRYING MUL -----------
+1
+3x+3x^{2}+1
+Mul succeeded
+combine succeeded
+(1x^{3}+3x+3x^{2}1+11)+x^{4}+3x^{2}+3x^{3}+x
+TRYING ADD -----------
+1x^{3}+3x+3x^{2}1+11
+x^{4}+3x^{2}+3x^{3}+x
+subadd 3, 3
+1x^{3}+3x+3x^{2}1+11
+x^{4}+3x^{2}+3x^{3}+x
+subadd 4, 6
+1x^{3}
+x^{4}
+subadd 4, 3
+1x^{3}
+3x^{2}+3x^{3}+x
+subadd 3, 4
+3x^{2}+3x^{3}
+1x^{3}
+subadd 4, 4
+3x^{2}
+1x^{3}
+subadd 1, 1
+3
+1
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 3, 6
+3x+3x^{2}1+11
+x^{4}
+subadd 3, 3
+3x+3x^{2}1+11
+3x^{2}+3x^{3}+x
+subadd 4, 3
+3x+3x^{2}1
+3x^{2}+3x^{3}
+subadd 4, 4
+3x^{2}
+3x+3x^{2}1
+subadd 1, 3
+3
+3x+3x^{2}
+subadd 4, 4
+3x^{3}
+3x+3x^{2}1
+subadd 1, 3
+3
+3x+3x^{2}
+subadd 4, 2
+3x+3x^{2}1
+x
+subadd 4, 3
+3x+3x^{2}1
+1+x
+subadd 1, 4
+1
+3x+3x^{2}1
+subadd 2, 4
+x
+3x+3x^{2}1
+subadd 4, 3
+11
+3x^{2}+3x^{3}
+subadd 4, 4
+3x^{2}
+11
+subadd 1, 1
+3
+1
+subadd 6, 1
+x^{2}
+1
+subadd 4, 4
+3x^{3}
+11
+subadd 1, 1
+3
+1
+subadd 6, 1
+x^{3}
+1
+subadd 4, 2
+11
+x
+subadd 4, 3
+11
+1+x
+subadd 1, 4
+1
+11
+subadd 2, 4
+x
+11
+subadd 2, 1
+x
+1
+combine failed
+TRYING ADD -----------
+x^{4}
+3x^{2}+3x^{3}+x
+subadd 6, 3
+x^{4}
+3x^{2}+3x^{3}+x
+combine failed
+TRYING ADD -----------
+3x^{2}+3x^{3}
+x
+subadd 3, 2
+3x^{2}+3x^{3}
+x
+combine failed
+combine failed
+TRYING ADD -----------
+3x^{2}
+3x^{3}
+subadd 4, 4
+3x^{2}
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}
+3x^{3}
+subadd 4, 4
+3x^{2}
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}+3x^{3}
+x
+subadd 3, 2
+3x^{2}+3x^{3}
+x
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+sorting 3 tokens
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{4}
+3x^{2}+3x^{3}+x
+subadd 6, 3
+x^{4}
+3x^{2}+3x^{3}+x
+combine failed
+subadd 4, 6
+3x^{2}
+x^{4}
+subadd 4, 6
+3x^{3}
+x^{4}
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 2, 6
+x
+x^{4}
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+sorting 4 tokens
+TRYING ADD -----------
+1x^{3}
+3x+3x^{2}1+11
+subadd 4, 3
+1x^{3}
+3x+3x^{2}1+11
+subadd 4, 4
+3x+3x^{2}1
+1x^{3}
+subadd 3, 1
+3x+3x^{2}
+1
+subadd 4, 4
+11
+1x^{3}
+subadd 1, 1
+1
+1
+subadd 1, 6
+1
+x^{3}
+combine failed
+TRYING ADD -----------
+3x+3x^{2}1
+11
+subadd 4, 4
+3x+3x^{2}1
+11
+subadd 3, 1
+3x+3x^{2}
+1
+combine failed
+TRYING MUL -----------
+1
+1
+Mul succeeded
+combine succeeded
+(1x^{3}+3x+3x^{2}1+1)+x^{4}+3x^{2}+3x^{3}+x
+TRYING ADD -----------
+1x^{3}+3x+3x^{2}1+1
+x^{4}+3x^{2}+3x^{3}+x
+subadd 3, 3
+1x^{3}+3x+3x^{2}1+1
+x^{4}+3x^{2}+3x^{3}+x
+subadd 4, 6
+1x^{3}
+x^{4}
+subadd 4, 3
+1x^{3}
+3x^{2}+3x^{3}+x
+subadd 3, 4
+3x^{2}+3x^{3}
+1x^{3}
+subadd 4, 4
+3x^{2}
+1x^{3}
+subadd 1, 1
+3
+1
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 3, 6
+3x+3x^{2}1+1
+x^{4}
+subadd 3, 3
+3x+3x^{2}1+1
+3x^{2}+3x^{3}+x
+subadd 4, 3
+3x+3x^{2}1
+3x^{2}+3x^{3}
+subadd 4, 4
+3x^{2}
+3x+3x^{2}1
+subadd 1, 3
+3
+3x+3x^{2}
+subadd 4, 4
+3x^{3}
+3x+3x^{2}1
+subadd 1, 3
+3
+3x+3x^{2}
+subadd 4, 2
+3x+3x^{2}1
+x
+subadd 4, 3
+3x+3x^{2}1
+1+x
+subadd 1, 4
+1
+3x+3x^{2}1
+subadd 2, 4
+x
+3x+3x^{2}1
+subadd 1, 3
+1
+3x^{2}+3x^{3}
+subadd 1, 2
+1
+x
+combine failed
+TRYING ADD -----------
+x^{4}
+3x^{2}+3x^{3}+x
+subadd 6, 3
+x^{4}
+3x^{2}+3x^{3}+x
+combine failed
+TRYING ADD -----------
+3x^{2}+3x^{3}
+x
+subadd 3, 2
+3x^{2}+3x^{3}
+x
+combine failed
+combine failed
+TRYING ADD -----------
+3x^{2}
+3x^{3}
+subadd 4, 4
+3x^{2}
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}
+3x^{3}
+subadd 4, 4
+3x^{2}
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}+3x^{3}
+x
+subadd 3, 2
+3x^{2}+3x^{3}
+x
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+sorting 3 tokens
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{4}
+3x^{2}+3x^{3}+x
+subadd 6, 3
+x^{4}
+3x^{2}+3x^{3}+x
+combine failed
+subadd 4, 6
+3x^{2}
+x^{4}
+subadd 4, 6
+3x^{3}
+x^{4}
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 2, 6
+x
+x^{4}
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+sorting 4 tokens
+TRYING ADD -----------
+1x^{3}
+3x+3x^{2}1+1
+subadd 4, 3
+1x^{3}
+3x+3x^{2}1+1
+subadd 4, 4
+3x+3x^{2}1
+1x^{3}
+subadd 3, 1
+3x+3x^{2}
+1
+subadd 1, 4
+1
+1x^{3}
+combine failed
+TRYING ADD -----------
+3x+3x^{2}1
+1
+subadd 4, 1
+3x+3x^{2}1
+1
+combine failed
+combine failed
+TRYING MUL -----------
+3x+3x^{2}
+1
+Mul succeeded
+combine succeeded
+(1x^{3}+(3x1+3x^{2}1+1))+x^{4}+3x^{2}+3x^{3}+x
+TRYING ADD -----------
+1x^{3}+3x1+3x^{2}1+1
+x^{4}+3x^{2}+3x^{3}+x
+subadd 3, 3
+1x^{3}+3x1+3x^{2}1+1
+x^{4}+3x^{2}+3x^{3}+x
+subadd 4, 6
+1x^{3}
+x^{4}
+subadd 4, 3
+1x^{3}
+3x^{2}+3x^{3}+x
+subadd 3, 4
+3x^{2}+3x^{3}
+1x^{3}
+subadd 4, 4
+3x^{2}
+1x^{3}
+subadd 1, 1
+3
+1
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 3, 6
+3x1+3x^{2}1+1
+x^{4}
+subadd 3, 3
+3x1+3x^{2}1+1
+3x^{2}+3x^{3}+x
+subadd 3, 3
+3x1+3x^{2}1
+3x^{2}+3x^{3}
+subadd 4, 4
+3x1
+3x^{2}
+subadd 4, 1
+3x
+3
+subadd 4, 4
+3x1
+3x^{3}
+subadd 4, 1
+3x
+3
+subadd 4, 4
+3x^{2}1
+3x^{2}
+subadd 4, 1
+3x^{2}
+3
+subadd 4, 4
+3x^{2}1
+3x^{3}
+subadd 4, 1
+3x^{2}
+3
+subadd 3, 2
+3x1+3x^{2}1
+x
+subadd 1, 3
+1
+3x^{2}+3x^{3}
+subadd 1, 2
+1
+x
+combine failed
+TRYING ADD -----------
+x^{4}
+3x^{2}+3x^{3}+x
+subadd 6, 3
+x^{4}
+3x^{2}+3x^{3}+x
+combine failed
+TRYING ADD -----------
+3x^{2}+3x^{3}
+x
+subadd 3, 2
+3x^{2}+3x^{3}
+x
+combine failed
+combine failed
+TRYING ADD -----------
+3x^{2}
+3x^{3}
+subadd 4, 4
+3x^{2}
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}
+3x^{3}
+subadd 4, 4
+3x^{2}
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+sorting 2 tokens
+TRYING ADD -----------
+3x^{2}+3x^{3}
+x
+subadd 3, 2
+3x^{2}+3x^{3}
+x
+combine failed
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+sorting 3 tokens
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{4}
+3x^{2}+3x^{3}+x
+subadd 6, 3
+x^{4}
+3x^{2}+3x^{3}+x
+combine failed
+subadd 4, 6
+3x^{2}
+x^{4}
+subadd 4, 6
+3x^{3}
+x^{4}
+subadd 4, 4
+3x^{3}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 2, 6
+x
+x^{4}
+subadd 2, 4
+x
+3x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+sorting 4 tokens
+TRYING ADD -----------
+1x^{3}
+3x1+3x^{2}1+1
+subadd 4, 3
+1x^{3}
+3x1+3x^{2}1+1
+subadd 3, 4
+3x1+3x^{2}1
+1x^{3}
+subadd 4, 4
+3x1
+1x^{3}
+subadd 4, 1
+3x
+1
+subadd 1, 4
+1
+1x^{3}
+combine failed
+TRYING ADD -----------
+3x1+3x^{2}1
+1
+subadd 3, 1
+3x1+3x^{2}1
+1
+combine failed
+combine failed
+TRYING ADD -----------
+3x1
+3x^{2}1
+subadd 4, 4
+3x1
+3x^{2}1
+subadd 4, 4
+3x
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 2, 6
+x
+x^{2}
+combine failed
+TRYING MUL -----------
+3x^{2}
+1
+Mul succeeded
+combine succeeded
+(1x^{3}+(3x1+3x^{2}+1))+x^{4}+3x^{2}+3x^{3}+x
+TRYING ADD -----------
+1x^{3}+3x1+3x^{2}+1
+x^{4}+3x^{2}+3x^{3}+x
+subadd 3, 3
+1x^{3}+3x1+3x^{2}+1
+x^{4}+3x^{2}+3x^{3}+x
+subadd 4, 6
+1x^{3}
+x^{4}
+subadd 4, 3
+1x^{3}
+3x^{2}+3x^{3}+x
+subadd 3, 4
+3x^{2}+3x^{3}
+1x^{3}
+subadd 4, 4
+3x^{2}
+1x^{3}
+subadd 1, 1
+3
+1
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 3, 6
+3x1+3x^{2}+1
+x^{4}
+subadd 3, 3
+3x1+3x^{2}+1
+3x^{2}+3x^{3}+x
+subadd 3, 3
+3x1+3x^{2}
+3x^{2}+3x^{3}
+subadd 4, 4
+3x1
+3x^{2}
+subadd 4, 1
+3x
+3
+subadd 4, 4
+3x1
+3x^{3}
+subadd 4, 1
+3x
+3
+subadd 4, 4
+3x^{2}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+2
+add add add
+subadd 4, 6
+1x^{3}
+x^{4}
+subadd 4, 3
+1x^{3}
+3x^{2}+3x^{3}+x
+subadd 3, 4
+3x^{2}+3x^{3}
+1x^{3}
+subadd 4, 4
+3x^{2}
+1x^{3}
+subadd 1, 1
+3
+1
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+subadd 2, 4
+x
+1x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 3, 6
+3x1+3x^{2}+1
+x^{4}
+subadd 3, 3
+3x1+3x^{2}+1
+3x^{2}+3x^{3}+x
+subadd 3, 3
+3x1+3x^{2}
+3x^{2}+3x^{3}
+subadd 4, 4
+3x1
+3x^{2}
+subadd 4, 1
+3x
+3
+subadd 4, 4
+3x1
+3x^{3}
+subadd 4, 1
+3x
+3
+subadd 4, 4
+3x^{2}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+2
+add add add
+subadd 3, 3
+3x1+3x^{2}
+3x^{2}+3x^{3}
+subadd 4, 4
+3x1
+3x^{2}
+subadd 4, 1
+3x
+3
+subadd 4, 4
+3x1
+3x^{3}
+subadd 4, 1
+3x
+3
+subadd 4, 4
+3x^{2}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+2
+add add add
+subadd 4, 4
+3x1
+3x^{2}
+subadd 4, 1
+3x
+3
+subadd 4, 4
+3x1
+3x^{3}
+subadd 4, 1
+3x
+3
+subadd 4, 4
+3x^{2}
+3x^{2}
+subadd 1, 1
+3
+3
+subadd 6, 6
+x^{2}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+2
+Add succeeded
+combine succeeded
+((6x^{2}+3x1+3x^{3})+1+x)+1x^{3}+x^{4}
+TRYING ADD -----------
+(6x^{2}+3x1+3x^{3})+1+x
+1x^{3}+x^{4}
+subadd 3, 3
+(6x^{2}+3x1+3x^{3})+1+x
+1x^{3}+x^{4}
+subadd 3, 4
+6x^{2}+3x1+3x^{3}
+1x^{3}
+subadd 4, 4
+6x^{2}
+1x^{3}
+subadd 1, 1
+6
+1
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+subadd 3, 6
+6x^{2}+3x1+3x^{3}
+x^{4}
+subadd 3, 4
+1+x
+1x^{3}
+subadd 1, 4
+1
+1x^{3}
+subadd 3, 6
+1+x
+x^{4}
+combine failed
+TRYING ADD -----------
+1x^{3}
+x^{4}
+subadd 4, 6
+1x^{3}
+x^{4}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+1
+x^{3}
+Mul succeeded
+combine succeeded
+((6x^{2}+3x1+3x^{3})+1+x)+x^{3}+x^{4}
+TRYING ADD -----------
+(6x^{2}+3x1+3x^{3})+1+x
+x^{3}+x^{4}
+subadd 3, 3
+(6x^{2}+3x1+3x^{3})+1+x
+x^{3}+x^{4}
+subadd 3, 6
+6x^{2}+3x1+3x^{3}
+x^{3}
+subadd 3, 6
+6x^{2}+3x1+3x^{3}
+x^{4}
+subadd 3, 6
+1+x
+x^{3}
+subadd 3, 6
+1+x
+x^{4}
+combine failed
+TRYING ADD -----------
+x^{3}
+x^{4}
+subadd 6, 6
+x^{3}
+x^{4}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+4
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{3}
+x^{4}
+subadd 6, 6
+x^{3}
+x^{4}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+4
+combine failed
+subadd 6, 6
+x^{4}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+4
+3
+sorting 2 tokens
+TRYING ADD -----------
+6x^{2}+3x1+3x^{3}
+1+x
+subadd 3, 3
+6x^{2}+3x1+3x^{3}
+1+x
+subadd 4, 1
+6x^{2}
+1
+subadd 4, 2
+6x^{2}
+x
+subadd 4, 3
+6x^{2}
+1+x
+subadd 1, 4
+1
+6x^{2}
+subadd 2, 4
+x
+6x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 3, 1
+3x1+3x^{3}
+1
+subadd 3, 2
+3x1+3x^{3}
+x
+combine failed
+TRYING ADD -----------
+1
+x
+subadd 1, 2
+1
+x
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+1
+x
+subadd 1, 2
+1
+x
+combine failed
+subadd 2, 1
+x
+1
+sorting 2 tokens
+Unstable sort
+((6x^{2}+3x1+3x^{3})+x+1)+x^{3}+x^{4}
+TRYING ADD -----------
+x
+1
+subadd 2, 1
+x
+1
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x
+1
+subadd 2, 1
+x
+1
+combine failed
+subadd 1, 2
+1
+x
+sorting 2 tokens
+TRYING ADD -----------
+6x^{2}
+3x1+3x^{3}
+subadd 4, 3
+6x^{2}
+3x1+3x^{3}
+subadd 4, 4
+3x1
+6x^{2}
+subadd 4, 1
+3x
+6
+subadd 4, 4
+3x^{3}
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+combine failed
+TRYING ADD -----------
+3x1
+3x^{3}
+subadd 4, 4
+3x1
+3x^{3}
+subadd 4, 1
+3x
+3
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING MUL -----------
+3x
+1
+Mul succeeded
+combine succeeded
+((6x^{2}+3x+3x^{3})+x+1)+x^{3}+x^{4}
+TRYING ADD -----------
+(6x^{2}+3x+3x^{3})+x+1
+x^{3}+x^{4}
+subadd 3, 3
+(6x^{2}+3x+3x^{3})+x+1
+x^{3}+x^{4}
+subadd 3, 6
+6x^{2}+3x+3x^{3}
+x^{3}
+subadd 3, 6
+6x^{2}+3x+3x^{3}
+x^{4}
+subadd 3, 6
+x+1
+x^{3}
+subadd 3, 6
+x+1
+x^{4}
+combine failed
+TRYING ADD -----------
+x^{3}
+x^{4}
+subadd 6, 6
+x^{3}
+x^{4}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+4
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{3}
+x^{4}
+subadd 6, 6
+x^{3}
+x^{4}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+4
+combine failed
+subadd 6, 6
+x^{4}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+4
+3
+sorting 2 tokens
+TRYING ADD -----------
+6x^{2}+3x+3x^{3}
+x+1
+subadd 3, 3
+6x^{2}+3x+3x^{3}
+x+1
+subadd 4, 2
+6x^{2}
+x
+subadd 4, 3
+6x^{2}
+1+x
+subadd 1, 4
+1
+6x^{2}
+subadd 2, 4
+x
+6x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 4, 1
+6x^{2}
+1
+subadd 3, 2
+3x+3x^{3}
+x
+subadd 3, 1
+3x+3x^{3}
+1
+combine failed
+TRYING ADD -----------
+x
+1
+subadd 2, 1
+x
+1
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x
+1
+subadd 2, 1
+x
+1
+combine failed
+subadd 1, 2
+1
+x
+sorting 2 tokens
+TRYING ADD -----------
+6x^{2}
+3x+3x^{3}
+subadd 4, 3
+6x^{2}
+3x+3x^{3}
+subadd 4, 4
+3x
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 2, 6
+x
+x^{2}
+subadd 4, 4
+3x^{3}
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+combine failed
+TRYING ADD -----------
+3x
+3x^{3}
+subadd 4, 4
+3x
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 2, 6
+x
+x^{3}
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING MUL -----------
+3
+x
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x
+combine failed
+subadd 2, 1
+x
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x
+3x^{3}
+subadd 4, 4
+3x
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 2, 6
+x
+x^{3}
+combine failed
+subadd 4, 4
+3x^{3}
+3x
+subadd 1, 1
+3
+3
+subadd 6, 2
+x^{3}
+x
+sorting 2 tokens
+TRYING MUL -----------
+6
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+6
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+6
+sorting 2 tokens
+TRYING ADD -----------
+6x^{2}
+3x+3x^{3}
+subadd 4, 3
+6x^{2}
+3x+3x^{3}
+subadd 4, 4
+3x
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 2, 6
+x
+x^{2}
+subadd 4, 4
+3x^{3}
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+combine failed
+subadd 4, 4
+3x
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 2, 6
+x
+x^{2}
+subadd 4, 4
+3x^{3}
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 4, 4
+3x^{3}
+3x
+subadd 1, 1
+3
+3
+subadd 6, 2
+x^{3}
+x
+sorting 3 tokens
+TRYING ADD -----------
+6x^{2}+3x+3x^{3}
+x+1
+subadd 3, 3
+6x^{2}+3x+3x^{3}
+x+1
+subadd 4, 2
+6x^{2}
+x
+subadd 4, 3
+6x^{2}
+1+x
+subadd 1, 4
+1
+6x^{2}
+subadd 2, 4
+x
+6x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 4, 1
+6x^{2}
+1
+subadd 3, 2
+3x+3x^{3}
+x
+subadd 3, 1
+3x+3x^{3}
+1
+combine failed
+subadd 4, 4
+3x
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 2, 6
+x
+x^{2}
+subadd 4, 4
+3x^{3}
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 4, 4
+3x^{3}
+3x
+subadd 1, 1
+3
+3
+subadd 6, 2
+x^{3}
+x
+subadd 2, 4
+x
+6x^{2}
+subadd 2, 6
+x
+x^{2}
+subadd 2, 4
+x
+3x
+subadd 2, 2
+x
+x
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 1, 4
+1
+6x^{2}
+subadd 1, 4
+1
+3x
+subadd 1, 4
+1
+3x^{3}
+subadd 1, 2
+1
+x
+sorting 5 tokens
+Unstable sort
+((3x+x+6x^{2})+3x^{3}+1)+x^{3}+x^{4}
+TRYING ADD -----------
+3x+x+6x^{2}
+3x^{3}+1
+subadd 3, 3
+3x+x+6x^{2}
+3x^{3}+1
+subadd 4, 4
+3x
+3x^{3}
+subadd 1, 1
+3
+3
+subadd 2, 6
+x
+x^{3}
+subadd 4, 1
+3x
+1
+subadd 3, 4
+x+6x^{2}
+3x^{3}
+subadd 2, 4
+x
+3x^{3}
+subadd 2, 6
+x
+x^{3}
+subadd 3, 1
+x+6x^{2}
+1
+combine failed
+TRYING ADD -----------
+3x^{3}
+1
+subadd 4, 1
+3x^{3}
+1
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x^{3}
+1
+subadd 4, 1
+3x^{3}
+1
+combine failed
+subadd 1, 4
+1
+3x^{3}
+sorting 2 tokens
+TRYING ADD -----------
+3x
+x+6x^{2}
+subadd 4, 3
+3x
+x+6x^{2}
+subadd 2, 4
+x
+3x
+subadd 2, 2
+x
+x
+subadd 2, 4
+x
+3x
+subadd 2, 2
+x
+x
+Add succeeded
+combine succeeded
+(4x+6x^{2}+3x^{3}+1)+x^{3}+x^{4}
+TRYING ADD -----------
+4x+6x^{2}+3x^{3}+1
+x^{3}+x^{4}
+subadd 3, 3
+4x+6x^{2}+3x^{3}+1
+x^{3}+x^{4}
+subadd 3, 6
+4x+6x^{2}
+x^{3}
+subadd 3, 6
+4x+6x^{2}
+x^{4}
+subadd 3, 6
+3x^{3}+1
+x^{3}
+subadd 3, 6
+3x^{3}+1
+x^{4}
+combine failed
+TRYING ADD -----------
+x^{3}
+x^{4}
+subadd 6, 6
+x^{3}
+x^{4}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+4
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{3}
+x^{4}
+subadd 6, 6
+x^{3}
+x^{4}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+4
+combine failed
+subadd 6, 6
+x^{4}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+4
+3
+sorting 2 tokens
+TRYING ADD -----------
+4x+6x^{2}
+3x^{3}+1
+subadd 3, 3
+4x+6x^{2}
+3x^{3}+1
+subadd 4, 4
+4x
+3x^{3}
+subadd 1, 1
+4
+3
+subadd 2, 6
+x
+x^{3}
+subadd 4, 1
+4x
+1
+subadd 4, 4
+6x^{2}
+3x^{3}
+subadd 1, 1
+6
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+subadd 4, 1
+6x^{2}
+1
+combine failed
+TRYING ADD -----------
+3x^{3}
+1
+subadd 4, 1
+3x^{3}
+1
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x^{3}
+1
+subadd 4, 1
+3x^{3}
+1
+combine failed
+subadd 1, 4
+1
+3x^{3}
+sorting 2 tokens
+TRYING ADD -----------
+4x
+6x^{2}
+subadd 4, 4
+4x
+6x^{2}
+subadd 1, 1
+4
+6
+subadd 2, 6
+x
+x^{2}
+combine failed
+TRYING MUL -----------
+6
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+6
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+6
+sorting 2 tokens
+TRYING MUL -----------
+4
+x
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+4
+x
+combine failed
+subadd 2, 1
+x
+4
+sorting 2 tokens
+TRYING ADD -----------
+4x
+6x^{2}
+subadd 4, 4
+4x
+6x^{2}
+subadd 1, 1
+4
+6
+subadd 2, 6
+x
+x^{2}
+combine failed
+subadd 4, 4
+6x^{2}
+4x
+subadd 1, 1
+6
+4
+subadd 6, 2
+x^{2}
+x
+sorting 2 tokens
+TRYING ADD -----------
+4x+6x^{2}
+3x^{3}+1
+subadd 3, 3
+4x+6x^{2}
+3x^{3}+1
+subadd 4, 4
+4x
+3x^{3}
+subadd 1, 1
+4
+3
+subadd 2, 6
+x
+x^{3}
+subadd 4, 1
+4x
+1
+subadd 4, 4
+6x^{2}
+3x^{3}
+subadd 1, 1
+6
+3
+subadd 6, 6
+x^{2}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+2
+3
+subadd 4, 1
+6x^{2}
+1
+combine failed
+subadd 4, 4
+6x^{2}
+4x
+subadd 1, 1
+6
+4
+subadd 6, 2
+x^{2}
+x
+subadd 4, 4
+3x^{3}
+4x
+subadd 1, 1
+3
+4
+subadd 6, 2
+x^{3}
+x
+subadd 4, 4
+3x^{3}
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 1, 4
+1
+4x
+subadd 1, 4
+1
+6x^{2}
+subadd 1, 4
+1
+3x^{3}
+sorting 4 tokens
+TRYING ADD -----------
+4x+6x^{2}+3x^{3}+1
+x^{3}+x^{4}
+subadd 3, 3
+4x+6x^{2}+3x^{3}+1
+x^{3}+x^{4}
+subadd 3, 6
+4x+6x^{2}
+x^{3}
+subadd 3, 6
+4x+6x^{2}
+x^{4}
+subadd 3, 6
+3x^{3}+1
+x^{3}
+subadd 3, 6
+3x^{3}+1
+x^{4}
+combine failed
+subadd 4, 4
+6x^{2}
+4x
+subadd 1, 1
+6
+4
+subadd 6, 2
+x^{2}
+x
+subadd 4, 4
+3x^{3}
+4x
+subadd 1, 1
+3
+4
+subadd 6, 2
+x^{3}
+x
+subadd 4, 4
+3x^{3}
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 1, 4
+1
+4x
+subadd 1, 4
+1
+6x^{2}
+subadd 1, 4
+1
+3x^{3}
+subadd 6, 4
+x^{3}
+4x
+subadd 6, 4
+x^{3}
+6x^{2}
+subadd 6, 4
+x^{3}
+3x^{3}
+subadd 6, 1
+x^{3}
+1
+subadd 6, 4
+x^{4}
+4x
+subadd 6, 4
+x^{4}
+6x^{2}
+subadd 6, 4
+x^{4}
+3x^{3}
+subadd 6, 1
+x^{4}
+1
+subadd 6, 6
+x^{4}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+4
+3
+sorting 6 tokens
+Unstable sort
+(x^{3}+x^{4}+4x+6x^{2})+3x^{3}+1
+TRYING ADD -----------
+x^{3}+x^{4}+4x+6x^{2}
+3x^{3}+1
+subadd 3, 3
+x^{3}+x^{4}+4x+6x^{2}
+3x^{3}+1
+subadd 3, 4
+x^{3}+x^{4}
+3x^{3}
+subadd 6, 4
+x^{3}
+3x^{3}
+subadd 3, 1
+x^{3}+x^{4}
+1
+subadd 3, 4
+4x+6x^{2}
+3x^{3}
+subadd 4, 4
+4x
+3x^{3}
+subadd 1, 1
+4
+3
+subadd 2, 6
+x
+x^{3}
+subadd 3, 1
+4x+6x^{2}
+1
+combine failed
+TRYING ADD -----------
+3x^{3}
+1
+subadd 4, 1
+3x^{3}
+1
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+3
+x^{3}
+combine failed
+subadd 6, 1
+x^{3}
+3
+sorting 2 tokens
+TRYING ADD -----------
+3x^{3}
+1
+subadd 4, 1
+3x^{3}
+1
+combine failed
+subadd 1, 4
+1
+3x^{3}
+sorting 2 tokens
+TRYING ADD -----------
+x^{3}+x^{4}
+4x+6x^{2}
+subadd 3, 3
+x^{3}+x^{4}
+4x+6x^{2}
+subadd 6, 4
+x^{3}
+4x
+subadd 6, 4
+x^{3}
+6x^{2}
+subadd 6, 4
+x^{4}
+4x
+subadd 6, 4
+x^{4}
+6x^{2}
+combine failed
+TRYING ADD -----------
+4x
+6x^{2}
+subadd 4, 4
+4x
+6x^{2}
+subadd 1, 1
+4
+6
+subadd 2, 6
+x
+x^{2}
+combine failed
+TRYING MUL -----------
+6
+x^{2}
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+6
+x^{2}
+combine failed
+subadd 6, 1
+x^{2}
+6
+sorting 2 tokens
+TRYING MUL -----------
+4
+x
+combine failed
+combine failed
+combine failed
+TRYING MUL -----------
+4
+x
+combine failed
+subadd 2, 1
+x
+4
+sorting 2 tokens
+TRYING ADD -----------
+4x
+6x^{2}
+subadd 4, 4
+4x
+6x^{2}
+subadd 1, 1
+4
+6
+subadd 2, 6
+x
+x^{2}
+combine failed
+subadd 4, 4
+6x^{2}
+4x
+subadd 1, 1
+6
+4
+subadd 6, 2
+x^{2}
+x
+sorting 2 tokens
+TRYING ADD -----------
+x^{3}
+x^{4}
+subadd 6, 6
+x^{3}
+x^{4}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+4
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+combine failed
+TRYING ADD -----------
+x^{3}
+x^{4}
+subadd 6, 6
+x^{3}
+x^{4}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+4
+combine failed
+subadd 6, 6
+x^{4}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+4
+3
+sorting 2 tokens
+TRYING ADD -----------
+x^{3}+x^{4}
+4x+6x^{2}
+subadd 3, 3
+x^{3}+x^{4}
+4x+6x^{2}
+subadd 6, 4
+x^{3}
+4x
+subadd 6, 4
+x^{3}
+6x^{2}
+subadd 6, 4
+x^{4}
+4x
+subadd 6, 4
+x^{4}
+6x^{2}
+combine failed
+subadd 6, 6
+x^{4}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+4
+3
+subadd 4, 6
+4x
+x^{3}
+subadd 4, 6
+4x
+x^{4}
+subadd 4, 6
+6x^{2}
+x^{3}
+subadd 4, 6
+6x^{2}
+x^{4}
+subadd 4, 4
+6x^{2}
+4x
+subadd 1, 1
+6
+4
+subadd 6, 2
+x^{2}
+x
+sorting 4 tokens
+TRYING ADD -----------
+x^{3}+x^{4}+4x+6x^{2}
+3x^{3}+1
+subadd 3, 3
+x^{3}+x^{4}+4x+6x^{2}
+3x^{3}+1
+subadd 3, 4
+x^{3}+x^{4}
+3x^{3}
+subadd 6, 4
+x^{3}
+3x^{3}
+subadd 3, 1
+x^{3}+x^{4}
+1
+subadd 3, 4
+4x+6x^{2}
+3x^{3}
+subadd 4, 4
+4x
+3x^{3}
+subadd 1, 1
+4
+3
+subadd 2, 6
+x
+x^{3}
+subadd 3, 1
+4x+6x^{2}
+1
+combine failed
+subadd 6, 6
+x^{4}
+x^{3}
+subadd 2, 2
+x
+x
+subadd 1, 1
+4
+3
+subadd 4, 6
+4x
+x^{3}
+subadd 4, 6
+4x
+x^{4}
+subadd 4, 6
+6x^{2}
+x^{3}
+subadd 4, 6
+6x^{2}
+x^{4}
+subadd 4, 4
+6x^{2}
+4x
+subadd 1, 1
+6
+4
+subadd 6, 2
+x^{2}
+x
+subadd 4, 6
+3x^{3}
+x^{3}
+subadd 4, 6
+3x^{3}
+x^{4}
+subadd 4, 4
+3x^{3}
+4x
+subadd 1, 1
+3
+4
+subadd 6, 2
+x^{3}
+x
+subadd 4, 4
+3x^{3}
+6x^{2}
+subadd 1, 1
+3
+6
+subadd 6, 6
+x^{3}
+x^{2}
+subadd 2, 2
+x
+x
+subadd 1, 1
+3
+2
+subadd 1, 6
+1
+x^{3}
+subadd 1, 6
+1
+x^{4}
+subadd 1, 4
+1
+4x
+subadd 1, 4
+1
+6x^{2}
+subadd 1, 4
+1
+3x^{3}
+sorting 6 tokens
+Stability after 74 iterations.
+(x^{3}+x^{4}+4x+6x^{2})+3x^{3}+1

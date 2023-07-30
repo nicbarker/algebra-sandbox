@@ -33,6 +33,7 @@ typedef union
 
 typedef struct
 {
+    int path;
     ChildTokenIndexOrPrimitiveValue childLeft;
     TokenIndex childRight;
     TokenType tokenType;

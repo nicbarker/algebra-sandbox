@@ -184,7 +184,7 @@ int main()
   // Token *rightAddGroup = createTokenAsRightChild(TOKENTYPE_GROUP_ADD, outerMulGroup);
 
   Token *leftNum1 = createTokenAsLeftChild(mainTree, TOKENTYPE_PRIMITIVE_NUMBER, leftAddGroup);
-  leftNum1->childLeft.numberValue = 1;
+  leftNum1->childLeft.numberValue = 2;
   Token *leftPro1 = createTokenAsRightChild(mainTree, TOKENTYPE_PRIMITIVE_PRONUMERAL, leftAddGroup);
   leftPro1->childLeft.pronumeralValue = 'x';
 

@@ -11,7 +11,6 @@ const poppins = Poppins({
 function MyApp({ Component, pageProps }) {
   return (
     <main className={poppins.className}>
-      <script src="/algebra.js" type="text/javascript" />
       <Component {...pageProps} />
     </main>
   );

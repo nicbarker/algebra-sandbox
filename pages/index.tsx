@@ -30,11 +30,12 @@ type AlgorithmStep = {
 type Token = {
     path: number[],
     quantity: number,
-    leftSubTree?: Token[]
+    leftSubTree?: Token[],
     rightSubTree?: Token[]
 }
 
 const pathMapping: string[] = [
+    'NONE',
     'ADD'
 ]
 
@@ -42,21 +43,13 @@ if (typeof window !== 'undefined') {
     window['pathMapping'] = pathMapping;
 }
 
-function leafToken(token: Token) {
-    return pathMapping[token.path[token.path.length - 1]];
-}
-
-function groupToken(token: Token) {
-    return pathMapping[token.path[token.path.length - 2]];
-}
-
 type NestedToken = { key: number, quantity: number, subTokens: NestedToken[] }
 export function getPrintableTree(tokens: Token[]) {
-    const printableTree: NestedToken = { key: tokens.length > 0 ? tokens[0].path[0] : 0, quantity: 1, subTokens: [] };
+    const printableTree: NestedToken = { key: getOrCreatePathMapping("NONE"), quantity: 0, subTokens: [] };
     const copy = JSON.parse(JSON.stringify(tokens)) as Token[];
 
     for (const token of copy) {
-        let subTokens = [printableTree];
+        let subTokens = printableTree.subTokens;
         while (token.path.length > 0) {
             let pathSegment = token.path.splice(0, 1)[0];
             const matchingToken = subTokens.find(t => t.key === pathSegment);
@@ -107,6 +100,8 @@ function printTokens(tokens: Token[]) {
         } else {
             switch (pathMapping[token.token.key]) {
                 case "NONE":
+                case "LEFT":
+                case "RIGHT":
                 case "MUL": {
                     for (let i = token.token.subTokens.length - 1; i > -1; i--) {
                         toPrint.push({ type: 'token', token: token.token.subTokens[i] });
@@ -142,7 +137,7 @@ function printTokens(tokens: Token[]) {
                     break;
                 }
             }
-            if (pathMapping[token.token.key] === 'NUMBER' || token.token.quantity !== 1) {
+            if (pathMapping[token.token.key] !== 'NONE' && (pathMapping[token.token.key] === 'NUMBER' || token.token.quantity !== 1)) {
                 toPrint.push({ type: 'string', string: token.token.quantity === -1 ? '-' : token.token.quantity.toString() });
             }
         }
@@ -166,243 +161,179 @@ function getOrCreatePathMapping(path: string) {
     }
 }
 
-export function command(leaves: Token[], operator: string, path: string, quantity: number) {
-    commandInternal(leaves, operator, [path], quantity);
+function getPathSortOrder(path: string) {
+    switch (path) {
+        case 'NUMBER': return 1;
+        case 'MUL': return 2;
+        case 'ADD': return 3;
+        default: return 0;
+    }
 }
 
-// Returns TRUE the result was a "clean" add or division
-export function commandInternalWillProduceCleanResult(leaves: Token[], operator: string, pathString: string[]): boolean {
-    const path = getOrCreatePathMapping(pathString[0]);
-    switch (operator) {
-        case 'ADD': {
-            return leaves.findIndex(l => l.path[1] == path) !== -1;
+function compareTokens(tokenA: Token, tokenB: Token) {
+    for (let i = 0; i < tokenA.path.length && i < tokenB.path.length; i++) {
+        if (tokenA.path[i] !== tokenB.path[i]) {
+            return getPathSortOrder(pathMapping[tokenA.path[i]]) - getPathSortOrder(pathMapping[tokenB.path[i]]);
         }
+    }
+    return tokenA.path.length - tokenB.path.length;
+}
+
+function getPathHash(leaves: Token[], path: number[]) {
+    let stringPath = path.join(',');
+    let toHash = leaves.filter(t => t.path.slice(path.length).join(",").includes(stringPath));
+    let hash: string = '';
+    for (const token of toHash) {
+        for (const segment of token.path) {
+            hash += pathMapping[segment];
+        }
+    }
+    return hash;
+}
+
+function process(leaves: Token[], basePath: number[]) {
+    console.log("inspecting base path", basePath);
+    let stringPath = JSON.stringify(basePath);
+    let matched = leaves.filter(t => JSON.stringify(t.path.slice(0, basePath.length)) === stringPath);
+    matched.sort(compareTokens);
+    console.log("matched", JSON.parse(JSON.stringify(matched)));
+    const group = basePath[basePath.length - 1];
+    // Prune empty mul / add groups
+    if (matched.length === 1 && (pathMapping[group] === "ADD" || pathMapping[group] === "MUL")) {
+        console.log('prune', matched[0].path);
+        matched[0].path.splice(basePath.length - 1, 1);
+        return;
+    }
+    const mulCache: { [key: number]: number } = {};
+    const diverged: number[][] = [];
+    for (let i = 0; i < matched.length; i++) {
+        if (matched[i].path[basePath.length - 1] !== group) { // The path has changed during this iteration and doesn't match the group any more
+            const newPath = matched[i].path.slice(0, basePath.length + 1);
+            if (matched[i].path.length > basePath.length + 1 && !diverged.find(p => JSON.stringify(p) === JSON.stringify(newPath))) {
+                diverged.push(newPath);
+            }
+            continue;
+        }
+        let destroyed = false;
+        for (let j = 0; j < matched.length; j++) {
+            if (i === j) continue;
+            if (pathMapping[matched[j].path[basePath.length]] === pathMapping[group]) { // hoist nested ADD & MUL
+                matched[j].path.splice(basePath.length, 1);
+                console.log(pathMapping[group], 'Hoist', JSON.parse(JSON.stringify(matched)));
+            }
+            const pathHash1 = getPathHash(matched, matched[i].path.slice(basePath.length));
+            const pathHash2 = getPathHash(matched, matched[j].path.slice(basePath.length));
+            switch (pathMapping[group]) {
+                case 'ADD': {
+                    if (pathHash1 && pathHash1 === pathHash2) {
+                        matched[i].quantity += matched[j].quantity;
+                        matched[j].path = [-1];
+                        if (matched[i].quantity === 0) {
+                            matched[i].path = [-1];
+                        }
+                    }
+                    break;
+                }
+                case 'MUL': {
+                    const leaf1 = matched[i].path[basePath.length];
+                    const leaf2 = matched[j].path[basePath.length];
+                    if (pathMapping[leaf2] === 'DIV') {
+                        if (pathMapping[leaf1] === 'DIV') {
+                            console.log("div div multiply");
+                            console.log()
+                            command(matched[j].leftSubTree, matched[i].leftSubTree, 'MUL');
+                            command(matched[j].rightSubTree, matched[i].rightSubTree, 'MUL');
+                        } else {
+                            console.log("div any multiply");
+                            command(matched[j].leftSubTree, [{ ...matched[i], path: matched[i].path.slice(basePath.length) }], 'MUL');
+                        }
+                        destroyed = true;
+                    } // x * (x + 1) = x^2 + x
+                    else if (pathMapping[leaf2] === 'ADD') { // Multiply out add
+                        const cached = mulCache[matched[j].path[basePath.length + 1]] !== undefined;
+                        const newMul = cached ? mulCache[matched[j].path[basePath.length + 1]] : createPathMapping("MUL");
+                        matched[j].path.splice(basePath.length - 1, 1);
+                        matched[j].path.splice(basePath.length, 0, newMul);
+                        const clonedToken = { path: [...matched[j].path.slice(0, basePath.length + 1), ...matched[i].path.slice(basePath.length)], quantity: matched[i].quantity };
+                        !cached && leaves.push(clonedToken);
+                        mulCache[matched[j].path[basePath.length + 1]] = newMul;
+                        console.log('Multiply out add', JSON.parse(JSON.stringify(matched)));
+                        destroyed = true;
+                    } // x * x^2 = x^3
+                    else if (pathMapping[leaf1].length === 1 && pathMapping[leaf2] === 'POW' && pathMapping[matched[j].leftSubTree[0].path[0]] === pathMapping[leaf1]) {
+                        command(matched[j].rightSubTree, [{ path: [getOrCreatePathMapping("NUMBER")], quantity: 1 }], 'ADD');
+                        destroyed = true;
+                    } // x * x = x^2
+                    else if (pathMapping[leaf1].length === 1 && leaf1 === leaf2) {
+                        const leaf = matched[i].path.splice(basePath.length, 1, createPathMapping("POW"))[0];
+                        matched[i].quantity *= matched[j].quantity;
+                        matched[i].leftSubTree = [{ path: [leaf], quantity: 1 }];
+                        matched[i].rightSubTree = [{ path: [getOrCreatePathMapping("NUMBER")], quantity: 2 }];
+                        matched[j].path = [-1];
+                    } // x * 2 = 2x
+                    else if (pathMapping[leaf2] === 'NUMBER' && pathMapping[leaf1] !== 'DIV') {
+                        matched[i].quantity *= matched[j].quantity;
+                        matched[j].path = [-1];
+                    }
+                    break;
+                }
+            }
+        }
+        const newPath = matched[i].path.slice(0, basePath.length + 1);
+        if (destroyed) {
+            matched[i].path = [-1];
+            console.log('destroyed', JSON.parse(JSON.stringify(matched)));
+        }
+        else if (matched[i].path.length > basePath.length + 1 && !diverged.find(p => JSON.stringify(p) === JSON.stringify(newPath))) {
+            diverged.push(newPath);
+        }
+    }
+    console.log('cache', mulCache);
+    for (const path of diverged) {
+        process(leaves, path);
+    }
+}
+
+export function command(leaves: Token[], newLeaves: Token[], operator: string) {
+    switch (operator) {
+        case 'ADD':
+        case 'SUB':
         case 'MUL': {
-            return true;
+            const baseGroup = getOrCreatePathMapping(operator === 'SUB' ? 'ADD' : operator);
+            leaves.push(...newLeaves);
+            leaves.forEach(t => t.path.splice(0, 0, baseGroup));
+            process(leaves, []);
+            break;
         }
         case 'DIV': {
-            const toModify: { index: number, token: Token }[] = []
-            for (let i = 0; i < leaves.length; i++) {
-                const token = leaves[i];
-                // Only multiply / div into a mul group once
-                if (groupToken(token) === "MUL") {
-                    const otherTokenInGroupIndex = toModify.findIndex(t => t.token.path[t.token.path.length - 2] === token.path[token.path.length - 2]);
-                    if (otherTokenInGroupIndex === -1) {
-                        toModify.push({ index: i, token });
-                    } else if (
-                        (leafToken(toModify[otherTokenInGroupIndex].token) !== 'NUMBER' &&
-                            path === token.path[token.path.length - 1])
-                        ||
-                        (leafToken(token) === 'POW' &&
-                            JSON.stringify(token.leftSubTree[0].path) === JSON.stringify([0, path]))) {
-                        toModify[otherTokenInGroupIndex] = { token, index: i };
-                    }
-                } else {
-                    toModify.push({ index: i, token });
-                }
-            }
-            for (let i = 0; i < toModify.length; i++) {
-                const token = toModify[i].token;
-                if (operator === 'DIV') {
-                    const leaf = leafToken(token);
-                    if (pathMapping[path] === 'NUMBER' && leaf !== 'DIV') {
-                        continue;
-                    } else if (leaf === 'POW' && JSON.stringify(token.leftSubTree[0].path) === JSON.stringify([0, path])) {
-                        continue;
-                    } else if (leaf === 'DIV') {
-                        continue;
-                    } else if (leaf.length === 1 && leaf === pathMapping[path]) {
-                        continue;
-                    } else if (leaf.length === 1 && leaf === pathMapping[path]) {
-                        continue;
-                    }
-
-                    return false;
-                }
-            }
-            return true;
+            const baseGroup = getOrCreatePathMapping('MUL');
+            const numerator = [{ path: [getOrCreatePathMapping("NUMBER")], quantity: 1 }];
+            const denominator = newLeaves;
+            leaves.push({
+                path: [baseGroup, getOrCreatePathMapping('DIV')],
+                quantity: 1,
+                leftSubTree: numerator,
+                rightSubTree: denominator
+            });
+            leaves.forEach(t => t.path.splice(0, 0, baseGroup));
+            process(leaves, []);
+        }
+    }
+    for (let i = 0; i < leaves.length; i++) {
+        if (leaves[i].path[0] === -1) {
+            console.log("Deleting old token", JSON.parse(JSON.stringify(leaves)));
+            leaves.splice(i--, 1);
         }
     }
 }
 
-export function commandInternal(leaves: Token[], operator: string, pathString: string[], quantity: number): boolean {
-    const path = getOrCreatePathMapping(pathString[0]);
-    switch (operator) {
-        case 'ADD': {
-            for (let i = 0; i < leaves.length; i++) {
-                const leaf1 = leaves[i];
-                if (leaf1.path[1] == path) {
-                    leaf1.quantity += quantity;
-                    if (leaf1.quantity === 0) {
-                        leaves.splice(i, 1);
-                    }
-                    return true;
-                }
-            }
-            leaves.push({
-                path: [0, path],
-                quantity
-            });
-        }
-        case 'DIV':
-        case 'MUL': {
-            const toMultiply: Token[] = []
-            for (let i = 0; i < leaves.length; i++) {
-                const token = leaves[i];
-                // Only multiply / div into a mul group once
-                if (groupToken(token) === "MUL") {
-                    const otherTokenInGroupIndex = toMultiply.findIndex(t => t.path[t.path.length - 2] === token.path[token.path.length - 2]);
-                    if (otherTokenInGroupIndex === -1) {
-                        toMultiply.push(token);
-                    } else if (
-                        (leafToken(toMultiply[otherTokenInGroupIndex]) !== 'NUMBER' &&
-                            path === token.path[token.path.length - 1])
-                        ||
-                        (leafToken(token) === 'POW' &&
-                            JSON.stringify(token.leftSubTree[0].path) === JSON.stringify([0, path]))) {
-                        toMultiply[otherTokenInGroupIndex] = token;
-                    }
-                } else {
-                    toMultiply.push(token);
-                }
-            }
-            for (let i = 0; i < toMultiply.length; i++) {
-                const token = toMultiply[i];
-                console.log(operator, leafToken(token), quantity);
-                if (operator === 'MUL') {
-                    if (pathMapping[path] === 'NUMBER' && leafToken(token) !== 'DIV') {
-                        token.quantity *= quantity;
-                        continue;
-                    }
-                    switch (leafToken(token)) {
-                        case "NUMBER": {
-                            token.quantity *= quantity;
-                            token.path[token.path.length - 1] = path;
-                            break;
-                        }
-                        case 'DIV': {
-                            if (commandInternalWillProduceCleanResult(token.rightSubTree, 'DIV', [pathMapping[path]])) {
-                                commandInternal(token.rightSubTree, 'DIV', [pathMapping[path]], quantity);
-                                if (pathMapping[token.rightSubTree[0].path[1]] === "NUMBER" && token.rightSubTree[0].quantity === 1) { // DIV has hit x/1
-                                    token.path.splice(-1, 1);
-                                    token.leftSubTree.forEach(t => t.path = token.path.concat(t.path.slice(1)));
-                                    leaves.splice(leaves.indexOf(toMultiply[i]), 1);
-                                }
-                            } else {
-                                command(token.leftSubTree, 'MUL', pathMapping[path], quantity);
-                            }
-                            break;
-                        }
-                        case 'POW': {
-                            token.quantity *= quantity;
-                            if (JSON.stringify(token.leftSubTree[0].path) === JSON.stringify([0, path])) {
-                                command(token.rightSubTree, 'ADD', 'NUMBER', 1);
-                                break;
-                            }
-                        }
-                        default: { // pronumerals
-                            token.quantity *= quantity;
-                            // Same pronumeral, upgrade to POW
-                            if (leafToken(token) === pathMapping[path]) {
-                                const powBase = token.path.splice(-1, 1)[0];
-                                token.path.push(createPathMapping('POW'));
-                                token.leftSubTree = [{
-                                    path: [0, powBase],
-                                    quantity: 1
-                                }];
-                                token.rightSubTree = [{
-                                    path: [0, getOrCreatePathMapping('NUMBER')],
-                                    quantity: 2
-                                }];
-                            } else {
-                                // Different pronumeral, create MUL group
-                                if (groupToken(token) !== 'MUL') {
-                                    const newMapping = createPathMapping("MUL");
-                                    token.path.splice(token.path.length - 1, 0, newMapping);
-                                }
-                                leaves.push({
-                                    path: token.path.slice(0, -1).concat([path]),
-                                    quantity: 1
-                                });
-                            }
-                        }
-                    }
-                } else if (operator === 'DIV') {
-                    const isCleanDivision = token.quantity / quantity === Math.floor(token.quantity / quantity);
-                    if (isCleanDivision) {
-                        token.quantity /= quantity;
-                        if (pathMapping[path] === 'NUMBER') {
-                            continue;
-                        }
-                    }
-                    const leaf = leafToken(token);
-                    if (leaf === 'POW') {
-                        if (JSON.stringify(token.leftSubTree[0].path) === JSON.stringify([0, path])) {
-                            command(token.rightSubTree, 'ADD', 'NUMBER', -1)
-                            if (token.rightSubTree.length === 0) { // POW has hit x^0
-                                token.path[token.path.length - 1] = getOrCreatePathMapping("NUMBER");
-                                token.quantity = 1;
-                            } else if (pathMapping[token.rightSubTree[0].path[1]] === "NUMBER" && token.rightSubTree[0].quantity === 1) { // POW has hit x^1
-                                token.path[token.path.length - 1] = token.leftSubTree[0].path[1] // TODO composite bases need to be merged back out of subtree
-                            }
-                            continue;
-                        }
-                    } else if (leaf === 'DIV') {
-                        if (commandInternalWillProduceCleanResult(token.leftSubTree, 'DIV', [pathMapping[path]])) {
-                            command(token.leftSubTree, 'DIV', pathMapping[path], quantity);
-                        } else {
-                            command(token.rightSubTree, 'MUL', pathMapping[path], quantity);
-                        }
-                        continue;
-                    } else if (leaf.length === 1 && leaf === pathMapping[path]) {
-                        if (groupToken(token) === "MUL") {
-                            leaves.splice(leaves.indexOf(toMultiply[i]), 1);
-                        } else {
-                            token.path[token.path.length - 1] = getOrCreatePathMapping('NUMBER');
-                        }
-                        continue;
-                    }
-
-                    // Fallback: upgrade to DIV
-                    const divGroup: Token = {
-                        path: token.path.slice(0, -1).concat(createPathMapping('DIV')),
-                        quantity: 1,
-                        leftSubTree: [],
-                        rightSubTree: [{
-                            path: [0, path],
-                            quantity: quantity
-                        }],
-                    };
-
-                    const group = token.path[token.path.length - 2];
-                    // If we're dividing a multiply group, bring the whole group into the DIV numerator
-                    if (groupToken(token) === "MUL") {
-                        const newMul = createPathMapping("MUL");
-                        for (let j = 0; j < leaves.length; j++) {
-                            const leaf = leaves[j];
-                            if (group === leaf.path[leaf.path.length - 2]) {
-                                divGroup.leftSubTree.push({
-                                    path: [0, newMul, leaf.path[leaf.path.length - 1]],
-                                    quantity: leaf.quantity,
-                                    leftSubTree: leaf.leftSubTree,
-                                    rightSubTree: leaf.rightSubTree
-                                })
-                                leaves.splice(j, 1);
-                                j--;
-                            }
-                        }
-                    } else {
-                        // Otherwise, just bring the single token into the numerator
-                        token.path = [0, token.path[token.path.length - 1]];
-                        divGroup.leftSubTree[0] = token;
-                        leaves.splice(leaves.findIndex(t => t === token), 1);
-                    }
-                    leaves.push(divGroup);
-                }
-            }
-            console.log(JSON.parse(JSON.stringify(leaves)));
-        }
-    }
+function applyOperator(input: InputOperatorObject) {
+    previousSteps.push({
+        operator: input,
+        state: JSON.parse(JSON.stringify(equations))
+    });
+    const leaf = input.numeral ? getOrCreatePathMapping(input.numeral) : getOrCreatePathMapping('NUMBER');
+    command(equations, [{ path: [leaf], quantity: input.value }], input.operator);
 }
 
 const getGCD = (x: number, y: number): number => (!y ? x : getGCD(y, x % y));
@@ -465,7 +396,6 @@ function getInputLabelFromOperator(operatorObject: InputOperatorObject) {
 
 function PreviousToken(props: { step: AlgorithmStep, onClick?: () => void, onExpandSubTokens?: () => void }) {
     return useMemo(() => {
-        process.env.NODE_ENV === 'development' && console.log("recompute");
         const tokens = printTokens(props.step.state);
         try {
             const leftString = katex.renderToString(tokens);
@@ -486,14 +416,6 @@ function PreviousToken(props: { step: AlgorithmStep, onClick?: () => void, onExp
             console.warn(error, tokens, props.step);
         }
     }, [props.step, props.step.expanded]);
-}
-
-function applyOperator(input: InputOperatorObject) {
-    previousSteps.push({
-        operator: input,
-        state: JSON.parse(JSON.stringify(equations))
-    });
-    command(equations, input.operator === 'SUB' ? 'ADD' : input.operator, input.numeral || 'NUMBER', input.value);
 }
 
 function App() {

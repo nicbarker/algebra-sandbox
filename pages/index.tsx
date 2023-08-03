@@ -4,8 +4,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import classnames from "classnames";
 import katex from "katex";
 import Link from "next/link";
-import classNames from "classnames";
-import { Token, cloneTokenWithGroup, command, incrementAndReturnGroupId, printTokens } from "./algebra";
+import { Token, cloneTokenWithGroup, command, incrementAndReturnGroupId, printTokens } from "../algebra/algebra";
 
 let equations: Token[] = [{
     group: 0,

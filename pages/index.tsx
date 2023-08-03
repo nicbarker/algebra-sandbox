@@ -238,30 +238,6 @@ function App() {
             <div className={styles.container}>
                 <div className={styles.headerBar}>
                     <div className={styles.logo}>Algebra Sandbox</div>
-                    <div className={styles.dropdownOuter}>
-                        <div className={styles.dropdownLabel} onClick={() => setOptionsExpanded(!optionsExpanded)}>Options &#8595;</div>
-                        <button className={classNames(styles.dropdownInner, { [styles.visible]: optionsExpanded })}>
-                            <label>
-                                Equality Count
-                                <div className={styles.expand} />
-                                <select onChange={(event) => {
-                                    const newValue = parseInt(event.target.value, 10);
-                                    if (newValue > equations.length) {
-                                        for (let i = equations.length; i < newValue; i++) {
-                                            // equations.push({ type: TokenType.GROUP_ADD, id: nextTokenId++, tokens: [{ type: TokenType.PRIMITIVE_NUMBER, id: nextTokenId++, value: 1 }] });
-                                        }
-                                    } else if (newValue < equations.length) {
-                                        equations = equations.slice(0, newValue);
-                                    }
-                                    setReload(reload + 1);
-                                }}>
-                                    <option value={1}>1</option>
-                                    <option value={2}>2</option>
-                                    <option value={3}>3</option>
-                                </select>
-                            </label>
-                        </button>
-                    </div>
                     <div className={styles.expand} />
                     <Link href="https://github.com/nicbarker/algebra-sandbox">
                         GitHub

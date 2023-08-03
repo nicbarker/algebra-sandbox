@@ -10,7 +10,7 @@ export type Token = {
 let nextGroupId = 1;
 
 export function cloneTokenWithGroup(token: Token, group: number) {
-	const newToken = JSON.parse(JSON.stringify(token));
+	const newToken = JSON.parse(JSON.stringify(token)); // This should be an easy AOS clone in a C like language
 	newToken.group = group;
 	return newToken as Token;
 }
@@ -163,7 +163,6 @@ function processAdd(leaves: Token[]) {
 			let quantity2 = 0;
 			const group2 = groups[j];
 			if (group1.tokens.length !== group2.tokens.length) {
-				console.log('length');
 				continue;
 			}
 			let valid = true;

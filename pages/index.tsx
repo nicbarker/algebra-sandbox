@@ -5,10 +5,19 @@ import classnames from "classnames";
 import katex from "katex";
 import Link from "next/link";
 import classNames from "classnames";
+import { Token, cloneTokenWithGroup, command, incrementAndReturnGroupId, printTokens } from "./algebra";
 
-const DEBUG_VIEW = true;
-
-let equations: Token[] = [];
+let equations: Token[] = [{
+    group: 0,
+    numerator: {
+        pow: { value: "NUMBER", quantity: 1 },
+        base: { value: "NUMBER", quantity: 1 }
+    },
+    denominator: {
+        pow: { value: "NUMBER", quantity: 1 },
+        base: { value: "NUMBER", quantity: 1 }
+    },
+}];
 
 type StepNote = {
     groupId: number,
@@ -27,165 +36,30 @@ type AlgorithmStep = {
     cancellations?: number[]
 }
 
-type Value = { value: number | string, quantity: number };
-
-type Token = {
-    group: number,
-    power: Value,
-    mul: Value,
-    div: Value,
-    divPower: Value,
-}
-
-const pathMapping: string[] = [
-    'NONE',
-    'ADD'
-]
-
-if (typeof window !== 'undefined') {
-    window['pathMapping'] = pathMapping;
-}
-
-let nextGroupId = 0;
-
-function printValue(value: Value) {
-    return value.value === 'NUMBER' ? value.quantity : `${value.quantity}${value.value}`;
-}
-
-function hasValue(value: Value) {
-    return value.value !== 'NUMBER' || value.quantity !== 1;
-}
-
-export function printTokens(tokens: Token[]) {
-    const copy = JSON.parse(JSON.stringify(tokens)) as Token[];
-    copy.sort((a, b) => { return a.group - b.group });
-    let output = '';
-
-    for (let i = 0; i < copy.length; i++) {
-        const token = copy[i];
-        const hasDiv = token.div.value !== 'NUMBER' || token.div.quantity !== 1;
-        const hasDivPower = token.divPower.value !== 'NUMBER' || token.divPower.quantity !== 1;
-        const hasPower = token.power.value !== 'NUMBER' || token.power.quantity !== 1;
-        output += hasValue(token.div) ? `{` : '';
-        output += printValue(token.mul);
-        output += hasValue(token.power) ? `^{${printValue(token.power)}}` : ''
-        output += hasValue(token.div) ? ` \\over ${printValue(token.div)}` : ''
-        output += hasValue(token.divPower) ? `^{${printValue(token.divPower)}}` : ''
-        output += hasValue(token.div) ? `}` : ''
-        output += (i < copy.length - 1 && copy[i + 1].group !== token.group) ? '+' : '';
-    }
-    return output;
-}
-
-function process(leaves: Token[]) {
-    for (let i = 0; i < leaves.length; i++) {
-        const leaf1 = leaves[i];
-        for (let j = 0; j < leaves.length; j++) {
-            if (i === j || leaves[i].mul.value === 'DESTROYED' || leaves[j].mul.value === 'DESTROYED') continue;
-            const leaf2 = leaves[j];
-            if (leaf1.group == leaf2.group) {
-                // DIV
-                if (hasValue(leaf2.div)) {
-                    if (hasValue(leaf1.div)) {
-                        if ((leaf1.div.value === leaf2.div.value || leaf1.div.value === "NUMBER" || leaf2.div.value === "NUMBER") &&
-                            (leaf1.mul.value === leaf2.mul.value || leaf1.mul.value === "NUMBER" || leaf2.mul.value === "NUMBER")) {
-                            console.log("SDF", leaf1, leaf2);
-                            if (leaf2.div.value === 'NUMBER') { // NUMBER
-                                leaf1.div.quantity *= leaf2.div.quantity;
-                            }
-                            else { //POW
-                                leaf1.divPower.quantity += leaf2.divPower.quantity;
-                            }
-                            if (leaf2.mul.value === 'NUMBER') { // DIV NUMBER
-                                leaf1.mul.quantity *= leaf2.mul.quantity;
-                            }
-                            else { // DIV POW
-                                leaf1.power.quantity += leaf2.power.quantity;
-                            }
-                            leaf2.mul.value = 'DESTROYED';
-                        } else {
-                            console.log("TODO");
-                        }
-                    }
-                    else if (leaf1.mul.value === "NUMBER" && leaf1.mul.value == leaf2.div.value) {
-                        if (leaf1.mul.quantity / leaf2.div.quantity === Math.floor(leaf1.mul.quantity / leaf2.div.quantity)) {
-                            leaf1.mul.quantity /= leaf2.div.quantity;
-                        } else {
-                            leaf1.div.quantity = leaf2.div.quantity;
-                        }
-                        leaf2.mul.value = 'DESTROYED';
-                    } else if (leaf1.mul.value == leaf2.div.value) { // DIV X
-                        leaf1.power.quantity -= leaf2.divPower.quantity;
-                        if (leaf1.power.quantity === 0) {
-                            leaf1.power.quantity = 1;
-                            leaf1.mul.value = 'NUMBER';
-                        }
-                        leaf2.mul.value = 'DESTROYED';
-                    } else if (leaf2.div.value !== 'NUMBER' || leaf2.div.quantity !== 1) {
-                        console.log(leaf1.div.quantity, leaf2.div.quantity);
-                        leaf1.div.value = leaf2.div.value;
-                        leaf1.div.quantity *= leaf2.div.quantity;
-                        leaf2.mul.value = 'DESTROYED';
-                    }
-                }
-                else if (leaf2.mul.value === 'NUMBER') { // NUMBER
-                    leaf1.mul.quantity *= leaf2.mul.quantity;
-                    leaf2.mul.value = 'DESTROYED';
-                }
-                else if (leaf1.mul.value == leaf2.mul.value) { //POW
-                    leaf1.power.quantity += leaf2.power.quantity;
-                    leaf2.mul.value = 'DESTROYED';
-                }
-            }
-        }
-    }
-    for (let i = 0; i < leaves.length; i++) {
-        if (leaves[i].mul.value === "DESTROYED") {
-            leaves.splice(i--, 1);
-        }
-    }
-}
-
-export function command(leaves: Token[], newLeaves: Token[], operator: string) {
-    for (const token of newLeaves) {
-        if (operator === 'ADD' || operator === 'SUB') {
-            leaves.push(token);
-        } else if (operator === 'MUL') {
-            const oldLength = leaves.length;
-            const cached = new Set<number>();
-            for (let i = 0; i < oldLength; i++) {
-                if (!cached.has(leaves[i].group)) {
-                    const toAdd = JSON.parse(JSON.stringify(token));
-                    toAdd.group = leaves[i].group;
-                    leaves.push(toAdd);
-                }
-                cached.add(leaves[i].group);
-            }
-        } else if (operator === 'DIV') {
-            const oldLength = leaves.length;
-            for (let i = 0; i < oldLength; i++) {
-                const toAdd = JSON.parse(JSON.stringify(token));
-                toAdd.group = leaves[i].group;
-                leaves.push(toAdd);
-            }
-        }
-        console.log(JSON.parse(JSON.stringify(equations)));
-        process(leaves);
-    }
-}
-
 function applyOperator(input: InputOperatorObject) {
     previousSteps.push({
         operator: input,
         state: JSON.parse(JSON.stringify(equations))
     });
+    if (input.operator === 'POW') {
+        const originalEquations = JSON.parse(JSON.stringify(equations));
+        for (let i = 1; i < input.value; i++) {
+            incrementAndReturnGroupId(1);
+            equations = command(equations, originalEquations.map(t => cloneTokenWithGroup(t, t.group + incrementAndReturnGroupId(0))), 'MUL');
+        }
+        return;
+    }
     const leaf = input.numeral || 'NUMBER';
-    command(equations, [{
-        group: nextGroupId++,
-        power: { value: 'NUMBER', quantity: 1 },
-        mul: input.operator !== InputOperator.DIVIDE ? { value: leaf, quantity: input.value } : { value: 'NUMBER', quantity: 1 },
-        div: input.operator === InputOperator.DIVIDE ? { value: leaf, quantity: input.value } : { value: 'NUMBER', quantity: 1 },
-        divPower: { value: 'NUMBER', quantity: 1 }
+    equations = command(equations, [{
+        group: incrementAndReturnGroupId(1),
+        numerator: {
+            pow: { value: 'NUMBER', quantity: 1 },
+            base: input.operator !== InputOperator.DIVIDE ? { value: leaf, quantity: input.value } : { value: 'NUMBER', quantity: 1 },
+        },
+        denominator: {
+            pow: { value: 'NUMBER', quantity: 1 },
+            base: input.operator === InputOperator.DIVIDE ? { value: leaf, quantity: input.value } : { value: 'NUMBER', quantity: 1 },
+        }
     }], input.operator);
 }
 
@@ -275,13 +149,8 @@ function App() {
     const [currentInput, setCurrentInput] = useState<InputOperatorObject>({ operator: InputOperator.NONE });
     const [reload, setReload] = useState<number>(0);
     const [optionsExpanded, setOptionsExpanded] = useState(false);
-    const [tokenString, setTokenString] = useState("");
+    const [tokenString, setTokenString] = useState(printTokens(equations));
     const scrollRef = useRef<HTMLDivElement>(null);
-
-    // useEffect(() => {
-    //   window['Module']._initialize();
-    //   setTokenString(window['Module'].UTF8ToString(window['Module']._getTokenString()));
-    // }, []);
 
     useEffect(() => {
         const down = (event: KeyboardEvent) => {
@@ -314,9 +183,7 @@ function App() {
                 case 'Enter': {
                     if (currentInput.operator !== InputOperator.NONE) {
                         if (currentInput.value || currentInput.numeral) {
-                            console.log(currentInput);
                             applyOperator(currentInput);
-                            console.log(JSON.parse(JSON.stringify(equations)));
                             setTokenString(printTokens(equations));
                             handled = true;
                             setTimeout(() => {
@@ -366,9 +233,6 @@ function App() {
             }}
         ></PreviousToken>
     ));
-    // const tokens = equations.map(equation => {
-    //   return TokenGroupComponent({ group: equation, noParens: true, algorithmStep: { operator: { operator: InputOperator.NONE }, state: equations, subSteps: [] } }).join(' ');
-    // }).join(' = ');
     return (
         <div className={styles.App} role="main">
             <div className={styles.container}>

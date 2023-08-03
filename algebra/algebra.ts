@@ -15,11 +15,12 @@ export function cloneTokenWithGroup(token: Token, group: number) {
 	return newToken as Token;
 }
 
-function printValue(value: Value, showQuantity: boolean = true) {
+function printValue(value: Value, showQuantity: boolean = true, negative: boolean = false) {
+	const quantity = negative && value.quantity === -1 ? "-" : value.quantity.toString();
 	if (value.value === 'NUMBER' && showQuantity) {
-		return value.quantity;
+		return quantity;
 	} else if (value.value !== 'NUMBER') {
-		return showQuantity ? `${value.quantity}${value.value}` : value.value
+		return showQuantity ? `${quantity}${value.value}` : value.value
 	}
 	return '';
 }
@@ -43,7 +44,7 @@ export function printTokens(tokens: Token[]) {
 			}
 			compoundDenominator.push(token.denominator);
 		}
-		output += printValue(token.numerator.base, token.numerator.base.quantity !== 1 || (token.numerator.base.value === 'NUMBER' && (compoundDenominator.length === 1 || !copy.find(t => t.group === token.group && t !== token))));
+		output += printValue(token.numerator.base, token.numerator.base.quantity !== 1 || (token.numerator.base.value === 'NUMBER' && (compoundDenominator.length === 1 || !copy.find(t => t.group === token.group && t !== token))), token.numerator.base.quantity < 0);
 		output += hasValue(token.numerator.pow) ? `^{${printValue(token.numerator.pow)}}` : ''
 		if (compoundDenominator.length > 0 && (i === copy.length - 1 || copy[i + 1].group !== token.group)) {
 			output += ` \\over `;
@@ -54,7 +55,7 @@ export function printTokens(tokens: Token[]) {
 			output += `}`
 			compoundDenominator = [];
 		}
-		output += (i < copy.length - 1 && copy[i + 1].group !== token.group) ? '+' : '';
+		output += (i < copy.length - 1 && copy[i + 1].group !== token.group && copy[i + 1].numerator.base.quantity > 0) ? '+' : '';
 	}
 	return output;
 }

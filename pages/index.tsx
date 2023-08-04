@@ -4,18 +4,20 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import classnames from "classnames";
 import katex from "katex";
 import Link from "next/link";
-import { Token, cloneTokenWithGroup, command, incrementAndReturnGroupId, printTokens } from "../algebra/algebra";
+import { Token, TokenGroup, cloneTokenGroup, command, incrementAndReturnGroupId, printTokens } from "../algebra/algebra";
 
-let equations: Token[] = [{
-    group: 0,
-    numerator: {
-        pow: { value: "NUMBER", quantity: 1 },
-        base: { value: "NUMBER", quantity: 1 }
-    },
-    denominator: {
-        pow: { value: "NUMBER", quantity: 1 },
-        base: { value: "NUMBER", quantity: 1 }
-    },
+let equations: TokenGroup[] = [{
+    groupId: 0,
+    tokens: [{
+        numerator: {
+            pow: { value: "NUMBER", quantity: 1 },
+            base: { value: "NUMBER", quantity: 1 }
+        },
+        denominator: {
+            pow: { value: "NUMBER", quantity: 1 },
+            base: { value: "NUMBER", quantity: 1 }
+        }
+    }]
 }];
 
 type StepNote = {
@@ -30,7 +32,7 @@ type AlgorithmStep = {
     operator: InputOperatorObject,
     subSteps?: AlgorithmStep[],
     expanded?: boolean,
-    state: Token[],
+    state: TokenGroup[],
     note?: StepNote,
     cancellations?: number[]
 }
@@ -41,24 +43,26 @@ function applyOperator(input: InputOperatorObject) {
         state: JSON.parse(JSON.stringify(equations))
     });
     if (input.operator === 'POW') {
-        const originalEquations = JSON.parse(JSON.stringify(equations));
+        const originalEquations = JSON.parse(JSON.stringify(equations)) as TokenGroup[];
         for (let i = 1; i < input.value; i++) {
             incrementAndReturnGroupId(1);
-            equations = command(equations, originalEquations.map(t => cloneTokenWithGroup(t, t.group + incrementAndReturnGroupId(0))), 'MUL');
+            equations = command(equations, originalEquations.map(t => cloneTokenGroup(t, t.groupId + incrementAndReturnGroupId(0))), 'MUL');
         }
         return;
     }
     const leaf = input.numeral || 'NUMBER';
     equations = command(equations, [{
-        group: incrementAndReturnGroupId(1),
-        numerator: {
-            pow: { value: 'NUMBER', quantity: 1 },
-            base: input.operator !== InputOperator.DIVIDE ? { value: leaf, quantity: input.value } : { value: 'NUMBER', quantity: 1 },
-        },
-        denominator: {
-            pow: { value: 'NUMBER', quantity: 1 },
-            base: input.operator === InputOperator.DIVIDE ? { value: leaf, quantity: input.value } : { value: 'NUMBER', quantity: 1 },
-        }
+        groupId: incrementAndReturnGroupId(1),
+        tokens: [{
+            numerator: {
+                pow: { value: 'NUMBER', quantity: 1 },
+                base: input.operator !== InputOperator.DIVIDE ? { value: leaf, quantity: input.value } : { value: 'NUMBER', quantity: 1 },
+            },
+            denominator: {
+                pow: { value: 'NUMBER', quantity: 1 },
+                base: input.operator === InputOperator.DIVIDE ? { value: leaf, quantity: input.value } : { value: 'NUMBER', quantity: 1 },
+            }
+        }]
     }], input.operator);
 }
 

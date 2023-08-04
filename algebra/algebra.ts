@@ -1,18 +1,17 @@
 type Value = { value: string, quantity: number };
 type ValueContainer = { base: Value, pow: Value };
-
 export type Token = {
-	group: number,
 	numerator: ValueContainer,
 	denominator: ValueContainer
 }
+export type TokenGroup = { groupId: number, tokens: Token[] }
 
 let nextGroupId = 1;
 
-export function cloneTokenWithGroup(token: Token, group: number) {
-	const newToken = JSON.parse(JSON.stringify(token)); // This should be an easy AOS clone in a C like language
-	newToken.group = group;
-	return newToken as Token;
+export function cloneTokenGroup(group: TokenGroup, groupId: number) {
+	const newGroup = JSON.parse(JSON.stringify(group)) as TokenGroup; // This should be an easy AOS clone in a C like language
+	newGroup.groupId = groupId;
+	return newGroup as TokenGroup;
 }
 
 function printValue(value: Value, showQuantity: boolean = true, negative: boolean = false) {
@@ -29,33 +28,28 @@ function hasValue(value: Value) {
 	return value.value !== 'NUMBER' || value.quantity !== 1;
 }
 
-export function printTokens(tokens: Token[]) {
-	const copy = JSON.parse(JSON.stringify(tokens)) as Token[];
-	copy.sort((a, b) => { return a.group - b.group });
+export function printTokens(groups: TokenGroup[]) {
 	let output = '';
-
-	let compoundDenominator: ValueContainer[] = [];
-	for (let i = 0; i < copy.length; i++) {
-		const token = copy[i];
-		const nextToken = copy[Math.min(copy.length - 1, i + 1)];
-		if (hasValue(token.denominator.base) || (nextToken.group === token.group && hasValue(nextToken.denominator.base))) {
-			if (compoundDenominator.length === 0) {
-				output += token.denominator.base ? `{` : '';
-			}
-			compoundDenominator.push(token.denominator);
+	for (let gi = 0; gi < groups.length; gi++) {
+		const group = groups[gi];
+		const denominators = group.tokens.filter(t => hasValue(t.denominator.base)).map(t => t.denominator);
+		output += gi === 0 || (group.tokens[0].numerator.base.quantity < 0 && !hasValue(group.tokens[0].denominator.base)) ? '' : '+';
+		if (denominators.length > 0) {
+			output += `{`;
 		}
-		output += printValue(token.numerator.base, token.numerator.base.quantity !== 1 || (token.numerator.base.value === 'NUMBER' && (compoundDenominator.length === 1 || !copy.find(t => t.group === token.group && t !== token))), token.numerator.base.quantity < 0);
-		output += hasValue(token.numerator.pow) ? `^{${printValue(token.numerator.pow)}}` : ''
-		if (compoundDenominator.length > 0 && (i === copy.length - 1 || copy[i + 1].group !== token.group)) {
+		for (let i = 0; i < group.tokens.length; i++) {
+			const token = group.tokens[i];
+			output += printValue(token.numerator.base, token.numerator.base.quantity !== 1 || (token.numerator.base.value === 'NUMBER' && group.tokens.length === 1), token.numerator.base.quantity < 0);
+			output += hasValue(token.numerator.pow) ? `^{${printValue(token.numerator.pow)}}` : ''
+		}
+		if (denominators.length > 0) {
 			output += ` \\over `;
-			for (const denominator of compoundDenominator) {
+			for (const denominator of denominators) {
 				output += `${printValue(denominator.base, denominator.base.quantity !== 1)}`;
 				output += hasValue(denominator.pow) ? `^{${printValue(denominator.pow)}}` : '';
 			}
 			output += `}`
-			compoundDenominator = [];
 		}
-		output += (i < copy.length - 1 && copy[i + 1].group !== token.group && copy[i + 1].numerator.base.quantity > 0) ? '+' : '';
 	}
 	return output;
 }
@@ -98,65 +92,45 @@ function simplify(token: Token, alone: boolean) {
 	}
 }
 
-function processMultiply(leaves: Token[]) {
-	leaves.sort((a, b) => { return a.group - b.group });
-	for (let i = 0; i < leaves.length; i++) {
-		const leaf1 = leaves[i];
-		for (let j = Math.min(i + 1, leaves.length - 1); j < leaves.length; j++) {
-			const leaf2 = leaves[j];
-			if (leaf1.group == leaf2.group) {
-				const multiplied = i !== j && canMultiply(leaf1.numerator.base, leaf2.numerator.base) && canMultiply(leaf1.denominator.base, leaf2.denominator.base);
-				if (multiplied) {
+function processMultiply(groups: TokenGroup[]) {
+	for (let gi = 0; gi < groups.length; gi++) {
+		const group = groups[gi];
+		for (let i = 0; i < group.tokens.length; i++) {
+			const leaf1 = group.tokens[i];
+			for (let j = i + 1; j < group.tokens.length; j++) {
+				const leaf2 = group.tokens[j];
+				const canMultiplyNumerator = canMultiply(leaf1.numerator.base, leaf2.numerator.base);
+				const canMultiplyDenominator = canMultiply(leaf1.denominator.base, leaf2.denominator.base);
+				if (canMultiplyNumerator) {
 					multiply(leaf1.numerator, leaf2.numerator);
-					multiply(leaf1.denominator, leaf2.denominator);
+					leaf2.numerator = { base: { value: 'NUMBER', quantity: 1 }, pow: { value: 'NUMBER', quantity: 1 } }
 				}
-				else if (leaf1.numerator.base.value === leaf2.denominator.base.value || leaf2.numerator.base.value === leaf1.denominator.base.value) {
+				if (canMultiplyDenominator) {
+					multiply(leaf1.denominator, leaf2.denominator);
+					leaf2.denominator = { base: { value: 'NUMBER', quantity: 1 }, pow: { value: 'NUMBER', quantity: 1 } }
+				}
+				if (leaf1.numerator.base.value === leaf2.denominator.base.value || leaf2.numerator.base.value === leaf1.denominator.base.value) {
 					const temp = leaf1.denominator;
 					leaf1.denominator = leaf2.denominator;
 					leaf2.denominator = temp;
 				}
-				if (multiplied || simplify(leaf2, !leaves.find(t => t.group === leaf2.group && t !== leaf2))) {
-					leaves.splice(j, 1);
+				if (simplify(leaf2, group.tokens.length === 1)) {
+					group.tokens.splice(j, 1);
 					i = -1;
 					break;
 				}
 			}
-		}
-		if (i > -1 && simplify(leaf1, !leaves.find(t => t.group === leaf1.group && t !== leaf1))) {
-			leaves.splice(i--, 1);
-		}
-	}
-}
-
-function getGroups(leaves: Token[]): { group: number, tokens: Token[] }[] {
-	const groups: { group: number, tokens: Token[] }[] = [];
-	for (let i = 0; i < leaves.length; i++) {
-		const leaf = leaves[i];
-		let groupIndex = groups.findIndex(g => g.group === leaf.group);
-		if (groupIndex < 0) {
-			groups.push({ group: leaf.group, tokens: [] });
-			groupIndex = groups.length - 1;
-		}
-		groups[groupIndex].tokens.push(leaf);
-	}
-	return groups;
-}
-
-function processAdd(leaves: Token[]) {
-	leaves.sort((a, b) => {
-		if (a.group !== b.group) {
-			return a.group - b.group;
-		} else {
-			if (a.numerator.base.value === "NUMBER") {
-				return +1;
-			} else if (b.numerator.base.value === "NUMBER") {
-				return -1;
-			} else {
-				return a.numerator.base.value.charCodeAt(0) - b.numerator.base.value.charCodeAt(0);
+			if (i > -1 && simplify(leaf1, group.tokens.length === 1)) {
+				group.tokens.splice(i--, 1);
 			}
 		}
-	})
-	const groups = getGroups(leaves);
+		if (group.tokens.length === 0) {
+			groups.splice(gi--, 1);
+		}
+	}
+}
+
+function processAdd(groups: TokenGroup[]) {
 	for (let i = 0; i < groups.length - 1; i++) {
 		const group1 = groups[i];
 		for (let j = i + 1; j < groups.length; j++) {
@@ -184,41 +158,38 @@ function processAdd(leaves: Token[]) {
 			}
 			if (valid) {
 				for (let k = 0; k < group2.tokens.length; k++) {
-					leaves.splice(leaves.indexOf(group2.tokens[k]), 1);
+					group2.tokens.splice(k, 1);
 				}
 				group1.tokens[0].numerator.base.quantity = quantity1 + quantity2;
 				groups.splice(j--, 1);
 				if (group1.tokens[0].numerator.base.quantity === 0) {
 					for (let k = 0; k < group1.tokens.length; k++) {
-						leaves.splice(leaves.indexOf(group1.tokens[k]), 1);
+						group1.tokens.splice(k, 1);
 					}
 				}
 			}
 		}
+		if (group1.tokens.length === 0) {
+			groups.splice(i--, 1);
+		}
 	}
 }
 
-export function command(leaves: Token[], newLeaves: Token[], operator: string) {
-	const createdLeaves: Token[] = [];
+export function command(oldGroups: TokenGroup[], newGroups: TokenGroup[], operator: string) {
+	const createdGroups: TokenGroup[] = [];
 	if (operator === 'ADD' || operator === 'SUB') {
-		createdLeaves.push(...leaves);
-		for (const token of newLeaves) {
-			createdLeaves.push(token);
-		}
+		createdGroups.push(...oldGroups, ...newGroups);
 	} else if (operator === 'MUL' || operator === 'DIV') {
-		const oldGroups = getGroups(leaves);
-		const newGroups = getGroups(newLeaves);
 		for (let i = 0; i < oldGroups.length; i++) {
 			for (let j = 0; j < newGroups.length; j++) {
 				const createdGroup = nextGroupId++;
-				createdLeaves.push(...oldGroups[i].tokens.map(t => cloneTokenWithGroup(t, createdGroup)));
-				createdLeaves.push(...newGroups[j].tokens.map(t => cloneTokenWithGroup(t, createdGroup)));
+				createdGroups.push({ groupId: createdGroup, tokens: JSON.parse(JSON.stringify(oldGroups[i].tokens)).concat(JSON.parse(JSON.stringify(newGroups[j].tokens))) });
 			}
 		}
 	}
-	processMultiply(createdLeaves);
-	processAdd(createdLeaves);
-	return createdLeaves;
+	processMultiply(createdGroups);
+	processAdd(createdGroups);
+	return createdGroups;
 }
 
 export function incrementAndReturnGroupId(inc: number) {

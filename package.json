@@ -16,7 +16,7 @@
     "@types/react": "^18",
     "eslint": "^8.44.0",
     "react-refresh": "0.10.0",
-    "typescript": "latest"
+    "typescript": "4.1.6"
   },
   "scripts": {
     "dev": "next dev",

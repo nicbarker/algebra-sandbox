@@ -3,5 +3,6 @@
         "algebra": "c",
         "stdbool.h": "c",
         "stdlib.h": "c"
-    }
+    },
+    "typescript.tsdk": "./node_modules/typescript/lib"
 }

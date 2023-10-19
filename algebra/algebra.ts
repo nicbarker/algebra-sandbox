@@ -190,6 +190,13 @@ function Exp(algebraFunction: AlgebraFunction): FunctionResult {
 		PrintDebug("Fold down nested exponents");
 		return { collapsed: true, algebraFunction, collapsedFunctionId: exponent.id };
 	}
+	else if (expBase.functionType == AlgebraFunctionType.EXPONENTIAL) { // Fold down nested exponents
+		var newExponent = FunctionArguments(1, AlgebraFunctionType.MUL, CloneAlgebraFunction(expBase.arguments[1]), CloneAlgebraFunction(exponent));
+		algebraFunction.arguments[1] = newExponent;
+		algebraFunction.arguments[0] = CloneAlgebraFunction(expBase.arguments[0]);
+		PrintDebug("Multiply out exponent as base for nested exponent");
+		return { collapsed: true, algebraFunction, collapsedFunctionId: expBase.id };
+	}
 	if (exponent.functionType == AlgebraFunctionType.PRIMITIVE && exponent.symbol == AlgebraSymbol.NUMBER) {
 		if (exponent.quantity == 0) {
 			PrintDebug("Convert value with exponent of 0 into 1");
@@ -222,6 +229,18 @@ function Exp(algebraFunction: AlgebraFunction): FunctionResult {
 			}
 		}
 	}
+	// Square root
+	else if (exponent.functionType == AlgebraFunctionType.DIV) {
+		if (exponent.arguments[1].functionType == AlgebraFunctionType.PRIMITIVE && exponent.arguments[1].symbol == AlgebraSymbol.NUMBER
+			&& expBase.functionType == AlgebraFunctionType.PRIMITIVE && expBase.symbol == AlgebraSymbol.NUMBER) {
+			var result = Math.pow(expBase.quantity, 1 / exponent.arguments[1].quantity);
+			if (Math.floor(result) == result) {
+				PrintDebug("Square root of primitive number");
+				return { collapsed: true, algebraFunction: FunctionPrimitive(result), collapsedFunctionId: algebraFunction.id };
+			}
+			return { collapsed: false, algebraFunction };
+		}
+	}
 	return { collapsed: false, algebraFunction };
 }
 
@@ -237,11 +256,11 @@ function Div(algebraFunction: AlgebraFunction): FunctionResult {
 	const denominatorIsDiv = denominator.functionType == AlgebraFunctionType.DIV;
 	if (numeratorIsDiv || denominatorIsDiv) {
 		const newFunction = FunctionArguments(algebraFunction.quantity, AlgebraFunctionType.MUL,
-			FunctionArguments(numerator.quantity, AlgebraFunctionType.DIV,
+			FunctionArguments(1, AlgebraFunctionType.DIV,
 				numeratorIsDiv ? numerator.arguments[0] : numerator,
 				numeratorIsDiv ? numerator.arguments[1] : FunctionPrimitive(1)
 			),
-			FunctionArguments(denominator.quantity, AlgebraFunctionType.DIV,
+			FunctionArguments(1, AlgebraFunctionType.DIV,
 				denominatorIsDiv ? denominator.arguments[1] : FunctionPrimitive(1),
 				denominatorIsDiv ? denominator.arguments[0] : denominator
 			)
@@ -486,20 +505,35 @@ export function PrintFunctionsLatex(algebraFunction: AlgebraFunction): string {
 			if (current.algebraFunction.functionType === AlgebraFunctionType.EXPONENTIAL) {
 				toInspect.push({ isString: true, stringValue: "}" });
 			}
-			for (let i = current.algebraFunction.arguments.length - 1; i >= 0; i--) {
-				if (i < current.algebraFunction.arguments.length - 1) {
-					let separator = "+";
-					switch (current.algebraFunction.functionType) {
-						case AlgebraFunctionType.MUL: separator = ""; break;
-						case AlgebraFunctionType.EXPONENTIAL: separator = (current.algebraFunction.arguments[1].functionType == AlgebraFunctionType.ADD ? "(" : "") + "^{"; break;
-						case AlgebraFunctionType.DIV: separator = "\\over"; break;
+			var isRoot = current.algebraFunction.functionType === AlgebraFunctionType.EXPONENTIAL && current.algebraFunction.arguments[1].functionType == AlgebraFunctionType.DIV;
+			if (!isRoot) {
+				for (let i = current.algebraFunction.arguments.length - 1; i >= 0; i--) {
+					if (i < current.algebraFunction.arguments.length - 1) {
+						let separator = "+";
+						switch (current.algebraFunction.functionType) {
+							case AlgebraFunctionType.MUL: separator = "*"; break;
+							case AlgebraFunctionType.EXPONENTIAL: {
+								separator = (current.algebraFunction.arguments[1].functionType == AlgebraFunctionType.ADD ? "(" : "") + "^{";
+								break;
+							}
+							case AlgebraFunctionType.DIV: separator = "\\over"; break;
+						}
+						toInspect.push({ isString: true, stringValue: ` ${separator} ` });
 					}
-					toInspect.push({ isString: true, stringValue: ` ${separator} ` });
+					toInspect.push({ isString: false, algebraFunction: current.algebraFunction.arguments[i] });
 				}
-				toInspect.push({ isString: false, algebraFunction: current.algebraFunction.arguments[i] });
 			}
 			if (current.algebraFunction.functionType === AlgebraFunctionType.EXPONENTIAL && current.algebraFunction.arguments[1].functionType == AlgebraFunctionType.ADD) {
 				toInspect.push({ isString: true, stringValue: "(" });
+			}
+			if (isRoot) {
+				toInspect.push({ isString: false, algebraFunction: current.algebraFunction.arguments[0] });
+				toInspect.push({ isString: true, stringValue: "{" });
+				toInspect.push({ isString: true, stringValue: "]" });
+				if (current.algebraFunction.arguments[1].arguments[1].quantity > 2) {
+					toInspect.push({ isString: false, algebraFunction: current.algebraFunction.arguments[1].arguments[1] });
+				}
+				toInspect.push({ isString: true, stringValue: "\\sqrt[" });
 			}
 			if (current.algebraFunction.functionType === AlgebraFunctionType.DIV) {
 				toInspect.push({ isString: true, stringValue: "{" });

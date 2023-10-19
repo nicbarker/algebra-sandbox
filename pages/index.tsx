@@ -6,7 +6,14 @@ import katex from "katex";
 import Link from "next/link";
 import { AlgebraFunction, AlgebraFunctionType, AlgebraSymbol, AlgebraSymbolFromChar, ExecuteFunction, FunctionArguments, FunctionPrimitive, PrintFunctionsLatex } from "algebra/algebra";
 
-let equations: AlgebraFunction = FunctionPrimitive(1);
+let equations: AlgebraFunction = FunctionArguments(1, AlgebraFunctionType.EXPONENTIAL,
+  FunctionPrimitive(1, AlgebraSymbol.X),
+  FunctionArguments(1, AlgebraFunctionType.DIV,
+    FunctionPrimitive(1),
+    FunctionPrimitive(2)
+  )
+);
+
 type StepNote = {
   groupId: number,
   noteStart: number,
@@ -83,6 +90,12 @@ function App() {
   const [tokenString, setTokenString] = useState(PrintFunctionsLatex(equations));
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  function scrollTop() {
+    setTimeout(() => {
+      if (scrollRef.current) scrollRef.current.scrollTop = 10000;
+    }, 0)
+  }
+
   const onSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       let outerFunction: AlgebraFunction | undefined;
@@ -93,6 +106,17 @@ function App() {
         case "*": outerFunction = FunctionArguments(1, AlgebraFunctionType.MUL, equations); break;
         case "/": outerFunction = FunctionArguments(1, AlgebraFunctionType.DIV, equations); break;
         case "^": outerFunction = FunctionArguments(1, AlgebraFunctionType.EXPONENTIAL, equations); break;
+        case "s": {
+          if (currentInput.includes("sqrt")) {
+            applyOperator(currentInput, FunctionArguments(1, AlgebraFunctionType.EXPONENTIAL, equations, FunctionArguments(1, AlgebraFunctionType.DIV, FunctionPrimitive(1), FunctionPrimitive(2))));
+            setCurrentInput("");
+            setTokenString(PrintFunctionsLatex(equations));
+            scrollTop();
+            return;
+          } else {
+            throw new Error("Invalid operator");
+          }
+        }
         default: throw new Error("Need an operator for input");
       }
       let stringIndex = 1;
@@ -118,6 +142,7 @@ function App() {
       applyOperator(currentInput, outerFunction);
       setCurrentInput("");
       setTokenString(PrintFunctionsLatex(equations));
+      scrollTop();
     }
   }
 
@@ -153,7 +178,7 @@ function App() {
             <div className={styles.right}>&#8592;</div>
           </div>
         </div>
-        <input placeholder={"Try something like \"+x\""} className={styles.inputIndicator} value={currentInput} onChange={(event) => setCurrentInput(event.target.value)} onKeyDown={onSubmit} />
+        <input autoFocus={true} placeholder={"Try something like \"+x\""} className={styles.inputIndicator} value={currentInput} onChange={(event) => setCurrentInput(event.target.value)} onKeyDown={onSubmit} />
       </div>
     </div>
   );

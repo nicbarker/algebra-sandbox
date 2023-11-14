@@ -7,7 +7,8 @@ It's mainly intended to be a tool for playing with algebra and symbolic manipula
 Operator support: +, -, *, /, ^
 
 TODO:
-- Allow arbitrary pronumeral usage
+- Allow arbitrary multi-character pronumeral usage
+- Support special symbols like π
 - Equality support
 - Input LaTeX strings in input field
 - "Set" vs "Modify" operators to input a new statement vs modifying an existing one

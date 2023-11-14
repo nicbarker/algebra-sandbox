@@ -4,14 +4,14 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import classnames from "classnames";
 import katex from "katex";
 import Link from "next/link";
-import { AlgebraFunction, AlgebraFunctionType, AlgebraSymbol, AlgebraSymbolFromChar, CloneAlgebraFunction, ExecuteFunction, FunctionArguments, FunctionPrimitive, FunctionResult, PrintFunctionsLatex, PrintFunctionsLatexWithoutColors, PrintFunctionsWithoutColors, collapseTypeDocumentation } from "algebra/algebra";
+import { AlgebraFunction, AlgebraFunctionType, AlgebraSymbol, CloneAlgebraFunction, ExecuteFunction, FunctionArguments, FunctionPrimitive, FunctionResult, PrintFunctionsLatex, PrintFunctionsLatexWithoutColors, PrintFunctionsWithoutColors, collapseTypeDocumentation } from "algebra/algebra";
 
 let equations: AlgebraFunction = FunctionArguments(1, AlgebraFunctionType.DIV,
   FunctionArguments(1, AlgebraFunctionType.ADD,
     FunctionArguments(1, AlgebraFunctionType.EXPONENTIAL,
       FunctionArguments(1, AlgebraFunctionType.ADD,
         FunctionPrimitive(2),
-        FunctionPrimitive(1, AlgebraSymbol.DT)
+        FunctionPrimitive(1, 'dt')
       ),
       FunctionPrimitive(3)
     ),
@@ -20,7 +20,7 @@ let equations: AlgebraFunction = FunctionArguments(1, AlgebraFunctionType.DIV,
       FunctionPrimitive(3)
     )
   ),
-  FunctionPrimitive(1, AlgebraSymbol.DT)
+  FunctionPrimitive(1, 'dt')
 );
 
 type AlgorithmSubStep = {
@@ -148,7 +148,7 @@ function App() {
         if (currentInput[stringIndex].match(/[0-9]/)) {
           buildingFunction.quantity = parseInt(buildingFunction.quantity.toString() + currentInput[stringIndex], 10);
         } else if (currentInput[stringIndex].match(/[A-Za-z]/)) {
-          buildingFunction.symbol = AlgebraSymbolFromChar(currentInput[stringIndex])
+          buildingFunction.symbol = currentInput[stringIndex];
           if (buildingFunction.quantity == 0) {
             buildingFunction.quantity = 1;
           }

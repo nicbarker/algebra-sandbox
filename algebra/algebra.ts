@@ -339,16 +339,6 @@ function Div(algebraFunction: AlgebraFunction): FunctionResult {
 		var newPrimitive = FunctionPrimitive(1);
 		return { collapsed: true, algebraFunction: newPrimitive, functionCollapseInfo: { functionCollapseType: FunctionCollapseType.COLLAPSE_VALUE_DIVIDED_BY_ITSELF, beforeFunctionIds: [numerator.id, denominator.id], afterFunctionIds: [newPrimitive.id] } };
 	}
-	for (const prime of primesGenerated) {
-		var primePrimitive = FunctionPrimitive(prime);
-		const tryNumerator = DivInternal(numerator, FunctionPrimitive(prime));
-		const tryDenominator = DivInternal(denominator, FunctionPrimitive(prime));
-		if (tryNumerator.collapsed && tryDenominator.collapsed) {
-			algebraFunction.arguments[0] = tryNumerator.remainder;
-			algebraFunction.arguments[1] = tryDenominator.remainder;
-			return { collapsed: true, algebraFunction, functionCollapseInfo: { functionCollapseType: FunctionCollapseType.DIV_NUMERATOR_DENOMINATOR_COMMON_FACTOR, beforeFunctionIds: [numerator.id, denominator.id], afterFunctionIds: [algebraFunction.arguments[0].id, algebraFunction.arguments[1].id], additionalInfo: primePrimitive } };
-		}
-	}
 	if (numerator.functionType == AlgebraFunctionType.ADD) // If even one term in the numerator add function is divisible, split into ADD(DIV + DIV)
 	{
 		for (var i = 0; i < numerator.arguments.length; i++) {
@@ -367,7 +357,18 @@ function Div(algebraFunction: AlgebraFunction): FunctionResult {
 			}
 		}
 	}
-	for (const symbol of [AlgebraSymbol.NUMBER, AlgebraSymbol.A, AlgebraSymbol.B, AlgebraSymbol.C, AlgebraSymbol.X, AlgebraSymbol.Y, AlgebraSymbol.Z, AlgebraSymbol.DT]) {
+	// TODO limit this to maximum quantity value found inside function, dividing by a larger prime is pointless
+	for (const prime of primesGenerated) {
+		var primePrimitive = FunctionPrimitive(prime);
+		const tryNumerator = DivInternal(numerator, FunctionPrimitive(prime));
+		const tryDenominator = DivInternal(denominator, FunctionPrimitive(prime));
+		if (tryNumerator.collapsed && tryDenominator.collapsed) {
+			algebraFunction.arguments[0] = tryNumerator.remainder;
+			algebraFunction.arguments[1] = tryDenominator.remainder;
+			return { collapsed: true, algebraFunction, functionCollapseInfo: { functionCollapseType: FunctionCollapseType.DIV_NUMERATOR_DENOMINATOR_COMMON_FACTOR, beforeFunctionIds: [numerator.id, denominator.id], afterFunctionIds: [algebraFunction.arguments[0].id, algebraFunction.arguments[1].id], additionalInfo: primePrimitive } };
+		}
+	}
+	for (const symbol of getAlgebraSymbolsInFunction(numerator).concat(getAlgebraSymbolsInFunction(denominator))) {
 		var symbolPrimitive = FunctionPrimitive(1, symbol);
 		const tryNumerator = DivInternal(numerator, FunctionPrimitive(1, symbol));
 		const tryDenominator = DivInternal(denominator, FunctionPrimitive(1, symbol));
@@ -450,7 +451,7 @@ function DivInternal(numerator: AlgebraFunction, denominator: AlgebraFunction): 
 	return { collapsed: false };
 }
 
-export function FunctionPrimitive(quantity: number, symbol: AlgebraSymbol = AlgebraSymbol.NUMBER): AlgebraFunction {
+export function FunctionPrimitive(quantity: number, symbol: string = AlgebraSymbol.NUMBER): AlgebraFunction {
 	return {
 		quantity: quantity,
 		symbol: symbol,
@@ -502,6 +503,20 @@ function CalculateResultHashes(algebraFunction: AlgebraFunction): ResultHashes {
 		resultHashes.addHash = resultHashes.exactHash;
 	}
 	return resultHashes;
+}
+
+function getAlgebraSymbolsInFunction(algebraFunction: AlgebraFunction): string[] {
+	const functionsToInspect = [algebraFunction];
+	const symbolsToReturn: string[] = [];
+	while (functionsToInspect.length > 0) {
+		const current = functionsToInspect.splice(functionsToInspect.length - 1, 1)[0];
+		if (current.functionType === AlgebraFunctionType.PRIMITIVE && current.symbol !== AlgebraSymbol.NUMBER) {
+			symbolsToReturn.push(current.symbol);
+		} else if (current.arguments.length > 0) {
+			functionsToInspect.push(...current.arguments);
+		}
+	}
+	return symbolsToReturn;
 }
 
 export function PrintFunctionsWithoutColors(algebraFunction: AlgebraFunction): string {
@@ -618,7 +633,9 @@ export function PrintFunctionsLatex(algebraFunction: AlgebraFunction, affectedFu
 									break;
 								}
 								case AlgebraFunctionType.MUL: {
-									if (current.algebraFunction.arguments[i + 1].functionType == AlgebraFunctionType.PRIMITIVE && current.algebraFunction.arguments[i].functionType == AlgebraFunctionType.PRIMITIVE && current.algebraFunction.arguments[i + 1].symbol === AlgebraSymbol.NUMBER && current.algebraFunction.arguments[i].symbol == AlgebraSymbol.NUMBER) {
+									if (((current.algebraFunction.arguments[i].functionType == AlgebraFunctionType.PRIMITIVE && current.algebraFunction.arguments[i].symbol == AlgebraSymbol.NUMBER))
+										|| (current.algebraFunction.arguments[i + 1].functionType == AlgebraFunctionType.PRIMITIVE && current.algebraFunction.arguments[i + 1].symbol === AlgebraSymbol.NUMBER)
+										|| (current.algebraFunction.arguments[i + 1].functionType == AlgebraFunctionType.DIV && current.algebraFunction.arguments[i].functionType == AlgebraFunctionType.DIV)) {
 										separator = " ⋅ ";
 									} else {
 										separator = "";
@@ -693,26 +710,7 @@ export function CloneAlgebraFunction(algebraFunction: AlgebraFunction, newId = f
 }
 
 export enum AlgebraSymbol {
-	NUMBER = "NUMBER",
-	A = "A",
-	B = "B",
-	C = "C",
-	X = "X",
-	Y = "Y",
-	Z = "Z",
-	DT = "dt",
-}
-
-export function AlgebraSymbolFromChar(inputChar: string) {
-	switch (inputChar[0].toLocaleLowerCase()) {
-		case 'a': return AlgebraSymbol.A;
-		case 'b': return AlgebraSymbol.B;
-		case 'c': return AlgebraSymbol.C;
-		case 'x': return AlgebraSymbol.X;
-		case 'y': return AlgebraSymbol.Y;
-		case 'z': return AlgebraSymbol.Z;
-	}
-	throw new Error("Error: unsupported pronumeral, try x | y | a | b");
+	NUMBER = '\0',
 }
 
 export enum AlgebraFunctionType {
@@ -729,7 +727,7 @@ export type AlgebraFunction =
 		arguments: AlgebraFunction[];
 		quantity: number;
 		functionType: AlgebraFunctionType;
-		symbol: AlgebraSymbol; // Only used for primitives
+		symbol: string; // Only used for primitives
 		id: number;
 	}
 

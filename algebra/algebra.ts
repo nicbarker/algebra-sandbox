@@ -29,6 +29,7 @@ enum FunctionCollapseType {
 	COLLAPSE_VALUE_DIVIDED_BY_ITSELF,
 	SPLIT_AND_DIVIDE_DIV,
 	DIV_NUMERATOR_DENOMINATOR_COMMON_FACTOR,
+	MULTIPLY_BY_ZERO
 }
 
 export const collapseTypeDocumentation: FunctionCollapseTypeDocumentation[] = [
@@ -55,7 +56,8 @@ export const collapseTypeDocumentation: FunctionCollapseTypeDocumentation[] = [
 	{ functionCollapseType: FunctionCollapseType.CONVERT_NESTED_DIV_TO_RECIPROCAL_MUL, devMessage: "Convert nested DIV to reciprocal MUL", humanReadableMessage: "Simplified nested fractions by multiplying by the reciprocal of the denominator" },
 	{ functionCollapseType: FunctionCollapseType.COLLAPSE_VALUE_DIVIDED_BY_ITSELF, devMessage: "Collapse DIV with identical numerator and denominator to 1", humanReadableMessage: "Simplify fraction with identical numerator and denominator to 1" },
 	{ functionCollapseType: FunctionCollapseType.SPLIT_AND_DIVIDE_DIV, devMessage: "Split DIV with ADD numerator to allow partial division", humanReadableMessage: "Split the fraction numerator to allow division" },
-	{ functionCollapseType: FunctionCollapseType.DIV_NUMERATOR_DENOMINATOR_COMMON_FACTOR, devMessage: "Numerator and Denominator can be divided by common factor ?", humanReadableMessage: "Fraction numerator and denominator can be divided by common factor ?" }
+	{ functionCollapseType: FunctionCollapseType.DIV_NUMERATOR_DENOMINATOR_COMMON_FACTOR, devMessage: "Numerator and Denominator can be divided by common factor ?", humanReadableMessage: "Fraction numerator and denominator can be divided by common factor ?" },
+	{ functionCollapseType: FunctionCollapseType.MULTIPLY_BY_ZERO, devMessage: "Multiply group contains zero and can be removed", humanReadableMessage: "Anything multiplied by zero is zero" }
 ];
 
 function PrintDebug(msg: string) {
@@ -88,6 +90,11 @@ export function ExecuteFunction(algebraFunction: AlgebraFunction): FunctionResul
 
 		// Execute sub functions, break on collapse
 		for (let i = 0; i < newFunction.arguments.length; i++) {
+			// Remove entire multiply groups if there is a term with quantity zero
+			if (newFunction.functionType === AlgebraFunctionType.MUL && newFunction.arguments[i].quantity === 0) {
+				const primitiveZero = FunctionPrimitive(0);
+				return { collapsed: true, algebraFunction: primitiveZero, functionCollapseInfo: { functionCollapseType: FunctionCollapseType.MULTIPLY_BY_ZERO, beforeFunctionIds: [newFunction.id], afterFunctionIds: [primitiveZero.id] } };
+			};
 			const result = ExecuteFunction(newFunction.arguments[i]);
 			if (result.collapsed) {
 				newFunction.arguments[i] = result.algebraFunction;

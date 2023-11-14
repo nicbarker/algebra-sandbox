@@ -147,7 +147,7 @@ function App() {
       while (stringIndex < currentInput.length) {
         if (currentInput[stringIndex].match(/[0-9]/)) {
           buildingFunction.quantity = parseInt(buildingFunction.quantity.toString() + currentInput[stringIndex], 10);
-        } else if (currentInput[stringIndex].match(/[A-Za-z]/)) {
+        } else {
           buildingFunction.symbol = currentInput[stringIndex];
           if (buildingFunction.quantity == 0) {
             buildingFunction.quantity = 1;

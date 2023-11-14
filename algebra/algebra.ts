@@ -66,13 +66,19 @@ function PrintDebug(msg: string) {
 	}
 }
 export function ExecuteFunction(algebraFunction: AlgebraFunction): FunctionResult {
-	if (algebraFunction.functionType == AlgebraFunctionType.PRIMITIVE) {
+	if (algebraFunction.functionType == AlgebraFunctionType.PRIMITIVE && (algebraFunction.symbol === AlgebraSymbol.NUMBER || algebraFunction.quantity !== 0)) {
 		return { collapsed: false, algebraFunction: algebraFunction };
 	}
 	else {
 		const results: FunctionResult[] = [];
 		const newFunction = CloneAlgebraFunction(algebraFunction);
 
+		// Convert any complex terms into primitive if the quantity is zero
+		if (newFunction.quantity === 0 && !(newFunction.functionType === AlgebraFunctionType.PRIMITIVE && newFunction.symbol === AlgebraSymbol.NUMBER)) {
+			console.log("test");
+			const primitiveZero = FunctionPrimitive(0);
+			return { collapsed: true, algebraFunction: primitiveZero, functionCollapseInfo: { functionCollapseType: FunctionCollapseType.MULTIPLY_BY_ZERO, beforeFunctionIds: [newFunction.id], afterFunctionIds: [primitiveZero.id] } };
+		};
 		// Multiply quantity into group
 		if (newFunction.quantity != 1 && [AlgebraFunctionType.ADD, AlgebraFunctionType.DIV].includes(newFunction.functionType)) {
 			const affectedFunctionIds: number[] = [];
@@ -127,6 +133,7 @@ export function ExecuteFunction(algebraFunction: AlgebraFunction): FunctionResul
 
 		// If the function itself only has one child, hoist it
 		if (newFunction.arguments.length == 1) {
+			console.log('hoist');
 			const result = CloneAlgebraFunction(results[0].algebraFunction);
 			result.quantity *= newFunction.quantity;
 			return { collapsed: true, algebraFunction: result, functionCollapseInfo: { functionCollapseType: FunctionCollapseType.HOIST_SINGLE_ARGUMENT_INTO_PARENT, beforeFunctionIds: [result.id], afterFunctionIds: [result.id] } };

@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "../styles/Home.module.css";
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import classnames from "classnames";
 import katex from "katex";
 import Link from "next/link";
-import { AlgebraFunction, AlgebraFunctionType, AlgebraSymbol, CloneAlgebraFunction, ExecuteFunction, FunctionArguments, FunctionPrimitive, FunctionResult, PrintFunctionsLatex, PrintFunctionsLatexWithoutColors, PrintFunctionsWithoutColors, collapseTypeDocumentation } from "algebra/algebra";
+import { AlgebraFunction, AlgebraFunctionType, CloneAlgebraFunction, ExecuteFunction, FunctionArguments, FunctionPrimitive, FunctionResult, PrintFunctionsLatex, PrintFunctionsLatexWithoutColors, PrintFunctionsWithoutColors, collapseTypeDocumentation } from "algebra/algebra";
 
 let equations: AlgebraFunction = FunctionArguments(1, AlgebraFunctionType.DIV,
   FunctionArguments(1, AlgebraFunctionType.ADD,
@@ -113,6 +113,8 @@ function App() {
     }, 0)
   }
 
+  console.log(equations);
+
   const onSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       let outerFunction: AlgebraFunction | undefined;
@@ -174,7 +176,7 @@ function App() {
       onClick={() => {
         equations = previousSteps[i].state;
         previousSteps = previousSteps.slice(0, i);
-        setReload(reload + 1)
+        setTokenString(PrintFunctionsLatexWithoutColors(equations));
       }}
       onExpandSubTokens={() => {
         s.expanded = !s.expanded;

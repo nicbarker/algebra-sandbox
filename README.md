@@ -4,7 +4,7 @@ This is an extremely simple [computer algebra system](https://en.wikipedia.org/w
 
 It's mainly intended to be a tool for playing with algebra and symbolic manipulation, and a jumping off point for developing your own CAS.
 
-Operator support: +, -, *, /, ^
+Operator support: +, -, *, /, ^, "sqrt", "simplify"
 
 TODO:
 - Allow arbitrary multi-character pronumeral usage

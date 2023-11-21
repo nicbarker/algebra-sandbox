@@ -116,13 +116,40 @@
   margin-top: auto;
 }
 
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.inputContainer button {
+  background: #4ECDC4;
+  border-radius: 8px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  padding: 0px 12px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.inputContainer button:hover {
+  background: #38aaa2;
+}
+
+.inputContainer button:active {
+  background: #268680;
+}
+
 .inputIndicator {
   display: flex;
   align-items: center;
   border-radius: 8px;
   padding: 8px 12px;
   border: 2px solid #ccc;
-  margin-bottom: 24px;
   font-size: 24px;
   color: #bbb;
   font-style: italic;
@@ -131,16 +158,23 @@
 .tokensOuter {
   margin: 8px 0;
   font-size: 24px;
-  display: grid;
-  grid-template-columns: min-content 200px;
-  row-gap: 24px;
   margin: 32px 0 8px 0;
+}
+
+.tokensOuter tr {
+  vertical-align: top;
 }
 
 .left {
   white-space: nowrap;
-  display: flex;
-  align-items: flex-start;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.equals {
+  width: 40px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .grey {
@@ -157,15 +191,23 @@
   align-items: center;
   justify-content: flex-end;
   font-size: 30px;
+  padding: 0 30px;
 }
 
 .expandSubTokens {
-  grid-column: span 2;
   font-size: 14px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
+  height: 60px;
+}
+
+.expandSubTokens>td {
+  text-align: center;
+  padding: 15px 0;
+}
+
+.expandSubTokensInternal {
+  display: flex;
+  align-items: center;
 }
 
 .expandSubTokens:hover {
@@ -176,7 +218,8 @@
   flex-grow: 1;
   height: 1px;
   background: #555;
-  margin: 0 12px;
+  margin: 6px 12px;
+  min-width: 20px;
 }
 
 .actions {
@@ -184,6 +227,13 @@
   align-items: flex-start;
   flex-direction: column;
   gap: 12px;
+}
+
+.docItems {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 18px 0;
 }
 
 .docItemOuter {

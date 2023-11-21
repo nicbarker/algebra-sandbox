@@ -108,7 +108,6 @@ export function ExecuteFunction(algebraFunction: AlgebraFunction): FunctionResul
 			}
 			// Hoist out Matryoshka doll add and mul functions
 			if ((newFunction.functionType == AlgebraFunctionType.ADD || newFunction.functionType == AlgebraFunctionType.MUL) && newFunction.functionType == result.algebraFunction.functionType) {
-				var oldId = newFunction.arguments[i].id;
 				var argumentIds: number[] = [];
 				newFunction.arguments.splice(i, 1);
 				for (let j = result.algebraFunction.arguments.length - 1; j >= 0; j--) {
@@ -133,7 +132,6 @@ export function ExecuteFunction(algebraFunction: AlgebraFunction): FunctionResul
 
 		// If the function itself only has one child, hoist it
 		if (newFunction.arguments.length == 1) {
-			console.log('hoist');
 			const result = CloneAlgebraFunction(results[0].algebraFunction);
 			result.quantity *= newFunction.quantity;
 			return { collapsed: true, algebraFunction: result, functionCollapseInfo: { functionCollapseType: FunctionCollapseType.HOIST_SINGLE_ARGUMENT_INTO_PARENT, beforeFunctionIds: [result.id], afterFunctionIds: [result.id] } };
@@ -152,15 +150,15 @@ function Add(algebraFunction: AlgebraFunction): FunctionResult {
 	for (let i = 0; i < algebraFunction.arguments.length; i++) {
 		const argument1 = algebraFunction.arguments[i];
 		const argument1Hash = CalculateResultHashes(argument1);
+		if (argument1.quantity == 0) {
+			algebraFunction.arguments.splice(i, 1);
+			return { collapsed: true, algebraFunction, functionCollapseInfo: { functionCollapseType: FunctionCollapseType.ELIMINATE_ZERO_TERMS, beforeFunctionIds: [argument1.id], afterFunctionIds: [] } };
+		}
 		// Try to add function algebraFunction.arguments
 		for (let j = i + 1; j < algebraFunction.arguments.length; j++) {
 			const argument2 = algebraFunction.arguments[j];
 			if (argument1Hash.addHash == null) {
 				throw new Error("Error: Add hash was null");
-			}
-			if (argument1.quantity == 0) {
-				algebraFunction.arguments.splice(i, 1);
-				return { collapsed: true, algebraFunction, functionCollapseInfo: { functionCollapseType: FunctionCollapseType.ELIMINATE_ZERO_TERMS, beforeFunctionIds: [argument1.id], afterFunctionIds: [] } };
 			}
 			if (argument1.functionType == AlgebraFunctionType.DIV && argument2.functionType == AlgebraFunctionType.DIV && CalculateResultHashes(argument1.arguments[1]).exactHash == CalculateResultHashes(argument2.arguments[1]).exactHash) {
 				var numeratorIds = [argument1.arguments[0].id, argument2.arguments[0].id];
@@ -608,11 +606,17 @@ export function PrintFunctionsLatex(algebraFunction: AlgebraFunction, affectedFu
 			const collapseDocumentation = collapseTypeDocumentation[functionCollapseType];
 			if (current.algebraFunction.functionType == AlgebraFunctionType.PRIMITIVE) {
 				if (affectedFunction) output += startColor;
-				var quantity = Math.abs(current.algebraFunction.quantity).toString();
+				let quantity = Math.abs(current.algebraFunction.quantity).toString();
 				if (current.algebraFunction.symbol != AlgebraSymbol.NUMBER) {
 					if (quantity === "1") {
 						quantity = "";
 					}
+				}
+				if (current.algebraFunction === algebraFunction && current.algebraFunction.quantity !== 1) {
+					quantity = current.algebraFunction.quantity.toString();
+				}
+				if (current.showSign) {
+					quantity = (current.algebraFunction.quantity >= 0 ? "+" : "-") + quantity;
 				}
 				output += quantity;
 				if (affectedFunction && collapseDocumentation.affectsQuantity) output += endColor;
@@ -671,7 +675,7 @@ export function PrintFunctionsLatex(algebraFunction: AlgebraFunction, affectedFu
 						if (useParenthesis) {
 							toInspect.push({ isString: true, stringValue: ")" });
 						}
-						toInspect.push({ isString: false, algebraFunction: current.algebraFunction.arguments[i] });
+						toInspect.push({ isString: false, algebraFunction: current.algebraFunction.arguments[i], showSign: i === 0 && current.algebraFunction.arguments[i].quantity < 0 });
 						if (useParenthesis) {
 							toInspect.push({ isString: true, stringValue: "(" });
 						}
@@ -794,6 +798,7 @@ type Printable =
 	{
 		isString: false;
 		algebraFunction: AlgebraFunction;
+		showSign?: boolean;
 	}
 
 const primesGenerated = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541];

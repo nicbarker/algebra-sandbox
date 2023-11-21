@@ -9,7 +9,8 @@ Operator support: +, -, *, /, ^, "sqrt", "simplify"
 TODO:
 - Allow arbitrary multi-character pronumeral usage
 - Support special symbols like π
-- Equality support
+- Remove equalities
+- Set / Override specific expression in equality
 - Input LaTeX strings in input field
 - "Set" vs "Modify" operators to input a new statement vs modifying an existing one
 - "Isolate" function to rearrange equalities with single pronumeral on one side

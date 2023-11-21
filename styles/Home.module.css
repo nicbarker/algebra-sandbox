@@ -168,13 +168,13 @@
 .left {
   white-space: nowrap;
   text-align: center;
-  vertical-align: middle;
 }
 
 .equals {
   width: 40px;
-  text-align: center;
-  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .grey {
@@ -190,7 +190,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  font-size: 30px;
+  font-size: 24px;
+  color: #0f86aa;
   padding: 0 30px;
 }
 

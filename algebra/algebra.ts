@@ -651,9 +651,9 @@ export function PrintFunctionsLatex(algebraFunction: AlgebraFunction, affectedFu
 									break;
 								}
 								case AlgebraFunctionType.MUL: {
-									if (((current.algebraFunction.arguments[i].functionType == AlgebraFunctionType.PRIMITIVE && current.algebraFunction.arguments[i].symbol == AlgebraSymbol.NUMBER))
-										|| (current.algebraFunction.arguments[i + 1].functionType == AlgebraFunctionType.PRIMITIVE && current.algebraFunction.arguments[i + 1].symbol === AlgebraSymbol.NUMBER)
-										|| (current.algebraFunction.arguments[i + 1].functionType == AlgebraFunctionType.DIV && current.algebraFunction.arguments[i].functionType == AlgebraFunctionType.DIV)) {
+									if (((current.algebraFunction.arguments[i].functionType === AlgebraFunctionType.PRIMITIVE && current.algebraFunction.arguments[i].symbol === AlgebraSymbol.NUMBER && current.algebraFunction.arguments[i + 1].functionType == AlgebraFunctionType.PRIMITIVE && current.algebraFunction.arguments[i + 1].symbol === AlgebraSymbol.NUMBER))
+										|| ((current.algebraFunction.arguments[i].functionType === AlgebraFunctionType.PRIMITIVE && current.algebraFunction.arguments[i + 1].functionType === AlgebraFunctionType.PRIMITIVE && current.algebraFunction.arguments[i].symbol !== AlgebraSymbol.NUMBER && current.algebraFunction.arguments[i].symbol == current.algebraFunction.arguments[i + 1].symbol))
+										|| (current.algebraFunction.arguments[i].functionType === AlgebraFunctionType.DIV || current.algebraFunction.arguments[i + 1].functionType === AlgebraFunctionType.DIV)) {
 										separator = " ⋅ ";
 									} else {
 										separator = "";

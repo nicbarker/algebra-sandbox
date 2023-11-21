@@ -14,3 +14,4 @@ TODO:
 - Input LaTeX strings in input field
 - "Set" vs "Modify" operators to input a new statement vs modifying an existing one
 - "Isolate" function to rearrange equalities with single pronumeral on one side
+- Seperate "restore" button for returning to a previous step

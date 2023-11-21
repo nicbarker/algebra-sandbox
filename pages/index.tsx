@@ -26,13 +26,7 @@ import { AlgebraFunction, AlgebraFunctionType, CloneAlgebraFunction, ExecuteFunc
 //   FunctionPrimitive(5, 'x')
 // )];
 
-let equations: AlgebraFunction[] = [FunctionArguments(1, AlgebraFunctionType.ADD,
-  FunctionPrimitive(3, 'x'),
-  FunctionPrimitive(1),
-), FunctionArguments(1, AlgebraFunctionType.ADD,
-  FunctionPrimitive(-2, 'x'),
-  FunctionPrimitive(7),
-)]
+let equations: AlgebraFunction[] = [FunctionPrimitive(1)]
 
 
 type AlgorithmSubStep = {
@@ -46,6 +40,7 @@ type AlgorithmStep = {
   subSteps: AlgorithmSubStep[][],
   expanded?: boolean,
   state: AlgebraFunction[],
+  stateAfterOperator: AlgebraFunction[]
 }
 
 function applyOperator(algebraFunction: AlgebraFunction) {
@@ -99,22 +94,28 @@ function PreviousToken(props: { step: AlgorithmStep, onClick?: () => void, onExp
         <div className={styles.docItemAfter} dangerouslySetInnerHTML={{ __html: katex.renderToString(PrintFunctionsLatex(s.functionAfter, s.result.functionCollapseInfo!.afterFunctionIds, s.result.functionCollapseInfo!.functionCollapseType, "blue")) }} />
       </div>);
     });
-    return <>
+    return <Fragment key={index}>
       <td className={classnames(styles.left, styles.grey)} onClick={props.onClick}>
         <div dangerouslySetInnerHTML={{ __html: leftString }} />
-        {subTokens.length > 0 && props.step.expanded && <div className={styles.docItems}>{props.step.expanded && subTokens}</div>}
+        {props.step.expanded && <div className={styles.docItems}>
+          <div className={styles.docItemOuter}>
+            <div className={styles.docItemDescription}>Apply {props.step.operator} to the expression</div>
+            <div className={styles.docItemBefore} dangerouslySetInnerHTML={{ __html: katex.renderToString(PrintFunctionsLatex(props.step.stateAfterOperator[index], [], 1, "red")) }} />
+          </div>
+          {props.step.expanded && subTokens}
+        </div>}
       </td >
       {index < props.step.state.length - 1 && <td className={styles.equals}>=</td>}
-    </>
+    </Fragment>
   });
   try {
-    const rows = [<tr>
+    const rows = [<tr key={"result-row"}>
       {columns}
-      <td className={classnames(styles.right, styles.grey)} >{props.step.operator}</td>
+      <td className={classnames(styles.right, styles.grey)} dangerouslySetInnerHTML={{ __html: katex.renderToString(props.step.operator) }} />
     </tr >];
     if (hasSubSteps) {
       rows.push((
-        <tr className={styles.expandSubTokens} onClick={props.onExpandSubTokens}>
+        <tr className={styles.expandSubTokens} onClick={props.onExpandSubTokens} key={"substeps-row"}>
           <td colSpan={equations.length * 2 - 1}>
             <div className={styles.expandSubTokensInternal}>
               <div className={styles.subTokenLine} />
@@ -152,11 +153,13 @@ function App() {
       const newStep: AlgorithmStep = {
         operator: currentInput,
         state: equations.map(e => CloneAlgebraFunction(e)),
-        subSteps: []
+        subSteps: [],
+        stateAfterOperator: []
       };
 
       const operatorResults: {
         algebraFunction: AlgebraFunction;
+        startingFunction?: AlgebraFunction;
         subSteps: AlgorithmSubStep[];
       }[] = [];
       for (let i = 0; i < equations.length; i++) {
@@ -168,8 +171,9 @@ function App() {
           case "^": outerFunction = FunctionArguments(1, AlgebraFunctionType.EXPONENTIAL, equations[i]); break;
           case "s": {
             if (currentInput.includes("sqrt")) {
-              const result = applyOperator(FunctionArguments(1, AlgebraFunctionType.EXPONENTIAL, equations[i], FunctionArguments(1, AlgebraFunctionType.DIV, FunctionPrimitive(1), FunctionPrimitive(2))));
-              operatorResults.push(result);
+              outerFunction = FunctionArguments(1, AlgebraFunctionType.EXPONENTIAL, equations[i], FunctionArguments(1, AlgebraFunctionType.DIV, FunctionPrimitive(1), FunctionPrimitive(2)));
+              const result = applyOperator(outerFunction);
+              operatorResults.push({ ...result, startingFunction: outerFunction });
               continue;
             } else if (currentInput.includes("simplify")) {
               const result = applyOperator(equations[i]);
@@ -199,9 +203,11 @@ function App() {
         } else {
           outerFunction.arguments[1] = buildingFunction;
         }
-        operatorResults.push(applyOperator(outerFunction));
+        const result = applyOperator(outerFunction);
+        operatorResults.push({ ...result, startingFunction: outerFunction });
       }
       newStep.subSteps = operatorResults.map(r => r.subSteps);
+      newStep.stateAfterOperator = operatorResults.map(r => r.startingFunction).filter((r): r is AlgebraFunction => !!r);
       previousSteps.push(newStep);
       equations = operatorResults.map(r => CloneAlgebraFunction(r.algebraFunction));
       setCurrentInput("");
@@ -226,6 +232,7 @@ function App() {
       }}
     ></PreviousToken>
   ));
+
   return (
     <div className={styles.App} role="main">
       <div className={styles.container}>
@@ -242,10 +249,10 @@ function App() {
               {previousTokens}
               <tr>
                 {tokenStrings.map((tokenString, index) => (
-                  <>
+                  <Fragment key={index}>
                     <td className={styles.left} dangerouslySetInnerHTML={{ __html: katex.renderToString(tokenString) }} />
                     {index < tokenStrings.length - 1 && <td className={styles.equals}>=</td>}
-                  </>
+                  </Fragment>
                 ))}
                 <td className={styles.right}>&#8592;</td>
               </tr>

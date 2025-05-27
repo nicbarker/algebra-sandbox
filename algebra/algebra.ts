@@ -474,6 +474,12 @@ export function FunctionPrimitive(quantity: number, symbol: string = AlgebraSymb
 }
 
 export function FunctionArguments(quantity: number, functionType: AlgebraFunctionType, ...functionArguments: AlgebraFunction[]): AlgebraFunction {
+	// TODO it's possible this sort should be its own distinct step to prevent confusion around symbol rearranging
+	if (functionType === AlgebraFunctionType.MUL) {
+		functionArguments.sort((a, b) => {
+			return a.symbol.localeCompare(b.symbol);
+		});		
+	}
 	return {
 		quantity: quantity,
 		functionType: functionType,

@@ -161,6 +161,7 @@ function Add(algebraFunction: AlgebraFunction): FunctionResult {
 				throw new Error("Error: Add hash was null");
 			}
 			if (argument1.functionType == AlgebraFunctionType.DIV && argument2.functionType == AlgebraFunctionType.DIV && CalculateResultHashes(argument1.arguments[1]).exactHash == CalculateResultHashes(argument2.arguments[1]).exactHash) {
+				console.log('asdf', argument1, argument2, CalculateResultHashes(argument1.arguments[1]), CalculateResultHashes(argument2.arguments[1]));
 				var numeratorIds = [argument1.arguments[0].id, argument2.arguments[0].id];
 				algebraFunction.arguments[i].arguments[0] = FunctionArguments(1, AlgebraFunctionType.ADD, CloneAlgebraFunction(argument1.arguments[0]), CloneAlgebraFunction(argument2.arguments[0]));
 				algebraFunction.arguments.splice(j, 1);
@@ -503,7 +504,7 @@ function CalculateResultHashes(algebraFunction: AlgebraFunction): ResultHashes {
 	}
 	const resultHashes = {
 		addHash: algebraFunction.functionType.toString() + "_",
-		exactHash: algebraFunction.functionType.toString() + "_",
+		exactHash: algebraFunction.functionType.toString() + "_q" + algebraFunction.quantity.toString() + '_',
 		mulHash: ""
 	};
 	for (let i = 0; i < algebraFunction.arguments.length; i++) {
